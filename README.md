@@ -62,20 +62,13 @@ The card game format was chosen because it is the most agent-friendly implementa
 
 Two applications sharing a data layer — a Python simulation and a React frontend, both consuming the same JSON card/region/character definitions.
 
-### Components
-
-| Component | Technology | Purpose | Status |
-|-----------|------------|---------|--------|
-| Game Frontend | React + Tailwind | Browser-playable card game | ⬜ Phase 2 |
-| Balance Simulation | Python | Monte Carlo testing across 10K seeds | ⬜ Phase 1 |
-| Shared Data | JSON | Card, character, region, encounter definitions | ⬜ Phase 1 |
-| Game State | Redux-style reducer | Deterministic, serializable state machine | ⬜ Phase 2 |
+![alt text](assets/architecture-section-infographic.jpg)
 
 ### Key Design Decisions
 
-The **ResolverEngine** operates independently of React — it calculates full turns synchronously and outputs ActionTuple arrays. React is a dumb renderer consuming tuples with CSS transitions. This prevents UI state desynchronization.
+The ResolverEngine operates independently of React — it calculates full turns synchronously and outputs ActionTuple arrays. React is a dumb renderer consuming tuples with CSS transitions. This prevents UI state desynchronization.
 
-The **simulation targets 40-70% win rate** across seeds. It validates card math and decision quality, not seed solvability. Three AI heuristics (aggressive, defensive, balanced) play thousands of campaigns — if they converge on the same strategy, the game lacks meaningful choice.
+The simulation targets 40-70% win rate across seeds. It validates card math and decision quality, not seed solvability. Three AI heuristics (aggressive, defensive, balanced) play thousands of campaigns — if they converge on the same strategy, the game lacks meaningful choice.
 
 ---
 
@@ -121,7 +114,7 @@ The procedural generator does not guarantee solvable campaigns. This is the game
 
 ## 🚀 Getting Started
 
-> **Note:** No runnable code yet — the project is in pre-implementation. The GDD is the current deliverable.
+> Note: No runnable code yet — the project is in pre-implementation. The GDD is the current deliverable.
 
 ### Read the Design
 

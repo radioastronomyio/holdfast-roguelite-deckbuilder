@@ -13,6 +13,7 @@ secrets/
 credentials/
 config.local.*
 *.secrets
+assets/2d-pixel-quest-vol3-the-ui-gui/
 
 # ----------------------------------------------------------------------------
 # VAULT / AGENT WORKFLOW
