@@ -1,0 +1,87 @@
+═══════════════════════════════════════════════════════════════════════════
+Token Analysis: Session ses_349e4f639ffeCyakhb5Re9KpcL
+Model: approx
+═══════════════════════════════════════════════════════════════════════════
+
+TOKEN BREAKDOWN BY CATEGORY
+─────────────────────────────────────────────────────────────────────────
+Estimated using tokenizer analysis of message content:
+
+Input Categories:
+  USER      ██████████████████████████████        100.0% (56)
+
+  Subtotal: 56 estimated input tokens
+
+Output Categories:
+
+  Subtotal: 0 estimated output tokens
+
+Local Total: 56 tokens (estimated)
+
+TOOL USAGE BREAKDOWN
+─────────────────────────────────────────────────────────────────────────
+
+TOP CONTRIBUTORS
+─────────────────────────────────────────────────────────────────────────
+• User#1                       56 tokens (100.0%)
+
+═══════════════════════════════════════════════════════════════════════════
+MOST RECENT API CALL
+─────────────────────────────────────────────────────────────────────────
+
+Raw telemetry from last API response:
+  Input (fresh):              0 tokens
+  Cache read:                 0 tokens
+  Output:                     0 tokens
+  ─────────────────────────────────────
+  Total:                      0 tokens
+
+═══════════════════════════════════════════════════════════════════════════
+SESSION TOTALS (All 1 API calls)
+─────────────────────────────────────────────────────────────────────────
+
+Total tokens processed across the entire session (for cost calculation):
+
+  Input tokens:               0 (fresh tokens across all calls)
+  Cache read:                 0 (cached tokens across all calls)
+  Cache write:                0 (tokens written to cache)
+  Output tokens:              0 (all model responses)
+  ─────────────────────────────────────
+  Session Total:              0 tokens (for billing)
+
+═══════════════════════════════════════════════════════════════════════════
+SESSION COST
+─────────────────────────────────────────────────────────────────────────
+
+Token usage breakdown:
+  Input tokens:               0
+  Output tokens:              0
+
+─────────────────────────────────────────────────────────────────────────
+ACTUAL COST (from API):  $0.0000
+
+Note: Actual cost from OpenCode includes provider-specific pricing
+and 200K+ context adjustments.
+
+═══════════════════════════════════════════════════════════════════════════
+TOOL DEFINITION COSTS (Estimated from argument analysis)
+─────────────────────────────────────────────────────────────────────────
+
+  Tool                Est. Tokens   Args   Complexity
+  ───────────────────────────────────────────────────────────────────
+  read                       ~310       1   simple
+  tokenscope                 ~280       0   simple
+  ───────────────────────────────────────────────────────────────────
+  Total:             ~        590 tokens (2 enabled tools)
+
+  Note: Estimates inferred from tool call arguments in this session.
+        Actual schema tokens may vary +/-20%.
+
+═══════════════════════════════════════════════════════════════════════════
+SUMMARY
+─────────────────────────────────────────────────────────────────────────
+
+                          Cost        Tokens          API Calls
+  Session:           $    0.0000             0             1
+
+═══════════════════════════════════════════════════════════════════════════
