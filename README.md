@@ -28,6 +28,8 @@ related_documents:
 
 Holdfast is a browser-based card game where the player inherits an outpost on the edge of hostile territory and must conquer 6 procedurally generated regions to win. Combat, exploration, upgrades, and strategy all resolve through the same 5-stat modifier model. Some seeds are brutal. Some are unwinnable. The game's identity lives in that variance — interesting decisions under uncertainty, not guaranteed fairness.
 
+This project is also an experiment in **AI-assisted, spec-driven game development** — building a complete game end-to-end using [OpenSpec](https://github.com/Fission-AI/OpenSpec) for specification management, AI coding agents (KiloCode/GLM, Claude, OpenCode) for implementation, and Monte Carlo simulation for balance validation. The GDD was co-authored with Claude, validated through Gemini Deep Research, and every implementation milestone is spec'd as OpenSpec change proposals that agents execute from. If it works, the methodology is as interesting as the game.
+
 ---
 
 ## 🔭 Overview
@@ -44,17 +46,24 @@ Everything in the game — cards, characters, hazards, outpost upgrades, world e
 
 The card game format was chosen because it is the most agent-friendly implementation path. Pure state machines and data — no physics, no real-time input, no animation dependencies. React handles state management and click targets. Python handles balance simulation. Shared JSON definitions tie them together.
 
+### Development Methodology
+
+Each milestone is specified as an [OpenSpec](https://github.com/Fission-AI/OpenSpec) change proposal with detailed specs, design docs, and task checklists. AI coding agents execute against these specs, with human review before every commit. The workflow: Claude orchestrates design and spec authoring → OpenSpec captures the contract → KiloCode/GLM implements against the spec → human reviews and commits. This is a deliberate test of whether spec-driven AI development can produce a complete, balanced game.
+
 ---
 
 ## 📊 Project Status
 
-| Phase | Status | Description |
-|-------|--------|-------------|
+| Milestone | Status | Description |
+|-----------|--------|-------------|
 | Game Design Document | ✅ Complete | Full mechanical spec — [GDD](docs/game-design-document.md) |
 | Research Validation | ✅ Complete | Gemini Deep Research (NSB-bounded) |
-| Phase 1: Simulation | ⬜ Next | Python Monte Carlo — card math, combo detection, balance |
-| Phase 2: Minimal Playable | ⬜ Planned | React browser game — ugly but functional |
-| Phase 3: Visual Polish | ⬜ Planned | 2D Pixel Quest asset integration, animations, sound |
+| Repo & Tooling Setup | ✅ Complete | Repository, OpenSpec, GitHub milestones/issues |
+| M1: Data Schemas & Foundations | 🔄 In Progress | JSON schemas, Pydantic validation, test fixtures — [spec](openspec/changes/m1-data-schemas/) |
+| M2: Simulation Engine | ⬜ Planned | Resolver engine, combat system, campaign generator, AI heuristics |
+| M3: Simulation Validation & Tuning | ⬜ Planned | Monte Carlo harness, balance analysis, tuning iteration |
+| M4: Minimal Playable Frontend | ⬜ Planned | React browser game — ugly but functional |
+| M5: Visual Polish | ⬜ Planned | Asset integration, animations, effects |
 
 ---
 
@@ -75,19 +84,21 @@ The simulation targets 40-70% win rate across seeds. It validates card math and 
 ## 📁 Repository Structure
 
 ```
-holdfast-deckbuilder/
-├── 📂 assets/                # Game art (2D Pixel Quest UI pack, card templates)
+holdfast-roguelite-deckbuilder/
+├── 📂 assets/                # Game art (2D Pixel Quest UI pack — local only, gitignored)
 ├── 📂 data/                  # Shared JSON definitions (cards, characters, regions)
 ├── 📂 docs/                  # Design documentation and research
 │   ├── game-design-document.md
 │   └── research/             # GDR output, reference material
-├── 📂 game/                  # React frontend (Phase 2+)
-├── 📂 simulation/            # Python Monte Carlo (Phase 1)
+├── 📂 game/                  # React frontend (M4+)
+├── 📂 openspec/              # Spec-driven development — change proposals and specs
+│   ├── changes/              # Active and archived change proposals
+│   └── specs/                # Accumulated capability specs
+├── 📂 simulation/            # Python Monte Carlo (M1-M3)
 ├── 📂 scratch/               # Temporary working files (gitignored)
-├── 📂 staging/               # Pre-commit staging
 ├── 📄 AGENTS.md              # Agent context and session pattern
 ├── 📄 README.md              # This file
-└── 📄 [config]               # .gitignore, cspell, markdownlint, .vscode
+└── 📄 [config]               # .gitignore, cspell, markdownlint, .vscode, openspec
 ```
 
 ---
@@ -114,15 +125,15 @@ The procedural generator does not guarantee solvable campaigns. This is the game
 
 ## 🚀 Getting Started
 
-> Note: No runnable code yet — the project is in pre-implementation. The GDD is the current deliverable.
+> M1 (Data Schemas & Foundations) is in progress. No runnable code yet.
 
 ### Read the Design
 
 The [Game Design Document](docs/game-design-document.md) is the source of truth for all mechanics, systems, and architecture decisions.
 
-### Implementation Roadmap
+### Current Work
 
-Phase 1 (Simulation) begins with JSON schema definitions in `data/` and the Python resolver engine in `simulation/`. See those directory READMEs for planned structure.
+M1 defines JSON schemas and Pydantic validation for every data type in the game. The active spec is at [`openspec/changes/m1-data-schemas/`](openspec/changes/m1-data-schemas/). Once M1 lands, M2 builds the resolver engine and combat system on top of these schemas.
 
 ---
 
@@ -140,4 +151,4 @@ This project is licensed under the MIT License — see [LICENSE](LICENSE) for de
 
 ---
 
-Last Updated: 2026-03-03 | Status: Pre-Implementation
+Last Updated: 2026-03-04 | Status: M1 In Progress
