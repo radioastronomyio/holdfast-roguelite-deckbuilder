@@ -1,0 +1,44 @@
+schema: spec-driven
+
+context: |
+  Project: Holdfast — browser-based roguelite deckbuilder
+  Domain: Game development, balance simulation, procedural generation
+
+  Tech Stack:
+    - Python 3.12+ (simulation engine, Monte Carlo balance testing)
+    - React + TypeScript (browser frontend, Phase 2+)
+    - JSON schemas (shared data layer consumed by both applications)
+    - Pydantic for Python-side validation
+
+  Architecture:
+    data/        → Shared JSON definitions (cards, characters, regions, world deck)
+    simulation/  → Python Monte Carlo balance testing
+    game/        → React browser frontend
+    Both applications consume data/. The simulation ResolverEngine is authoritative.
+
+  Core Mechanic: Universal Modifier Engine
+    Every game element is modifier arrays on a 5-stat model (HP, Power, Speed, Defense, Energy).
+    Modifier tuple: (stat, operation, value, duration)
+    Resolution order: flat → percentage → multiplicative
+    Cards, hazards, passives, upgrades, world events — all resolve through the same engine.
+
+  Implementation Constraints:
+    - ResolverEngine must be pure functions — deterministic, no side effects, no UI coupling
+    - All game state must be serializable as JSON at any point
+    - Simulation targets 40-70% win rate across seeds — not 100% solvability
+    - Speed percentage modifiers scale exponentially with CT system — must be capped or taxed
+    - Card upgrade branches must never pit economy manipulation against flat damage
+    - Seed-based deterministic RNG — same seed must produce identical campaign
+
+  Source of Truth: docs/game-design-document.md
+  Agent Context: AGENTS.md at repo root
+
+rules:
+  proposal:
+    - Reference GDD section numbers when discussing mechanics
+    - Always include a "Non-goals" section
+    - Keep proposals under 500 words
+  tasks:
+    - Each task should be completable in one agent session
+    - Include test fixtures or acceptance criteria for every task
+    - Reference the specific GDD section that defines the mechanic being implemented
