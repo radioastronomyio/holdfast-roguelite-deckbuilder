@@ -72,10 +72,12 @@ Every effect in the game is expressed as:
   "operation": "FLAT_ADD | FLAT_SUB | PCT_ADD | PCT_SUB | MULTIPLY",
   "value": 15,
   "duration": 0,
-  "target": "SELF | ALLY_SINGLE | ALLY_ALL | ENEMY_SINGLE | ENEMY_ALL | GLOBAL"
+  "target": "SELF | ALLY_SINGLE | ALLY_ALL | ENEMY_SINGLE | ENEMY_ALL | GLOBAL",
+  "tags": []
 }
 ```
 
+- `tags`: optional string array. No logic attached in v1 — reserved for future condition evaluation and synergy systems. Example values: `["fire", "dot"]`, `["physical"]`.
 - `duration: 0` = instant (apply and discard)
 - `duration: -1` = permanent (persists until explicitly removed)
 - `duration: >0` = turns (decremented each turn, purged at 0)
@@ -85,6 +87,14 @@ Every effect in the game is expressed as:
 All modifiers resolve in strict priority: **Base Value → Flat Modification → Percentage Modification → Multiplicative Scaling**
 
 This prevents percentage buffs from yielding zero impact on base-zero stats and ensures mathematical stability. Identical to Orbweaver's `calculate_stat()` pattern: `(base + flat_sum) * (100 + add_pct_sum) // 100`, then sequential multiplicative application.
+
+### Fixed-Point Integer Arithmetic
+
+All stat values and modifier values are stored and computed as scaled integers. A named constant `STAT_SCALE` is multiplied into all base stats at initialization. The scale is chosen to be large enough that no percentage operation produces a fractional result — i.e., the smallest expected modifier value multiplied by the smallest base stat still yields a whole number after integer division.
+
+The specific scale value does not need to be fixed at design time. It is a runtime constant defined once in each layer (Python sim and React frontend) and referenced everywhere. If the simulation surfaces fractional results during M2, the scale is increased until it doesn't.
+
+**Key consequence:** `value` in modifier tuples is always `int`. Floats are never used in game math. This eliminates float precision drift between the Python sim and the JavaScript frontend entirely — both runtimes perform identical integer arithmetic.
 
 ---
 
@@ -163,6 +173,110 @@ Each procedurally generated region has:
 | Economic bonus | Conquered trading post reduces outpost upgrade costs | Accelerates campaign-wide power curve |
 | Intelligence bonus | Conquered mage tower grants free Level 1 research on all unscouted regions | Opens strategic planning dramatically |
 | Draft bonus | Conquered barracks shows 4 character draft options instead of 3 | Improves roster quality |
+
+---
+
+## Flavor & Name Generation System
+
+### Design Principle
+
+Every game element has underlying modifier math and a cosmetic label. The label is assembled at generation time from word pools driven by the entity's dominant stats or modifier type — never hardcoded. This creates the illusion of variety across campaigns without additional mechanical content. The same Ember Mage archetype might appear as "Mira the Swift, Storm Mage" in one campaign and "Dusk the Volatile, Void Warden" in another. The math is identical. The flavor is not.
+
+### Mod-Ready Architecture
+
+All flavor data lives under `mods/default/`. Code always loads from `mods/`. A custom mod provides its own directory alongside `default/` and the pools merge. No code changes required to add words or override existing pools.
+
+```
+mods/
+  default/
+    flavor/
+      elements.json            ← attack/resistance flavor labels
+      epithets.json            ← condition-mapped (see below)
+      archetypes.json          ← character class labels
+      given_names.json         ← first names
+      action_verbs.json        ← attack name second word
+      region_adjectives.json   ← region name first word
+      region_nouns.json        ← region name second word
+      element-stat-map.json    ← stat → element pool weights
+      epithet-conditions.json  ← condition DSL for epithet assignment
+```
+
+### Composition Templates
+
+| Entity | Template | Example |
+|--------|----------|---------|
+| Character | `{given_name} the {epithet}, {element} {archetype}` | Mira the Swift, Storm Mage |
+| Attack card | `{element} {action_verb}` | Void Pulse, Acid Lash |
+| Region | `{region_adjective} {region_noun}` | Ashen Wastes, Hollow Reach |
+
+Templates are format strings. The pools are JSON arrays. Composition happens at generation time, seeded by the campaign RNG.
+
+### Condition-Mapped Epithets
+
+Epithets are assigned by a condition evaluator that inspects the character's stat bundle — not drawn randomly. This makes names semantically meaningful and readable as a quick signal about the character.
+
+Condition schema stored in `mods/default/flavor/epithet-conditions.json`:
+
+```json
+[
+  {
+    "epithet": "the Strong",
+    "conditions": [{ "type": 1, "stat": "power", "op": ">=", "value": 70 }],
+    "pool": "default"
+  },
+  {
+    "epithet": "the Swift",
+    "conditions": [{ "type": 1, "stat": "speed", "op": ">=", "value": 80 }],
+    "pool": "default"
+  },
+  {
+    "epithet": "the Ghost",
+    "conditions": [{ "type": 1, "stat": "speed", "op": ">=", "value": 90 }],
+    "pool": "rare"
+  },
+  {
+    "epithet": "the Volatile",
+    "conditions": [
+      { "type": 2, "stat_a": "power", "op_a": ">=", "value_a": 75, "logic": "XOR", "stat_b": "defense", "op_b": "<=", "value_b": 25 }
+    ],
+    "pool": "rare"
+  }
+]
+```
+
+**Condition types:**
+- `type: 1` — single stat. Fields: `stat`, `op`, `value`
+- `type: 2` — two stats. Fields: `stat_a`, `op_a`, `value_a`, `logic` (AND / OR / XOR), `stat_b`, `op_b`, `value_b`
+
+**Operators:** `>=`, `<=`, `>`, `<`, `=`, `<>` (not equal)
+
+**Pool tiers:** `default` (eligible when conditions met), `rare` (sampled at reduced weight — creates memorable outlier characters)
+
+The evaluator collects all eligible epithets, then samples weighted by pool tier. Rare epithets only appear on characters with extreme or unusual stat distributions.
+
+### Element-to-Stat Mapping
+
+Attack elements are drawn from a pool weighted by the character's dominant stat. A high-Power character consistently produces fire/magma/stone flavor rather than random selection. Stored in `mods/default/flavor/element-stat-map.json`:
+
+```json
+{
+  "power":   { "default": ["Magma", "Stone", "Thunder"],  "rare": ["Inferno"] },
+  "speed":   { "default": ["Storm", "Wind", "Void"],      "rare": ["Phantom"] },
+  "defense": { "default": ["Iron", "Stone", "Earth"],     "rare": ["Bastion"] },
+  "energy":  { "default": ["Arcane", "Ether", "Pulse"],   "rare": ["Nexus"] },
+  "hp":      { "default": ["Blood", "Bone", "Marrow"],    "rare": ["Undying"] }
+}
+```
+
+The same element pools drive attack card names (`Magma Surge`, `Void Lash`) and resistance flavor text in region modifiers (`Magma resistance`, `Void exposure`). One pool, consistent terminology everywhere.
+
+### Seeding
+
+All name generation uses the campaign's seeded RNG. A given seed always produces the same names for the same characters. Shareable seeds produce fully reproducible campaigns including all flavor labels.
+
+### Future Extension: Synergy Conditions
+
+The condition evaluator operates on stat bundles in v1. The `tags` field on modifier tuples is the extension hook. In a future version, the evaluator could inspect accumulated card tags or active modifier tags on the character — enabling emergent synergy labels and conditional ability unlocks without schema migration. This is explicitly out of scope for v1. See Future Considerations.
 
 ---
 
@@ -574,6 +688,8 @@ Pixel art UI pack integration (2D Pixel Quest). Card art, region visuals, animat
 - Additional card pools and upgrade paths
 - Physical card game prototype for playtesting
 - Controller-first couch mode
+- **Synergy condition system:** Extend the flavor condition evaluator to inspect card tags and active modifier tags on entities. This enables conditional ability unlocks, emergent synergy labels, and class-like identities that emerge from play rather than generation. The `tags` field on modifier tuples and the condition DSL in the flavor system are already designed to support this. The primary design question is scope of observable state — stats only, or full card pool inspection.
+- **Mod system:** The `mods/default/` architecture is the foundation. A full mod system adds a mod loader, merge strategy for conflicting pool entries, schema versioning, and possibly a mod manifest format. The data layer is already structured for it.
 
 ---
 
@@ -590,8 +706,8 @@ Pixel art UI pack integration (2D Pixel Quest). Card art, region visuals, animat
 |---|---|
 | Author | CrainBramp + Claude (orchestrator) |
 | Created | 2026-03-02 |
-| Version | 1.0 |
-| Status | Design Complete — Pre-Implementation |
+| Version | 1.1 |
+| Status | Design Complete — M1 In Progress |
 
 ## Sources
 

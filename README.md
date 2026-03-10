@@ -42,6 +42,8 @@ The design draws from Soda Dungeon (idle dungeon loop, party roster), Darkest Du
 
 Everything in the game — cards, characters, hazards, outpost upgrades, world events — is expressed as modifier arrays on a shared 5-stat model (HP, Power, Speed, Defense, Energy). One resolver engine handles all encounter types. Flavor text is cosmetic. The math is the game.
 
+Character names, attack names, and region names are assembled at generation time from seeded word pools, weighted by the entity's dominant stats. "Mira the Swift, Storm Mage" and "Dusk the Volatile, Void Warden" are the same underlying modifier bundle in different clothes. This creates campaign variety without additional content. The flavor data lives in `mods/default/` — the architecture is mod-ready from day one.
+
 ### Why a Card Game
 
 The card game format was chosen because it is the most agent-friendly implementation path. Pure state machines and data — no physics, no real-time input, no animation dependencies. React handles state management and click targets. Python handles balance simulation. Shared JSON definitions tie them together.
@@ -86,6 +88,8 @@ The simulation targets 40-70% win rate across seeds. It validates card math and 
 ```
 holdfast-roguelite-deckbuilder/
 ├── 📂 assets/                # Game art (2D Pixel Quest UI pack — local only, gitignored)
+├── 📂 mods/                  # Mod-ready content layer — game always loads from here
+│   └── default/              # Base word pools, epithet conditions, element-stat maps
 ├── 📂 data/                  # Shared JSON definitions (cards, characters, regions)
 ├── 📂 docs/                  # Design documentation and research
 │   ├── game-design-document.md
