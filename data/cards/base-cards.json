@@ -1,0 +1,314 @@
+[
+  {
+    "id": "arcane_strike_01",
+    "name": "Arcane Strike",
+    "energy_cost": 2,
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 15,
+        "duration": 0,
+        "target": "ENEMY_SINGLE",
+        "stacking": "replace",
+        "tags": ["attack", "magic"]
+      }
+    ],
+    "tags": ["attack", "magic"],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "immolate_01",
+    "name": "Immolate",
+    "energy_cost": 1,
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 4,
+        "duration": 3,
+        "target": "ENEMY_SINGLE",
+        "stacking": "stack",
+        "tags": ["attack", "fire", "dot"]
+      }
+    ],
+    "tags": ["attack", "fire", "dot"],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "shield_bash_01",
+    "name": "Shield Bash",
+    "energy_cost": 2,
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 8,
+        "duration": 0,
+        "target": "ENEMY_SINGLE",
+        "stacking": "replace",
+        "tags": ["attack", "physical"]
+      },
+      {
+        "stat": "Speed",
+        "operation": "PCT_SUB",
+        "value": 100,
+        "duration": 1,
+        "target": "ENEMY_SINGLE",
+        "stacking": "replace",
+        "tags": ["debuff", "stun"]
+      }
+    ],
+    "tags": ["attack", "physical", "control"],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "sweeping_blade_01",
+    "name": "Sweeping Blade",
+    "energy_cost": 3,
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 12,
+        "duration": 0,
+        "target": "ENEMY_ALL",
+        "stacking": "replace",
+        "tags": ["attack", "physical", "aoe"]
+      }
+    ],
+    "tags": ["attack", "physical", "aoe"],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "phalanx_01",
+    "name": "Phalanx",
+    "energy_cost": 2,
+    "effects": [
+      {
+        "stat": "Defense",
+        "operation": "FLAT_ADD",
+        "value": 15,
+        "duration": 2,
+        "target": "ALLY_SINGLE",
+        "stacking": "replace",
+        "tags": ["buff", "defense"]
+      }
+    ],
+    "tags": ["buff", "defense"],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "adrenaline_01",
+    "name": "Adrenaline",
+    "energy_cost": 1,
+    "effects": [
+      {
+        "stat": "Speed",
+        "operation": "PCT_ADD",
+        "value": 30,
+        "duration": 3,
+        "target": "ALLY_SINGLE",
+        "stacking": "stack",
+        "tags": ["buff", "speed"]
+      }
+    ],
+    "tags": ["buff", "speed"],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "cleanse_01",
+    "name": "Cleanse",
+    "energy_cost": 1,
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_ADD",
+        "value": 10,
+        "duration": 0,
+        "target": "ALLY_SINGLE",
+        "stacking": "replace",
+        "tags": ["heal", "utility"]
+      }
+    ],
+    "tags": ["heal", "utility"],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "deep_focus_01",
+    "name": "Deep Focus",
+    "energy_cost": 0,
+    "effects": [
+      {
+        "stat": "Energy",
+        "operation": "FLAT_ADD",
+        "value": 3,
+        "duration": 0,
+        "target": "SELF",
+        "stacking": "stack",
+        "tags": ["buff", "utility", "energy"]
+      }
+    ],
+    "tags": ["buff", "utility", "energy"],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "acid_flask_01",
+    "name": "Acid Flask",
+    "energy_cost": 1,
+    "effects": [
+      {
+        "stat": "Defense",
+        "operation": "PCT_SUB",
+        "value": 25,
+        "duration": 2,
+        "target": "ENEMY_ALL",
+        "stacking": "stack",
+        "tags": ["debuff", "shred", "aoe"]
+      }
+    ],
+    "tags": ["debuff", "shred", "aoe"],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "frost_bolt_01",
+    "name": "Frost Bolt",
+    "energy_cost": 2,
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 18,
+        "duration": 0,
+        "target": "ENEMY_SINGLE",
+        "stacking": "replace",
+        "tags": ["attack", "ice"]
+      },
+      {
+        "stat": "Speed",
+        "operation": "PCT_SUB",
+        "value": 20,
+        "duration": 1,
+        "target": "ENEMY_SINGLE",
+        "stacking": "stack",
+        "tags": ["debuff", "slow"]
+      }
+    ],
+    "tags": ["attack", "ice", "control"],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "power_surge_01",
+    "name": "Power Surge",
+    "energy_cost": 2,
+    "effects": [
+      {
+        "stat": "Power",
+        "operation": "PCT_ADD",
+        "value": 25,
+        "duration": 2,
+        "target": "ALLY_SINGLE",
+        "stacking": "stack",
+        "tags": ["buff", "power"]
+      }
+    ],
+    "tags": ["buff", "power"],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "stone_wall_01",
+    "name": "Stone Wall",
+    "energy_cost": 3,
+    "effects": [
+      {
+        "stat": "Defense",
+        "operation": "FLAT_ADD",
+        "value": 25,
+        "duration": 3,
+        "target": "ALLY_SINGLE",
+        "stacking": "max",
+        "tags": ["buff", "defense"]
+      }
+    ],
+    "tags": ["buff", "defense"],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "lightning_chain_01",
+    "name": "Lightning Chain",
+    "energy_cost": 4,
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 8,
+        "duration": 0,
+        "target": "ENEMY_ALL",
+        "stacking": "replace",
+        "tags": ["attack", "lightning", "aoe"]
+      }
+    ],
+    "tags": ["attack", "lightning", "aoe"],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "heal_potion_01",
+    "name": "Heal Potion",
+    "energy_cost": 1,
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_ADD",
+        "value": 15,
+        "duration": 0,
+        "target": "ALLY_SINGLE",
+        "stacking": "replace",
+        "tags": ["heal"]
+      }
+    ],
+    "tags": ["heal"],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "drain_life_01",
+    "name": "Drain Life",
+    "energy_cost": 2,
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 10,
+        "duration": 0,
+        "target": "ENEMY_SINGLE",
+        "stacking": "replace",
+        "tags": ["attack", "dark", "lifesteal"]
+      },
+      {
+        "stat": "HP",
+        "operation": "FLAT_ADD",
+        "value": 5,
+        "duration": 0,
+        "target": "SELF",
+        "stacking": "replace",
+        "tags": ["heal"]
+      }
+    ],
+    "tags": ["attack", "dark", "lifesteal"],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  }
+]

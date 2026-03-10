@@ -1,0 +1,56 @@
+[
+  {
+    "stat": "HP",
+    "operation": "FLAT_SUB",
+    "value": 15,
+    "duration": 0,
+    "target": "ENEMY_SINGLE",
+    "stacking": "replace",
+    "tags": ["attack", "physical"]
+  },
+  {
+    "stat": "Power",
+    "operation": "PCT_ADD",
+    "value": 20,
+    "duration": -1,
+    "target": "SELF",
+    "stacking": "stack",
+    "tags": ["passive"]
+  },
+  {
+    "stat": "Speed",
+    "operation": "FLAT_ADD",
+    "value": 30,
+    "duration": 3,
+    "target": "ALLY_SINGLE",
+    "stacking": "max",
+    "tags": []
+  },
+  {
+    "stat": "Defense",
+    "operation": "PCT_SUB",
+    "value": 25,
+    "duration": 2,
+    "target": "ENEMY_ALL",
+    "stacking": "replace",
+    "tags": ["debuff", "shred"]
+  },
+  {
+    "stat": "Energy",
+    "operation": "FLAT_ADD",
+    "value": 3,
+    "duration": 1,
+    "target": "ALLY_ALL",
+    "stacking": "stack",
+    "tags": ["buff", "utility"]
+  },
+  {
+    "stat": "HP",
+    "operation": "FLAT_ADD",
+    "value": 10,
+    "duration": 0,
+    "target": "ALLY_SINGLE",
+    "stacking": "replace",
+    "tags": ["heal"]
+  }
+]

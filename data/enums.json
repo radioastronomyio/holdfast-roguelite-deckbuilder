@@ -1,0 +1,9 @@
+{
+  "Stat": ["HP", "Power", "Speed", "Defense", "Energy"],
+  "Operation": ["FLAT_ADD", "FLAT_SUB", "PCT_ADD", "PCT_SUB", "MULTIPLY"],
+  "Target": ["SELF", "ALLY_SINGLE", "ALLY_ALL", "ENEMY_SINGLE", "ENEMY_ALL", "GLOBAL"],
+  "Stacking": ["stack", "replace", "max"],
+  "AiHeuristic": ["aggressive", "defensive", "balanced"],
+  "NarrativePosition": ["approach", "settlement", "stronghold"],
+  "EncounterType": ["combat", "hazard", "event"]
+}

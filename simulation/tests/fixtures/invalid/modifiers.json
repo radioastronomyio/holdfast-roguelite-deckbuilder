@@ -1,0 +1,46 @@
+[
+  {
+    "operation": "FLAT_SUB",
+    "value": 15,
+    "duration": 0,
+    "target": "ENEMY_SINGLE",
+    "stacking": "replace",
+    "tags": []
+  },
+  {
+    "stat": "HP",
+    "operation": "INVALID_OP",
+    "value": 15,
+    "duration": 0,
+    "target": "ENEMY_SINGLE",
+    "stacking": "replace",
+    "tags": []
+  },
+  {
+    "stat": "Power",
+    "operation": "PCT_ADD",
+    "value": 20,
+    "duration": -2,
+    "target": "SELF",
+    "stacking": "stack",
+    "tags": []
+  },
+  {
+    "stat": "Speed",
+    "operation": "FLAT_ADD",
+    "value": 30.5,
+    "duration": 3,
+    "target": "ALLY_SINGLE",
+    "stacking": "max",
+    "tags": []
+  },
+  {
+    "stat": "INVALID_STAT",
+    "operation": "FLAT_ADD",
+    "value": 30,
+    "duration": 3,
+    "target": "ALLY_SINGLE",
+    "stacking": "max",
+    "tags": []
+  }
+]

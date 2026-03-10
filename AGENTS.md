@@ -24,10 +24,10 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 
 ## Current State
 
-- **Phase:** Pre-Implementation
-- **GDD:** v1.0 Complete
-- **Next work:** Phase 1 — JSON schema definitions in `data/`, Python resolver engine in `simulation/`
-- **No runnable code yet**
+- **Phase:** M1 Complete
+- **GDD:** v1.1 (flavor system, tags, fixed-point arithmetic)
+- **Next work:** M2 — Resolver engine, CT system, combat loop in `simulation/`
+- **M1 delivered:** All data schemas, Pydantic models, JSON data files, and 95 passing tests
 
 ## Core Concept: Universal Modifier Engine
 
