@@ -23,12 +23,32 @@ JSON definitions for all game entities — cards, characters, regions, encounter
 
 ```
 data/
-├── README.md               # This file
-├── cards/                   # Card definitions with upgrade trees (planned)
-├── characters/              # Character generation pools and passives (planned)
-├── regions/                 # Region templates, encounter pools, meta-rewards (planned)
-├── world-deck/              # World phase trade-off cards (planned)
-└── schema/                  # JSON Schema validation files (planned)
+├── README.md                 # This file
+├── cards/                    # Card definitions with upgrade trees
+│   ├── base-cards.json     # 15 base cards
+│   ├── upgrade-trees.json    # Upgrade paths for each card
+│   └── hazard-cards.json     # 5 hazard cards (region-played)
+├── entities/                  # Character and enemy definitions
+│   ├── example-characters.json  # 3 GDD example characters
+│   ├── example-enemies.json     # 4 example enemies
+│   └── generation-bounds.json  # Stat bounds for procedural generation
+├── campaign/                  # Campaign structures
+│   ├── example-regions.json     # 2 GDD example regions
+│   ├── world-deck.json         # 20 world phase cards
+│   └── outpost-upgrades.json    # 5 outpost upgrades
+└── enums.json                # Shared enum definitions
+mods/                            # Flavor and name generation pools
+├── README.md                   # Mod architecture documentation
+└── default/
+    ├── README.md                 # Default mod structure
+    └── flavor/                 # Flavor data files
+        ├── given_names.json          # 60+ first names
+        ├── archetypes.json           # 20+ character class labels
+        ├── action_verbs.json         # 30+ attack action verbs
+        ├── region_adjectives.json    # 30+ region name adjectives
+        ├── region_nouns.json         # 30+ region name nouns
+        ├── element-stat-map.json     # Stat to element pools
+        └── epithet-conditions.json   # 20+ condition-based epithets
 ```
 
 ---

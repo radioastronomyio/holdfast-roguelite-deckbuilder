@@ -1,0 +1,153 @@
+[
+  {
+    "id": "tripwire_hazard_01",
+    "name": "Tripwire",
+    "energy_cost": 0,
+    "effects": [
+      {
+        "stat": "Power",
+        "operation": "PCT_SUB",
+        "value": 50,
+        "duration": 2,
+        "target": "ALLY_SINGLE",
+        "stacking": "replace",
+        "tags": [
+          "debuff",
+          "trap"
+        ]
+      }
+    ],
+    "tags": [
+      "hazard",
+      "trap"
+    ],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "miasma_hazard_01",
+    "name": "Miasma",
+    "energy_cost": 0,
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 2,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "stack",
+        "tags": [
+          "debuff",
+          "poison"
+        ]
+      }
+    ],
+    "tags": [
+      "hazard",
+      "poison"
+    ],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "toxic_fumes_hazard_01",
+    "name": "Toxic Fumes",
+    "energy_cost": 0,
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 3,
+        "duration": 3,
+        "target": "ALLY_ALL",
+        "stacking": "stack",
+        "tags": [
+          "debuff",
+          "poison"
+        ]
+      }
+    ],
+    "tags": [
+      "hazard",
+      "poison"
+    ],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "freezing_wind_hazard_01",
+    "name": "Freezing Wind",
+    "energy_cost": 0,
+    "effects": [
+      {
+        "stat": "Speed",
+        "operation": "PCT_SUB",
+        "value": 40,
+        "duration": 2,
+        "target": "ALLY_ALL",
+        "stacking": "stack",
+        "tags": [
+          "debuff",
+          "slow"
+        ]
+      }
+    ],
+    "tags": [
+      "hazard",
+      "cold",
+      "slow"
+    ],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "crushing_weight_hazard_01",
+    "name": "Crushing Weight",
+    "energy_cost": 0,
+    "effects": [
+      {
+        "stat": "Defense",
+        "operation": "PCT_SUB",
+        "value": 30,
+        "duration": 2,
+        "target": "ALLY_ALL",
+        "stacking": "stack",
+        "tags": [
+          "debuff",
+          "pressure"
+        ]
+      }
+    ],
+    "tags": [
+      "hazard",
+      "pressure"
+    ],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "blinding_light_hazard_01",
+    "name": "Blinding Light",
+    "energy_cost": 0,
+    "effects": [
+      {
+        "stat": "Power",
+        "operation": "PCT_SUB",
+        "value": 25,
+        "duration": 2,
+        "target": "ALLY_ALL",
+        "stacking": "stack",
+        "tags": [
+          "debuff",
+          "blind"
+        ]
+      }
+    ],
+    "tags": [
+      "hazard",
+      "blind"
+    ],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  }
+]

@@ -1,0 +1,100 @@
+[
+  {
+    "comment": "Missing Energy stat in base_stats",
+    "id": "invalid_char_01",
+    "name": "Invalid Character",
+    "base_stats": {
+      "HP": 100000,
+      "Power": 15000,
+      "Speed": 90000,
+      "Defense": 10000
+    },
+    "innate_passive": {
+      "stat": "Power",
+      "operation": "PCT_ADD",
+      "value": 10,
+      "duration": -1,
+      "target": "SELF",
+      "stacking": "stack",
+      "tags": ["passive"]
+    },
+    "name_parts": {
+      "first_name": "Kael",
+      "title": "Blade",
+      "origin": "Forest"
+    }
+  },
+  {
+    "comment": "Innate passive with non-permanent duration",
+    "id": "invalid_char_02",
+    "name": "Invalid Character",
+    "base_stats": {
+      "HP": 100000,
+      "Power": 15000,
+      "Speed": 90000,
+      "Defense": 10000,
+      "Energy": 4000
+    },
+    "innate_passive": {
+      "stat": "Power",
+      "operation": "PCT_ADD",
+      "value": 10,
+      "duration": 3,
+      "target": "SELF",
+      "stacking": "stack",
+      "tags": ["passive"]
+    },
+    "name_parts": {
+      "first_name": "Kael",
+      "title": "Blade",
+      "origin": "Forest"
+    }
+  },
+  {
+    "comment": "Missing name_parts field",
+    "id": "invalid_char_03",
+    "name": "Invalid Character",
+    "base_stats": {
+      "HP": 100000,
+      "Power": 15000,
+      "Speed": 90000,
+      "Defense": 10000,
+      "Energy": 4000
+    },
+    "innate_passive": {
+      "stat": "Power",
+      "operation": "PCT_ADD",
+      "value": 10,
+      "duration": -1,
+      "target": "SELF",
+      "stacking": "stack",
+      "tags": ["passive"]
+    }
+  },
+  {
+    "comment": "Negative base_stat value",
+    "id": "invalid_char_04",
+    "name": "Invalid Character",
+    "base_stats": {
+      "HP": -5000,
+      "Power": 15000,
+      "Speed": 90000,
+      "Defense": 10000,
+      "Energy": 4000
+    },
+    "innate_passive": {
+      "stat": "Power",
+      "operation": "PCT_ADD",
+      "value": 10,
+      "duration": -1,
+      "target": "SELF",
+      "stacking": "stack",
+      "tags": ["passive"]
+    },
+    "name_parts": {
+      "first_name": "Kael",
+      "title": "Blade",
+      "origin": "Forest"
+    }
+  }
+]

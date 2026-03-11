@@ -1,0 +1,119 @@
+[
+  {
+    "id": "invalid_card_01",
+    "name": "Missing Effects",
+    "energy_cost": 2,
+    "tags": [
+      "attack"
+    ],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "invalid_card_02",
+    "name": "Negative Energy Cost",
+    "energy_cost": -1,
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 10,
+        "duration": 0,
+        "target": "ENEMY_SINGLE",
+        "stacking": "replace",
+        "tags": [
+          "attack"
+        ]
+      }
+    ],
+    "tags": [
+      "attack"
+    ],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "invalid_card_03",
+    "name": "Tier 2 with Null Prerequisite",
+    "energy_cost": 2,
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 10,
+        "duration": 0,
+        "target": "ENEMY_SINGLE",
+        "stacking": "replace",
+        "tags": [
+          "attack"
+        ]
+      }
+    ],
+    "tags": [
+      "attack"
+    ],
+    "upgrade_tier": 0,
+    "upgrade_paths": {
+      "2A_invalid": {
+        "added_effects": [
+          {
+            "stat": "HP",
+            "operation": "FLAT_SUB",
+            "value": 5,
+            "duration": 0,
+            "target": "ENEMY_SINGLE",
+            "stacking": "replace",
+            "tags": [
+              "attack"
+            ]
+          }
+        ],
+        "prerequisite": null,
+        "tier": 2,
+        "exclusions": []
+      }
+    }
+  },
+  {
+    "id": "invalid_card_04",
+    "name": "Upgrade Tree Missing Prerequisite",
+    "energy_cost": 2,
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 10,
+        "duration": 0,
+        "target": "ENEMY_SINGLE",
+        "stacking": "replace",
+        "tags": [
+          "attack"
+        ]
+      }
+    ],
+    "tags": [
+      "attack"
+    ],
+    "upgrade_tier": 0,
+    "upgrade_paths": {
+      "2A_missing": {
+        "added_effects": [
+          {
+            "stat": "HP",
+            "operation": "FLAT_SUB",
+            "value": 5,
+            "duration": 0,
+            "target": "ENEMY_SINGLE",
+            "stacking": "replace",
+            "tags": [
+              "attack"
+            ]
+          }
+        ],
+        "prerequisite": "1A_nonexistent",
+        "tier": 2,
+        "exclusions": []
+      }
+    }
+  }
+]

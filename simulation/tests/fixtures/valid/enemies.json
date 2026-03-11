@@ -1,0 +1,30 @@
+[
+  {
+    "id": "test_enemy_01",
+    "name": "Test Enemy",
+    "base_stats": {
+      "HP": 50000,
+      "Power": 10000,
+      "Speed": 60000,
+      "Defense": 5000,
+      "Energy": 3000
+    },
+    "card_pool": ["arcane_strike_01", "frost_bolt_01"],
+    "ai_heuristic_tag": "aggressive",
+    "is_elite": false
+  },
+  {
+    "id": "test_enemy_02",
+    "name": "Test Elite Enemy",
+    "base_stats": {
+      "HP": 120000,
+      "Power": 18000,
+      "Speed": 80000,
+      "Defense": 15000,
+      "Energy": 4000
+    },
+    "card_pool": ["arcane_strike_01", "shield_bash_01", "power_surge_01"],
+    "ai_heuristic_tag": "balanced",
+    "is_elite": true
+  }
+]

@@ -1,0 +1,103 @@
+[
+  {
+    "id": "test_card_01",
+    "name": "Test Card",
+    "energy_cost": 2,
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 10,
+        "duration": 0,
+        "target": "ENEMY_SINGLE",
+        "stacking": "replace",
+        "tags": [
+          "attack"
+        ]
+      }
+    ],
+    "tags": [
+      "attack",
+      "physical"
+    ],
+    "upgrade_tier": 0,
+    "upgrade_paths": {}
+  },
+  {
+    "id": "test_card_02",
+    "name": "Zero Cost Card",
+    "energy_cost": 0,
+    "effects": [
+      {
+        "stat": "Energy",
+        "operation": "FLAT_ADD",
+        "value": 2,
+        "duration": 0,
+        "target": "SELF",
+        "stacking": "replace",
+        "tags": [
+          "utility"
+        ]
+      }
+    ],
+    "tags": [
+      "utility"
+    ],
+    "upgrade_tier": 0,
+    "upgrade_paths": {
+      "1A": {
+        "added_effects": [
+          {
+            "stat": "Energy",
+            "operation": "FLAT_ADD",
+            "value": 1,
+            "duration": 0,
+            "target": "ALLY_SINGLE",
+            "stacking": "replace",
+            "tags": [
+              "utility"
+            ]
+          }
+        ],
+        "prerequisite": null,
+        "tier": 1,
+        "exclusions": []
+      }
+    }
+  },
+  {
+    "id": "test_card_03",
+    "name": "Multi-Effect Card",
+    "energy_cost": 3,
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 8,
+        "duration": 0,
+        "target": "ENEMY_SINGLE",
+        "stacking": "replace",
+        "tags": [
+          "attack"
+        ]
+      },
+      {
+        "stat": "Defense",
+        "operation": "PCT_SUB",
+        "value": 20,
+        "duration": 2,
+        "target": "ENEMY_SINGLE",
+        "stacking": "stack",
+        "tags": [
+          "shred"
+        ]
+      }
+    ],
+    "tags": [
+      "attack",
+      "shred"
+    ],
+    "upgrade_tier": 1,
+    "upgrade_paths": {}
+  }
+]

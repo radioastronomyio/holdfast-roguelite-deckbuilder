@@ -1,0 +1,52 @@
+[
+  {
+    "id": "test_character_01",
+    "name": "Test Character",
+    "base_stats": {
+      "HP": 100000,
+      "Power": 15000,
+      "Speed": 90000,
+      "Defense": 10000,
+      "Energy": 4000
+    },
+    "innate_passive": {
+      "stat": "Power",
+      "operation": "PCT_ADD",
+      "value": 10,
+      "duration": -1,
+      "target": "SELF",
+      "stacking": "stack",
+      "tags": ["passive"]
+    },
+    "name_parts": {
+      "first_name": "Kael",
+      "title": "Blade",
+      "origin": "Forest"
+    }
+  },
+  {
+    "id": "test_character_02",
+    "name": "Tank Character",
+    "base_stats": {
+      "HP": 130000,
+      "Power": 10000,
+      "Speed": 70000,
+      "Defense": 18000,
+      "Energy": 3000
+    },
+    "innate_passive": {
+      "stat": "Defense",
+      "operation": "FLAT_ADD",
+      "value": 5000,
+      "duration": -1,
+      "target": "SELF",
+      "stacking": "stack",
+      "tags": ["passive"]
+    },
+    "name_parts": {
+      "first_name": "Sorn",
+      "title": "Sentinel",
+      "origin": "Mountains"
+    }
+  }
+]

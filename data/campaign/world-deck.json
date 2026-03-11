@@ -1,0 +1,523 @@
+[
+  {
+    "id": "forced_march",
+    "name": "Forced March",
+    "upside": [
+      {
+        "stat": "Speed",
+        "operation": "PCT_ADD",
+        "value": 30,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "stack"
+      }
+    ],
+    "downside": [
+      {
+        "stat": "HP",
+        "operation": "PCT_SUB",
+        "value": 20,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "replace"
+      }
+    ],
+    "description": "+30% Speed, -20% HP (All)"
+  },
+  {
+    "id": "rations_cut",
+    "name": "Rations Cut",
+    "upside": [
+      {
+        "stat": "Energy",
+        "operation": "FLAT_ADD",
+        "value": 2000,
+        "duration": -1,
+        "target": "SELF",
+        "stacking": "stack"
+      }
+    ],
+    "downside": [
+      {
+        "stat": "Power",
+        "operation": "PCT_SUB",
+        "value": 25,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "replace"
+      }
+    ],
+    "description": "+2 Energy max, -25% Power (All)"
+  },
+  {
+    "id": "reckless_assault",
+    "name": "Reckless Assault",
+    "upside": [
+      {
+        "stat": "Power",
+        "operation": "PCT_ADD",
+        "value": 40,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "stack"
+      }
+    ],
+    "downside": [
+      {
+        "stat": "Defense",
+        "operation": "PCT_SUB",
+        "value": 40,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "replace"
+      }
+    ],
+    "description": "+40% Power, -40% Defense (All)"
+  },
+  {
+    "id": "heavy_armor",
+    "name": "Heavy Armor",
+    "upside": [
+      {
+        "stat": "Defense",
+        "operation": "FLAT_ADD",
+        "value": 30000,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "stack"
+      }
+    ],
+    "downside": [
+      {
+        "stat": "Speed",
+        "operation": "PCT_SUB",
+        "value": 30,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "replace"
+      }
+    ],
+    "description": "+30 Defense, -30% Speed (All)"
+  },
+  {
+    "id": "blood_magic",
+    "name": "Blood Magic",
+    "upside": [
+      {
+        "stat": "Energy",
+        "operation": "FLAT_ADD",
+        "value": 1000,
+        "duration": -1,
+        "target": "SELF",
+        "stacking": "stack",
+        "tags": ["card_cost_reduction"]
+      }
+    ],
+    "downside": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 8000,
+        "duration": -1,
+        "target": "SELF",
+        "stacking": "stack",
+        "tags": ["per_played_card"]
+      }
+    ],
+    "description": "Card costs -1 Energy, -8 HP per card played"
+  },
+  {
+    "id": "fog_of_war",
+    "name": "Fog of War",
+    "upside": [
+      {
+        "stat": "Power",
+        "operation": "PCT_SUB",
+        "value": 50,
+        "duration": -1,
+        "target": "ENEMY_ALL",
+        "stacking": "replace"
+      }
+    ],
+    "downside": [
+      {
+        "stat": "Power",
+        "operation": "FLAT_SUB",
+        "value": 999000,
+        "duration": 1,
+        "target": "ALLY_ALL",
+        "stacking": "replace",
+        "tags": ["blind_turn_1"]
+      }
+    ],
+    "description": "Enemies start -50% Power, Roster starts Blind Turn 1"
+  },
+  {
+    "id": "overclocked",
+    "name": "Overclocked",
+    "upside": [
+      {
+        "stat": "Speed",
+        "operation": "PCT_ADD",
+        "value": 60,
+        "duration": 1,
+        "target": "ALLY_ALL",
+        "stacking": "stack"
+      }
+    ],
+    "downside": [
+      {
+        "stat": "Energy",
+        "operation": "FLAT_SUB",
+        "value": 999000,
+        "duration": 2,
+        "target": "ALLY_ALL",
+        "stacking": "replace",
+        "tags": ["resolver_special", "no_refresh_turn_2"]
+      }
+    ],
+    "description": "+60% Speed Turn 1, Energy does not refresh Turn 2"
+  },
+  {
+    "id": "vampiric_contract",
+    "name": "Vampiric Contract",
+    "upside": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_ADD",
+        "value": 15000,
+        "duration": -1,
+        "target": "SELF",
+        "stacking": "stack",
+        "tags": ["on_kill"]
+      }
+    ],
+    "downside": [
+      {
+        "stat": "HP",
+        "operation": "PCT_SUB",
+        "value": 30,
+        "duration": -1,
+        "target": "SELF",
+        "stacking": "replace"
+      }
+    ],
+    "description": "+15 HP heal on kill, -30% base max HP"
+  },
+  {
+    "id": "scavengers_greed",
+    "name": "Scavenger's Greed",
+    "upside": [
+      {
+        "stat": "Energy",
+        "operation": "FLAT_ADD",
+        "value": 5000,
+        "duration": -1,
+        "target": "SELF",
+        "stacking": "stack",
+        "tags": ["reward_bonus"]
+      }
+    ],
+    "downside": [
+      {
+        "stat": "Power",
+        "operation": "PCT_ADD",
+        "value": 50,
+        "duration": -1,
+        "target": "ENEMY_ALL",
+        "stacking": "stack",
+        "tags": ["elite_boss_only"]
+      }
+    ],
+    "description": "Reward output +50%, Stronghold Elite +50% Power"
+  },
+  {
+    "id": "hyper_metabolism",
+    "name": "Hyper-Metabolism",
+    "upside": [
+      {
+        "stat": "HP",
+        "operation": "PCT_ADD",
+        "value": 50,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "stack"
+      }
+    ],
+    "downside": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_ADD",
+        "value": 0,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "replace",
+        "tags": ["resolver_special", "status_duration_multiply_2"]
+      }
+    ],
+    "description": "+50% HP (All), Status effect duration ×2. Downside requires resolver-level handling via tag."
+  },
+  {
+    "id": "glass_cannon",
+    "name": "Glass Cannon",
+    "upside": [
+      {
+        "stat": "Power",
+        "operation": "PCT_ADD",
+        "value": 100,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "stack"
+      }
+    ],
+    "downside": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 999000,
+        "duration": -1,
+        "target": "SELF",
+        "stacking": "replace"
+      }
+    ],
+    "description": "+100% Power (All), HP permanently set to 1"
+  },
+  {
+    "id": "pacifism_protocol",
+    "name": "Pacifism Protocol",
+    "upside": [
+      {
+        "stat": "Defense",
+        "operation": "FLAT_ADD",
+        "value": 50000,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "stack"
+      }
+    ],
+    "downside": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 999000,
+        "duration": 1,
+        "target": "ALLY_ALL",
+        "stacking": "replace",
+        "tags": ["no_attack_turn_1"]
+      }
+    ],
+    "description": "+50 Defense (All), Cannot play Attack cards Turn 1"
+  },
+  {
+    "id": "leyline_tap",
+    "name": "Leyline Tap",
+    "upside": [
+      {
+        "stat": "Energy",
+        "operation": "FLAT_ADD",
+        "value": 5000,
+        "duration": -1,
+        "target": "SELF",
+        "stacking": "stack"
+      }
+    ],
+    "downside": [
+      {
+        "stat": "HP",
+        "operation": "PCT_SUB",
+        "value": 10,
+        "duration": -1,
+        "target": "SELF",
+        "stacking": "stack",
+        "tags": ["per_turn"]
+      }
+    ],
+    "description": "Energy refreshes to Max+5, Lose 10% current HP per turn"
+  },
+  {
+    "id": "tunnel_vision",
+    "name": "Tunnel Vision",
+    "upside": [
+      {
+        "stat": "Power",
+        "operation": "PCT_ADD",
+        "value": 50,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "stack",
+        "tags": ["elite_only"]
+      }
+    ],
+    "downside": [
+      {
+        "stat": "Power",
+        "operation": "PCT_SUB",
+        "value": 50,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "stack",
+        "tags": ["minion_only"]
+      }
+    ],
+    "description": "+50% Power vs Elites, -50% Power vs Minions"
+  },
+  {
+    "id": "unstable_mutagen",
+    "name": "Unstable Mutagen",
+    "upside": [
+      {
+        "stat": "HP",
+        "operation": "PCT_ADD",
+        "value": 50,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "stack",
+        "tags": ["random_stat"]
+      }
+    ],
+    "downside": [
+      {
+        "stat": "HP",
+        "operation": "PCT_SUB",
+        "value": 50,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "stack",
+        "tags": ["random_stat"]
+      }
+    ],
+    "description": "Random stat +50%, Random stat -50%"
+  },
+  {
+    "id": "barricaded",
+    "name": "Barricaded",
+    "upside": [
+      {
+        "stat": "Defense",
+        "operation": "FLAT_ADD",
+        "value": 100000,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "stack"
+      }
+    ],
+    "downside": [
+      {
+        "stat": "Defense",
+        "operation": "FLAT_SUB",
+        "value": 20000,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "stack",
+        "tags": ["per_turn_decay"]
+      }
+    ],
+    "description": "Start with +100 Defense, Lose 20 Defense per turn"
+  },
+  {
+    "id": "cursed_relic",
+    "name": "Cursed Relic",
+    "upside": [
+      {
+        "stat": "Energy",
+        "operation": "FLAT_ADD",
+        "value": 1000,
+        "duration": -1,
+        "target": "SELF",
+        "stacking": "stack",
+        "tags": ["draft_bonus"]
+      }
+    ],
+    "downside": [
+      {
+        "stat": "HP",
+        "operation": "PCT_ADD",
+        "value": 15,
+        "duration": -1,
+        "target": "ENEMY_ALL",
+        "stacking": "stack"
+      }
+    ],
+    "description": "+1 character drafted early, All enemies +15% stats"
+  },
+  {
+    "id": "martyrdom",
+    "name": "Martyrdom",
+    "upside": [
+      {
+        "stat": "Defense",
+        "operation": "PCT_ADD",
+        "value": 200,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "stack",
+        "tags": ["lowest_hp"]
+      }
+    ],
+    "downside": [
+      {
+        "stat": "HP",
+        "operation": "PCT_SUB",
+        "value": 50,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "stack",
+        "tags": ["highest_hp"]
+      }
+    ],
+    "description": "Lowest HP ally +200% Defense, Highest HP ally -50% HP"
+  },
+  {
+    "id": "temporal_shift",
+    "name": "Temporal Shift",
+    "upside": [
+      {
+        "stat": "Speed",
+        "operation": "PCT_ADD",
+        "value": 100,
+        "duration": 1,
+        "target": "ALLY_ALL",
+        "stacking": "stack"
+      }
+    ],
+    "downside": [
+      {
+        "stat": "Speed",
+        "operation": "PCT_SUB",
+        "value": 50,
+        "duration": 3,
+        "target": "ALLY_ALL",
+        "stacking": "stack",
+        "tags": ["resolver_special", "delayed_start_turn_2"]
+      }
+    ],
+    "description": "+100% Speed Turn 1, -50% Speed Turns 2-4. Downside delayed start requires resolver-level handling via tag."
+  },
+  {
+    "id": "echo_chamber",
+    "name": "Echo Chamber",
+    "upside": [
+      {
+        "stat": "Power",
+        "operation": "FLAT_ADD",
+        "value": 5000,
+        "duration": -1,
+        "target": "SELF",
+        "stacking": "stack",
+        "tags": ["card_double_trigger"]
+      }
+    ],
+    "downside": [
+      {
+        "stat": "Energy",
+        "operation": "FLAT_ADD",
+        "value": 1000,
+        "duration": -1,
+        "target": "SELF",
+        "stacking": "stack",
+        "tags": ["card_cost_double"]
+      }
+    ],
+    "description": "Played cards trigger twice, Card Energy costs ×2"
+  }
+]

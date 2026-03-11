@@ -1,0 +1,80 @@
+[
+  {
+    "id": "forge",
+    "name": "Forge",
+    "description": "Forges weapons and armor for the party, increasing combat effectiveness.",
+    "effects": [
+      {
+        "stat": "Power",
+        "operation": "FLAT_ADD",
+        "value": 2000,
+        "duration": -1,
+        "target": "SELF",
+        "stacking": "stack"
+      }
+    ],
+    "cost": 50,
+    "special_effect": ""
+  },
+  {
+    "id": "watchtower",
+    "name": "Watchtower",
+    "description": "Grants free reconnaissance on unscouted regions.",
+    "effects": [
+      {
+        "stat": "Energy",
+        "operation": "FLAT_ADD",
+        "value": 0,
+        "duration": -1,
+        "target": "SELF",
+        "stacking": "replace",
+        "tags": ["free_research"]
+      }
+    ],
+    "cost": 40,
+    "special_effect": "free_level_1_research"
+  },
+  {
+    "id": "infirmary",
+    "name": "Infirmary",
+    "description": "Heals and strengthens the party's resilience.",
+    "effects": [
+      {
+        "stat": "HP",
+        "operation": "PCT_ADD",
+        "value": 10,
+        "duration": -1,
+        "target": "SELF",
+        "stacking": "stack"
+      }
+    ],
+    "cost": 60,
+    "special_effect": ""
+  },
+  {
+    "id": "war_room",
+    "name": "War Room",
+    "description": "Increases the maximum party size for battles.",
+    "effects": [],
+    "cost": 100,
+    "special_effect": "party_size+1"
+  },
+  {
+    "id": "library",
+    "name": "Library",
+    "description": "Contains ancient tomes that expedite research efforts.",
+    "effects": [
+      {
+        "stat": "Energy",
+        "operation": "FLAT_ADD",
+        "value": 0,
+        "duration": -1,
+        "target": "SELF",
+        "stacking": "stack",
+        "tags": ["research_discount"]
+      }
+    ],
+    "cost": 80,
+    "special_effect": "research_cost_25%"
+  }
+]

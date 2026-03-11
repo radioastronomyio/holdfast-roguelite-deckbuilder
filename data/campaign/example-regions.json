@@ -1,0 +1,192 @@
+[
+  {
+    "id": "ashen_wastes",
+    "name": "The Ashen Wastes",
+    "region_type": "Ashen",
+    "modifier_stack": [
+      {
+        "stat": "Speed",
+        "operation": "PCT_SUB",
+        "value": 15,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "replace"
+      }
+    ],
+    "encounters": [
+      {
+        "type": "hazard",
+        "narrative_position": "approach",
+        "name": "Ash Storm",
+        "description": "A swirling storm of hot ash obscures vision and slows movement.",
+        "hazard_modifiers": [
+          {
+            "stat": "Speed",
+            "operation": "PCT_SUB",
+            "value": 15,
+            "duration": -1,
+            "target": "ALLY_ALL",
+            "stacking": "replace"
+          }
+        ],
+        "hazard_duration": 3
+      },
+      {
+        "type": "combat",
+        "narrative_position": "settlement",
+        "name": "Scavenger Patrol",
+        "description": "A band of scavengers protecting their haul.",
+        "enemies": ["scavenger_patrol"],
+        "enemy_cards": ["arcane_strike_01", "shield_bash_01"]
+      },
+      {
+        "type": "combat",
+        "narrative_position": "stronghold",
+        "name": "Warlord Vanguard",
+        "description": "The region's elite commander awaits.",
+        "enemies": ["warlord_vanguard"],
+        "enemy_cards": ["arcane_strike_01", "sweeping_blade_01", "power_surge_01"]
+      }
+    ],
+    "meta_reward": {
+      "stat": "Defense",
+      "operation": "FLAT_ADD",
+      "value": 2000,
+      "duration": -1,
+      "target": "SELF",
+      "stacking": "stack"
+    },
+    "research_layers": [
+      {
+        "level": 1,
+        "reveal_type": "region_type",
+        "cost": 10
+      },
+      {
+        "level": 2,
+        "reveal_type": "primary_modifier",
+        "cost": 25
+      },
+      {
+        "level": 3,
+        "reveal_type": "encounter_details",
+        "cost": 50
+      },
+      {
+        "level": 4,
+        "reveal_type": "boss_mechanics",
+        "cost": 100
+      }
+    ]
+  },
+  {
+    "id": "whispering_thicket",
+    "name": "Whispering Thicket",
+    "region_type": "Forest",
+    "modifier_stack": [
+      {
+        "stat": "HP",
+        "operation": "FLAT_SUB",
+        "value": 2000,
+        "duration": -1,
+        "target": "ALLY_ALL",
+        "stacking": "replace"
+      }
+    ],
+    "encounters": [
+      {
+        "type": "event",
+        "narrative_position": "approach",
+        "name": "Lost Caravan",
+        "description": "A wounded merchant offers a trade.",
+        "choices": [
+          {
+            "description": "Trade HP for Power",
+            "effects": [
+              {
+                "stat": "Power",
+                "operation": "FLAT_ADD",
+                "value": 5000,
+                "duration": -1,
+                "target": "ALLY_ALL",
+                "stacking": "stack"
+              }
+            ],
+            "cost": [
+              {
+                "stat": "HP",
+                "operation": "FLAT_SUB",
+                "value": 10000,
+                "duration": -1,
+                "target": "ALLY_ALL",
+                "stacking": "replace"
+              }
+            ]
+          },
+          {
+            "description": "Refuse",
+            "effects": [],
+            "cost": []
+          }
+        ]
+      },
+      {
+        "type": "hazard",
+        "narrative_position": "settlement",
+        "name": "Toxic Spores",
+        "description": "Fungal spores fill the air, causing damage over time.",
+        "hazard_modifiers": [
+          {
+            "stat": "HP",
+            "operation": "FLAT_SUB",
+            "value": 2000,
+            "duration": -1,
+            "target": "ALLY_ALL",
+            "stacking": "stack",
+            "tags": ["dot"]
+          }
+        ],
+        "hazard_duration": 4
+      },
+      {
+        "type": "combat",
+        "narrative_position": "stronghold",
+        "name": "Fungal Behemoth",
+        "description": "A massive fungal creature towers over you.",
+        "enemies": ["fungal_behemoth"],
+        "enemy_cards": ["acid_flask_01", "immolate_01", "sweeping_blade_01"]
+      }
+    ],
+    "meta_reward": {
+      "stat": "Energy",
+      "operation": "FLAT_ADD",
+      "value": 1000,
+      "duration": -1,
+      "target": "SELF",
+      "stacking": "stack",
+      "tags": ["research_discount"]
+    },
+    "research_layers": [
+      {
+        "level": 1,
+        "reveal_type": "region_type",
+        "cost": 10
+      },
+      {
+        "level": 2,
+        "reveal_type": "primary_modifier",
+        "cost": 25
+      },
+      {
+        "level": 3,
+        "reveal_type": "encounter_details",
+        "cost": 50
+      },
+      {
+        "level": 4,
+        "reveal_type": "boss_mechanics",
+        "cost": 100
+      }
+    ]
+  }
+]
