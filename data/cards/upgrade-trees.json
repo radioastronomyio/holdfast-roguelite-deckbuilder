@@ -1,1712 +1,406 @@
 {
   "arcane_strike_01": {
     "1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 15,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1B"
-      ]
+      "added_effects": [{"stat": "Defense", "operation": "PCT_SUB", "value": 15, "duration": 2, "target": "ENEMY_SINGLE", "stacking": "stack", "tags": ["shred"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1B"]
     },
     "1B": {
-      "added_effects": [
-        {
-          "stat": "Power",
-          "operation": "PCT_ADD",
-          "value": 20,
-          "duration": 1,
-          "target": "SELF",
-          "stacking": "replace",
-          "tags": [
-            "buff"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1A"
-      ]
+      "added_effects": [{"stat": "Power", "operation": "PCT_ADD", "value": 20, "duration": 1, "target": "SELF", "stacking": "replace", "tags": ["buff"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1A"]
     },
     "2A_from_1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 10,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": "1A",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Defense", "operation": "PCT_SUB", "value": 10, "duration": 2, "target": "ENEMY_SINGLE", "stacking": "stack", "tags": ["shred"]}],
+      "prerequisite": "1A", "tier": 2, "exclusions": []
     },
     "2B_from_1B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 5,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "dot"
-          ]
-        }
-      ],
-      "prerequisite": "1B",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 5, "duration": 2, "target": "ENEMY_SINGLE", "stacking": "stack", "tags": ["dot", "magic"]}],
+      "prerequisite": "1B", "tier": 2, "exclusions": []
     },
     "3A_from_2A": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 8,
-          "duration": 0,
-          "target": "ENEMY_ALL",
-          "stacking": "replace",
-          "tags": [
-            "aoe"
-          ]
-        }
-      ],
-      "prerequisite": "2A_from_1A",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 8, "duration": 0, "target": "ENEMY_ALL", "stacking": "replace", "tags": ["aoe", "magic"]}],
+      "prerequisite": "2A_from_1A", "tier": 3, "exclusions": []
     },
     "3B_from_2B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 10,
-          "duration": 0,
-          "target": "ENEMY_SINGLE",
-          "stacking": "replace",
-          "tags": [
-            "attack"
-          ]
-        }
-      ],
-      "prerequisite": "2B_from_1B",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 12, "duration": 0, "target": "ENEMY_SINGLE", "stacking": "replace", "tags": ["attack", "magic"]}],
+      "prerequisite": "2B_from_1B", "tier": 3, "exclusions": []
     }
   },
+
   "immolate_01": {
     "1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 15,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1B"
-      ]
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 2, "duration": 3, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["dot", "fire", "aoe"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1B"]
     },
     "1B": {
-      "added_effects": [
-        {
-          "stat": "Power",
-          "operation": "PCT_ADD",
-          "value": 20,
-          "duration": 1,
-          "target": "SELF",
-          "stacking": "replace",
-          "tags": [
-            "buff"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1A"
-      ]
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 3, "duration": 3, "target": "ENEMY_SINGLE", "stacking": "stack", "tags": ["dot", "fire"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1A"]
     },
     "2A_from_1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 10,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": "1A",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Defense", "operation": "PCT_SUB", "value": 10, "duration": 3, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["shred", "fire"]}],
+      "prerequisite": "1A", "tier": 2, "exclusions": []
     },
     "2B_from_1B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 5,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "dot"
-          ]
-        }
-      ],
-      "prerequisite": "1B",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 2, "duration": 2, "target": "ENEMY_SINGLE", "stacking": "stack", "tags": ["dot", "fire"]}],
+      "prerequisite": "1B", "tier": 2, "exclusions": []
     },
     "3A_from_2A": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 8,
-          "duration": 0,
-          "target": "ENEMY_ALL",
-          "stacking": "replace",
-          "tags": [
-            "aoe"
-          ]
-        }
-      ],
-      "prerequisite": "2A_from_1A",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 3, "duration": 3, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["dot", "fire", "aoe"]}],
+      "prerequisite": "2A_from_1A", "tier": 3, "exclusions": []
     },
     "3B_from_2B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 10,
-          "duration": 0,
-          "target": "ENEMY_SINGLE",
-          "stacking": "replace",
-          "tags": [
-            "attack"
-          ]
-        }
-      ],
-      "prerequisite": "2B_from_1B",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 6, "duration": 3, "target": "ENEMY_SINGLE", "stacking": "stack", "tags": ["dot", "fire"]}],
+      "prerequisite": "2B_from_1B", "tier": 3, "exclusions": []
     }
   },
+
   "shield_bash_01": {
     "1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 15,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1B"
-      ]
+      "added_effects": [{"stat": "Speed", "operation": "PCT_SUB", "value": 100, "duration": 1, "target": "ENEMY_SINGLE", "stacking": "replace", "tags": ["stun", "control"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1B"]
     },
     "1B": {
-      "added_effects": [
-        {
-          "stat": "Power",
-          "operation": "PCT_ADD",
-          "value": 20,
-          "duration": 1,
-          "target": "SELF",
-          "stacking": "replace",
-          "tags": [
-            "buff"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1A"
-      ]
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 8, "duration": 0, "target": "ENEMY_SINGLE", "stacking": "replace", "tags": ["attack", "physical"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1A"]
     },
     "2A_from_1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 10,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": "1A",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Speed", "operation": "PCT_SUB", "value": 30, "duration": 1, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["slow", "aoe"]}],
+      "prerequisite": "1A", "tier": 2, "exclusions": []
     },
     "2B_from_1B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 5,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "dot"
-          ]
-        }
-      ],
-      "prerequisite": "1B",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Defense", "operation": "PCT_SUB", "value": 15, "duration": 2, "target": "ENEMY_SINGLE", "stacking": "stack", "tags": ["shred"]}],
+      "prerequisite": "1B", "tier": 2, "exclusions": []
     },
     "3A_from_2A": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 8,
-          "duration": 0,
-          "target": "ENEMY_ALL",
-          "stacking": "replace",
-          "tags": [
-            "aoe"
-          ]
-        }
-      ],
-      "prerequisite": "2A_from_1A",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "Speed", "operation": "PCT_SUB", "value": 50, "duration": 2, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["slow", "aoe", "control"]}],
+      "prerequisite": "2A_from_1A", "tier": 3, "exclusions": []
     },
     "3B_from_2B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 10,
-          "duration": 0,
-          "target": "ENEMY_SINGLE",
-          "stacking": "replace",
-          "tags": [
-            "attack"
-          ]
-        }
-      ],
-      "prerequisite": "2B_from_1B",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 12, "duration": 0, "target": "ENEMY_SINGLE", "stacking": "replace", "tags": ["attack", "physical"]}],
+      "prerequisite": "2B_from_1B", "tier": 3, "exclusions": []
     }
   },
+
   "sweeping_blade_01": {
     "1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 15,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1B"
-      ]
+      "added_effects": [{"stat": "Speed", "operation": "PCT_SUB", "value": 15, "duration": 2, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["slow", "aoe"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1B"]
     },
     "1B": {
-      "added_effects": [
-        {
-          "stat": "Power",
-          "operation": "PCT_ADD",
-          "value": 20,
-          "duration": 1,
-          "target": "SELF",
-          "stacking": "replace",
-          "tags": [
-            "buff"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1A"
-      ]
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 6, "duration": 0, "target": "ENEMY_ALL", "stacking": "replace", "tags": ["attack", "physical", "aoe"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1A"]
     },
     "2A_from_1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 10,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": "1A",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Defense", "operation": "PCT_SUB", "value": 12, "duration": 2, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["shred", "aoe"]}],
+      "prerequisite": "1A", "tier": 2, "exclusions": []
     },
     "2B_from_1B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 5,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "dot"
-          ]
-        }
-      ],
-      "prerequisite": "1B",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 3, "duration": 2, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["dot", "bleed", "aoe"]}],
+      "prerequisite": "1B", "tier": 2, "exclusions": []
     },
     "3A_from_2A": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 8,
-          "duration": 0,
-          "target": "ENEMY_ALL",
-          "stacking": "replace",
-          "tags": [
-            "aoe"
-          ]
-        }
-      ],
-      "prerequisite": "2A_from_1A",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "Power", "operation": "PCT_SUB", "value": 15, "duration": 2, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["debuff", "weaken", "aoe"]}],
+      "prerequisite": "2A_from_1A", "tier": 3, "exclusions": []
     },
     "3B_from_2B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 10,
-          "duration": 0,
-          "target": "ENEMY_SINGLE",
-          "stacking": "replace",
-          "tags": [
-            "attack"
-          ]
-        }
-      ],
-      "prerequisite": "2B_from_1B",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 8, "duration": 0, "target": "ENEMY_ALL", "stacking": "replace", "tags": ["attack", "physical", "aoe"]}],
+      "prerequisite": "2B_from_1B", "tier": 3, "exclusions": []
     }
   },
+
   "phalanx_01": {
     "1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 15,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1B"
-      ]
+      "added_effects": [{"stat": "Defense", "operation": "FLAT_ADD", "value": 8, "duration": 2, "target": "ALLY_ALL", "stacking": "replace", "tags": ["buff", "defense", "party"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1B"]
     },
     "1B": {
-      "added_effects": [
-        {
-          "stat": "Power",
-          "operation": "PCT_ADD",
-          "value": 20,
-          "duration": 1,
-          "target": "SELF",
-          "stacking": "replace",
-          "tags": [
-            "buff"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1A"
-      ]
+      "added_effects": [{"stat": "HP", "operation": "FLAT_ADD", "value": 5, "duration": 2, "target": "ALLY_SINGLE", "stacking": "stack", "tags": ["heal", "regen"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1A"]
     },
     "2A_from_1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 10,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": "1A",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Defense", "operation": "FLAT_ADD", "value": 5, "duration": 1, "target": "ALLY_ALL", "stacking": "replace", "tags": ["buff", "defense", "party"]}],
+      "prerequisite": "1A", "tier": 2, "exclusions": []
     },
     "2B_from_1B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 5,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "dot"
-          ]
-        }
-      ],
-      "prerequisite": "1B",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Speed", "operation": "PCT_ADD", "value": 10, "duration": 2, "target": "ALLY_SINGLE", "stacking": "stack", "tags": ["buff", "speed"]}],
+      "prerequisite": "1B", "tier": 2, "exclusions": []
     },
     "3A_from_2A": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 8,
-          "duration": 0,
-          "target": "ENEMY_ALL",
-          "stacking": "replace",
-          "tags": [
-            "aoe"
-          ]
-        }
-      ],
-      "prerequisite": "2A_from_1A",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "Speed", "operation": "PCT_ADD", "value": 10, "duration": 2, "target": "ALLY_ALL", "stacking": "stack", "tags": ["buff", "speed", "party"]}],
+      "prerequisite": "2A_from_1A", "tier": 3, "exclusions": []
     },
     "3B_from_2B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 10,
-          "duration": 0,
-          "target": "ENEMY_SINGLE",
-          "stacking": "replace",
-          "tags": [
-            "attack"
-          ]
-        }
-      ],
-      "prerequisite": "2B_from_1B",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "Defense", "operation": "FLAT_ADD", "value": 12, "duration": 3, "target": "ALLY_SINGLE", "stacking": "max", "tags": ["buff", "defense"]}],
+      "prerequisite": "2B_from_1B", "tier": 3, "exclusions": []
     }
   },
+
   "adrenaline_01": {
     "1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 15,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1B"
-      ]
+      "added_effects": [{"stat": "Speed", "operation": "PCT_ADD", "value": 15, "duration": 2, "target": "ALLY_ALL", "stacking": "stack", "tags": ["buff", "speed", "party"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1B"]
     },
     "1B": {
-      "added_effects": [
-        {
-          "stat": "Power",
-          "operation": "PCT_ADD",
-          "value": 20,
-          "duration": 1,
-          "target": "SELF",
-          "stacking": "replace",
-          "tags": [
-            "buff"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1A"
-      ]
+      "added_effects": [{"stat": "Power", "operation": "PCT_ADD", "value": 15, "duration": 2, "target": "SELF", "stacking": "stack", "tags": ["buff", "power"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1A"]
     },
     "2A_from_1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 10,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": "1A",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Defense", "operation": "FLAT_ADD", "value": 5, "duration": 2, "target": "ALLY_ALL", "stacking": "replace", "tags": ["buff", "defense", "party"]}],
+      "prerequisite": "1A", "tier": 2, "exclusions": []
     },
     "2B_from_1B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 5,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "dot"
-          ]
-        }
-      ],
-      "prerequisite": "1B",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Power", "operation": "PCT_ADD", "value": 10, "duration": 2, "target": "SELF", "stacking": "stack", "tags": ["buff", "power"]}],
+      "prerequisite": "1B", "tier": 2, "exclusions": []
     },
     "3A_from_2A": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 8,
-          "duration": 0,
-          "target": "ENEMY_ALL",
-          "stacking": "replace",
-          "tags": [
-            "aoe"
-          ]
-        }
-      ],
-      "prerequisite": "2A_from_1A",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_ADD", "value": 5, "duration": 2, "target": "ALLY_ALL", "stacking": "stack", "tags": ["heal", "regen", "party"]}],
+      "prerequisite": "2A_from_1A", "tier": 3, "exclusions": []
     },
     "3B_from_2B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 10,
-          "duration": 0,
-          "target": "ENEMY_SINGLE",
-          "stacking": "replace",
-          "tags": [
-            "attack"
-          ]
-        }
-      ],
-      "prerequisite": "2B_from_1B",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "Speed", "operation": "PCT_ADD", "value": 20, "duration": 3, "target": "SELF", "stacking": "stack", "tags": ["buff", "speed"]}],
+      "prerequisite": "2B_from_1B", "tier": 3, "exclusions": []
     }
   },
+
   "cleanse_01": {
     "1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 15,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1B"
-      ]
+      "added_effects": [{"stat": "Defense", "operation": "FLAT_ADD", "value": 10, "duration": 2, "target": "ALLY_SINGLE", "stacking": "replace", "tags": ["buff", "defense"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1B"]
     },
     "1B": {
-      "added_effects": [
-        {
-          "stat": "Power",
-          "operation": "PCT_ADD",
-          "value": 20,
-          "duration": 1,
-          "target": "SELF",
-          "stacking": "replace",
-          "tags": [
-            "buff"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1A"
-      ]
+      "added_effects": [{"stat": "HP", "operation": "FLAT_ADD", "value": 4, "duration": 3, "target": "ALLY_SINGLE", "stacking": "stack", "tags": ["heal", "regen"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1A"]
     },
     "2A_from_1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 10,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": "1A",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_ADD", "value": 5, "duration": 0, "target": "ALLY_ALL", "stacking": "replace", "tags": ["heal", "party"]}],
+      "prerequisite": "1A", "tier": 2, "exclusions": []
     },
     "2B_from_1B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 5,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "dot"
-          ]
-        }
-      ],
-      "prerequisite": "1B",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_ADD", "value": 3, "duration": 2, "target": "ALLY_SINGLE", "stacking": "stack", "tags": ["heal", "regen"]}],
+      "prerequisite": "1B", "tier": 2, "exclusions": []
     },
     "3A_from_2A": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 8,
-          "duration": 0,
-          "target": "ENEMY_ALL",
-          "stacking": "replace",
-          "tags": [
-            "aoe"
-          ]
-        }
-      ],
-      "prerequisite": "2A_from_1A",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "Defense", "operation": "FLAT_ADD", "value": 8, "duration": 2, "target": "ALLY_ALL", "stacking": "replace", "tags": ["buff", "defense", "party"]}],
+      "prerequisite": "2A_from_1A", "tier": 3, "exclusions": []
     },
     "3B_from_2B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 10,
-          "duration": 0,
-          "target": "ENEMY_SINGLE",
-          "stacking": "replace",
-          "tags": [
-            "attack"
-          ]
-        }
-      ],
-      "prerequisite": "2B_from_1B",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_ADD", "value": 10, "duration": 0, "target": "ALLY_SINGLE", "stacking": "replace", "tags": ["heal"]}],
+      "prerequisite": "2B_from_1B", "tier": 3, "exclusions": []
     }
   },
+
   "deep_focus_01": {
     "1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 15,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1B"
-      ]
+      "added_effects": [{"stat": "Defense", "operation": "FLAT_ADD", "value": 10, "duration": 2, "target": "SELF", "stacking": "replace", "tags": ["buff", "defense"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1B"]
     },
     "1B": {
-      "added_effects": [
-        {
-          "stat": "Power",
-          "operation": "PCT_ADD",
-          "value": 20,
-          "duration": 1,
-          "target": "SELF",
-          "stacking": "replace",
-          "tags": [
-            "buff"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1A"
-      ]
+      "added_effects": [{"stat": "Power", "operation": "PCT_ADD", "value": 15, "duration": 2, "target": "SELF", "stacking": "replace", "tags": ["buff", "power"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1A"]
     },
     "2A_from_1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 10,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": "1A",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Speed", "operation": "PCT_ADD", "value": 10, "duration": 2, "target": "SELF", "stacking": "stack", "tags": ["buff", "speed"]}],
+      "prerequisite": "1A", "tier": 2, "exclusions": []
     },
     "2B_from_1B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 5,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "dot"
-          ]
-        }
-      ],
-      "prerequisite": "1B",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_ADD", "value": 5, "duration": 2, "target": "SELF", "stacking": "stack", "tags": ["heal", "regen"]}],
+      "prerequisite": "1B", "tier": 2, "exclusions": []
     },
     "3A_from_2A": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 8,
-          "duration": 0,
-          "target": "ENEMY_ALL",
-          "stacking": "replace",
-          "tags": [
-            "aoe"
-          ]
-        }
-      ],
-      "prerequisite": "2A_from_1A",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "Energy", "operation": "FLAT_ADD", "value": 1, "duration": 0, "target": "SELF", "stacking": "stack", "tags": ["buff", "energy"]}],
+      "prerequisite": "2A_from_1A", "tier": 3, "exclusions": []
     },
     "3B_from_2B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 10,
-          "duration": 0,
-          "target": "ENEMY_SINGLE",
-          "stacking": "replace",
-          "tags": [
-            "attack"
-          ]
-        }
-      ],
-      "prerequisite": "2B_from_1B",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "Power", "operation": "PCT_ADD", "value": 10, "duration": 2, "target": "SELF", "stacking": "stack", "tags": ["buff", "power"]}],
+      "prerequisite": "2B_from_1B", "tier": 3, "exclusions": []
     }
   },
+
   "acid_flask_01": {
     "1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 15,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1B"
-      ]
+      "added_effects": [{"stat": "Defense", "operation": "PCT_SUB", "value": 10, "duration": 2, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["shred", "aoe"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1B"]
     },
     "1B": {
-      "added_effects": [
-        {
-          "stat": "Power",
-          "operation": "PCT_ADD",
-          "value": 20,
-          "duration": 1,
-          "target": "SELF",
-          "stacking": "replace",
-          "tags": [
-            "buff"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1A"
-      ]
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 3, "duration": 2, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["dot", "poison", "aoe"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1A"]
     },
     "2A_from_1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 10,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": "1A",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Defense", "operation": "PCT_SUB", "value": 8, "duration": 2, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["shred", "aoe"]}],
+      "prerequisite": "1A", "tier": 2, "exclusions": []
     },
     "2B_from_1B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 5,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "dot"
-          ]
-        }
-      ],
-      "prerequisite": "1B",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Speed", "operation": "PCT_SUB", "value": 15, "duration": 2, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["slow", "aoe"]}],
+      "prerequisite": "1B", "tier": 2, "exclusions": []
     },
     "3A_from_2A": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 8,
-          "duration": 0,
-          "target": "ENEMY_ALL",
-          "stacking": "replace",
-          "tags": [
-            "aoe"
-          ]
-        }
-      ],
-      "prerequisite": "2A_from_1A",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "Power", "operation": "PCT_SUB", "value": 15, "duration": 2, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["debuff", "weaken", "aoe"]}],
+      "prerequisite": "2A_from_1A", "tier": 3, "exclusions": []
     },
     "3B_from_2B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 10,
-          "duration": 0,
-          "target": "ENEMY_SINGLE",
-          "stacking": "replace",
-          "tags": [
-            "attack"
-          ]
-        }
-      ],
-      "prerequisite": "2B_from_1B",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 4, "duration": 2, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["dot", "poison", "aoe"]}],
+      "prerequisite": "2B_from_1B", "tier": 3, "exclusions": []
     }
   },
+
   "frost_bolt_01": {
     "1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 15,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1B"
-      ]
+      "added_effects": [{"stat": "Speed", "operation": "PCT_SUB", "value": 20, "duration": 2, "target": "ENEMY_SINGLE", "stacking": "stack", "tags": ["slow", "ice"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1B"]
     },
     "1B": {
-      "added_effects": [
-        {
-          "stat": "Power",
-          "operation": "PCT_ADD",
-          "value": 20,
-          "duration": 1,
-          "target": "SELF",
-          "stacking": "replace",
-          "tags": [
-            "buff"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1A"
-      ]
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 10, "duration": 0, "target": "ENEMY_SINGLE", "stacking": "replace", "tags": ["attack", "ice"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1A"]
     },
     "2A_from_1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 10,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": "1A",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Speed", "operation": "PCT_SUB", "value": 15, "duration": 1, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["slow", "ice", "aoe"]}],
+      "prerequisite": "1A", "tier": 2, "exclusions": []
     },
     "2B_from_1B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 5,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "dot"
-          ]
-        }
-      ],
-      "prerequisite": "1B",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Defense", "operation": "PCT_SUB", "value": 15, "duration": 2, "target": "ENEMY_SINGLE", "stacking": "stack", "tags": ["shred", "ice"]}],
+      "prerequisite": "1B", "tier": 2, "exclusions": []
     },
     "3A_from_2A": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 8,
-          "duration": 0,
-          "target": "ENEMY_ALL",
-          "stacking": "replace",
-          "tags": [
-            "aoe"
-          ]
-        }
-      ],
-      "prerequisite": "2A_from_1A",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 6, "duration": 0, "target": "ENEMY_ALL", "stacking": "replace", "tags": ["attack", "ice", "aoe"]}],
+      "prerequisite": "2A_from_1A", "tier": 3, "exclusions": []
     },
     "3B_from_2B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 10,
-          "duration": 0,
-          "target": "ENEMY_SINGLE",
-          "stacking": "replace",
-          "tags": [
-            "attack"
-          ]
-        }
-      ],
-      "prerequisite": "2B_from_1B",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 15, "duration": 0, "target": "ENEMY_SINGLE", "stacking": "replace", "tags": ["attack", "ice"]}],
+      "prerequisite": "2B_from_1B", "tier": 3, "exclusions": []
     }
   },
+
   "power_surge_01": {
     "1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 15,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1B"
-      ]
+      "added_effects": [{"stat": "Power", "operation": "PCT_ADD", "value": 12, "duration": 2, "target": "ALLY_ALL", "stacking": "stack", "tags": ["buff", "power", "party"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1B"]
     },
     "1B": {
-      "added_effects": [
-        {
-          "stat": "Power",
-          "operation": "PCT_ADD",
-          "value": 20,
-          "duration": 1,
-          "target": "SELF",
-          "stacking": "replace",
-          "tags": [
-            "buff"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1A"
-      ]
+      "added_effects": [{"stat": "Power", "operation": "PCT_ADD", "value": 10, "duration": 2, "target": "ALLY_SINGLE", "stacking": "stack", "tags": ["buff", "power"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1A"]
     },
     "2A_from_1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 10,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": "1A",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Defense", "operation": "FLAT_ADD", "value": 5, "duration": 2, "target": "ALLY_ALL", "stacking": "replace", "tags": ["buff", "defense", "party"]}],
+      "prerequisite": "1A", "tier": 2, "exclusions": []
     },
     "2B_from_1B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 5,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "dot"
-          ]
-        }
-      ],
-      "prerequisite": "1B",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Speed", "operation": "PCT_ADD", "value": 15, "duration": 2, "target": "ALLY_SINGLE", "stacking": "stack", "tags": ["buff", "speed"]}],
+      "prerequisite": "1B", "tier": 2, "exclusions": []
     },
     "3A_from_2A": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 8,
-          "duration": 0,
-          "target": "ENEMY_ALL",
-          "stacking": "replace",
-          "tags": [
-            "aoe"
-          ]
-        }
-      ],
-      "prerequisite": "2A_from_1A",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "Speed", "operation": "PCT_ADD", "value": 10, "duration": 2, "target": "ALLY_ALL", "stacking": "stack", "tags": ["buff", "speed", "party"]}],
+      "prerequisite": "2A_from_1A", "tier": 3, "exclusions": []
     },
     "3B_from_2B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 10,
-          "duration": 0,
-          "target": "ENEMY_SINGLE",
-          "stacking": "replace",
-          "tags": [
-            "attack"
-          ]
-        }
-      ],
-      "prerequisite": "2B_from_1B",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "Power", "operation": "PCT_ADD", "value": 15, "duration": 3, "target": "ALLY_SINGLE", "stacking": "stack", "tags": ["buff", "power"]}],
+      "prerequisite": "2B_from_1B", "tier": 3, "exclusions": []
     }
   },
+
   "stone_wall_01": {
     "1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 15,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1B"
-      ]
+      "added_effects": [{"stat": "Defense", "operation": "FLAT_ADD", "value": 12, "duration": 2, "target": "ALLY_ALL", "stacking": "replace", "tags": ["buff", "defense", "party"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1B"]
     },
     "1B": {
-      "added_effects": [
-        {
-          "stat": "Power",
-          "operation": "PCT_ADD",
-          "value": 20,
-          "duration": 1,
-          "target": "SELF",
-          "stacking": "replace",
-          "tags": [
-            "buff"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1A"
-      ]
+      "added_effects": [{"stat": "HP", "operation": "FLAT_ADD", "value": 8, "duration": 3, "target": "ALLY_SINGLE", "stacking": "stack", "tags": ["heal", "regen"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1A"]
     },
     "2A_from_1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 10,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": "1A",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Power", "operation": "PCT_SUB", "value": 10, "duration": 2, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["debuff", "weaken"]}],
+      "prerequisite": "1A", "tier": 2, "exclusions": []
     },
     "2B_from_1B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 5,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "dot"
-          ]
-        }
-      ],
-      "prerequisite": "1B",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_ADD", "value": 5, "duration": 2, "target": "ALLY_SINGLE", "stacking": "stack", "tags": ["heal", "regen"]}],
+      "prerequisite": "1B", "tier": 2, "exclusions": []
     },
     "3A_from_2A": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 8,
-          "duration": 0,
-          "target": "ENEMY_ALL",
-          "stacking": "replace",
-          "tags": [
-            "aoe"
-          ]
-        }
-      ],
-      "prerequisite": "2A_from_1A",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "Defense", "operation": "FLAT_ADD", "value": 8, "duration": 2, "target": "ALLY_ALL", "stacking": "replace", "tags": ["buff", "defense", "party"]}],
+      "prerequisite": "2A_from_1A", "tier": 3, "exclusions": []
     },
     "3B_from_2B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 10,
-          "duration": 0,
-          "target": "ENEMY_SINGLE",
-          "stacking": "replace",
-          "tags": [
-            "attack"
-          ]
-        }
-      ],
-      "prerequisite": "2B_from_1B",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "Defense", "operation": "FLAT_ADD", "value": 15, "duration": 3, "target": "ALLY_SINGLE", "stacking": "max", "tags": ["buff", "defense"]}],
+      "prerequisite": "2B_from_1B", "tier": 3, "exclusions": []
     }
   },
+
   "lightning_chain_01": {
     "1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 15,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1B"
-      ]
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 5, "duration": 0, "target": "ENEMY_ALL", "stacking": "replace", "tags": ["attack", "lightning", "aoe"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1B"]
     },
     "1B": {
-      "added_effects": [
-        {
-          "stat": "Power",
-          "operation": "PCT_ADD",
-          "value": 20,
-          "duration": 1,
-          "target": "SELF",
-          "stacking": "replace",
-          "tags": [
-            "buff"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1A"
-      ]
+      "added_effects": [{"stat": "Speed", "operation": "PCT_SUB", "value": 20, "duration": 2, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["slow", "lightning", "aoe"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1A"]
     },
     "2A_from_1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 10,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": "1A",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Defense", "operation": "PCT_SUB", "value": 10, "duration": 2, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["shred", "aoe"]}],
+      "prerequisite": "1A", "tier": 2, "exclusions": []
     },
     "2B_from_1B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 5,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "dot"
-          ]
-        }
-      ],
-      "prerequisite": "1B",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Power", "operation": "PCT_SUB", "value": 12, "duration": 2, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["debuff", "weaken", "aoe"]}],
+      "prerequisite": "1B", "tier": 2, "exclusions": []
     },
     "3A_from_2A": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 8,
-          "duration": 0,
-          "target": "ENEMY_ALL",
-          "stacking": "replace",
-          "tags": [
-            "aoe"
-          ]
-        }
-      ],
-      "prerequisite": "2A_from_1A",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 8, "duration": 0, "target": "ENEMY_ALL", "stacking": "replace", "tags": ["attack", "lightning", "aoe"]}],
+      "prerequisite": "2A_from_1A", "tier": 3, "exclusions": []
     },
     "3B_from_2B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 10,
-          "duration": 0,
-          "target": "ENEMY_SINGLE",
-          "stacking": "replace",
-          "tags": [
-            "attack"
-          ]
-        }
-      ],
-      "prerequisite": "2B_from_1B",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "Speed", "operation": "PCT_SUB", "value": 15, "duration": 2, "target": "ENEMY_ALL", "stacking": "stack", "tags": ["slow", "lightning", "aoe"]}],
+      "prerequisite": "2B_from_1B", "tier": 3, "exclusions": []
     }
   },
+
   "heal_potion_01": {
     "1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 15,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1B"
-      ]
+      "added_effects": [{"stat": "HP", "operation": "FLAT_ADD", "value": 8, "duration": 0, "target": "ALLY_ALL", "stacking": "replace", "tags": ["heal", "party"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1B"]
     },
     "1B": {
-      "added_effects": [
-        {
-          "stat": "Power",
-          "operation": "PCT_ADD",
-          "value": 20,
-          "duration": 1,
-          "target": "SELF",
-          "stacking": "replace",
-          "tags": [
-            "buff"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1A"
-      ]
+      "added_effects": [{"stat": "HP", "operation": "FLAT_ADD", "value": 5, "duration": 3, "target": "ALLY_SINGLE", "stacking": "stack", "tags": ["heal", "regen"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1A"]
     },
     "2A_from_1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 10,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": "1A",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Defense", "operation": "FLAT_ADD", "value": 8, "duration": 2, "target": "ALLY_ALL", "stacking": "replace", "tags": ["buff", "defense", "party"]}],
+      "prerequisite": "1A", "tier": 2, "exclusions": []
     },
     "2B_from_1B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 5,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "dot"
-          ]
-        }
-      ],
-      "prerequisite": "1B",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Speed", "operation": "PCT_ADD", "value": 15, "duration": 2, "target": "ALLY_SINGLE", "stacking": "stack", "tags": ["buff", "speed"]}],
+      "prerequisite": "1B", "tier": 2, "exclusions": []
     },
     "3A_from_2A": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 8,
-          "duration": 0,
-          "target": "ENEMY_ALL",
-          "stacking": "replace",
-          "tags": [
-            "aoe"
-          ]
-        }
-      ],
-      "prerequisite": "2A_from_1A",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_ADD", "value": 5, "duration": 0, "target": "ALLY_ALL", "stacking": "replace", "tags": ["heal", "party"]}],
+      "prerequisite": "2A_from_1A", "tier": 3, "exclusions": []
     },
     "3B_from_2B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 10,
-          "duration": 0,
-          "target": "ENEMY_SINGLE",
-          "stacking": "replace",
-          "tags": [
-            "attack"
-          ]
-        }
-      ],
-      "prerequisite": "2B_from_1B",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_ADD", "value": 8, "duration": 0, "target": "ALLY_SINGLE", "stacking": "replace", "tags": ["heal"]}],
+      "prerequisite": "2B_from_1B", "tier": 3, "exclusions": []
     }
   },
+
   "drain_life_01": {
     "1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 15,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1B"
-      ]
+      "added_effects": [{"stat": "HP", "operation": "FLAT_ADD", "value": 5, "duration": 0, "target": "SELF", "stacking": "replace", "tags": ["heal", "lifesteal"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1B"]
     },
     "1B": {
-      "added_effects": [
-        {
-          "stat": "Power",
-          "operation": "PCT_ADD",
-          "value": 20,
-          "duration": 1,
-          "target": "SELF",
-          "stacking": "replace",
-          "tags": [
-            "buff"
-          ]
-        }
-      ],
-      "prerequisite": null,
-      "tier": 1,
-      "exclusions": [
-        "1A"
-      ]
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 4, "duration": 2, "target": "ENEMY_SINGLE", "stacking": "stack", "tags": ["dot", "dark"]}],
+      "prerequisite": null, "tier": 1, "exclusions": ["1A"]
     },
     "2A_from_1A": {
-      "added_effects": [
-        {
-          "stat": "Defense",
-          "operation": "PCT_SUB",
-          "value": 10,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "shred"
-          ]
-        }
-      ],
-      "prerequisite": "1A",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 5, "duration": 0, "target": "ENEMY_ALL", "stacking": "replace", "tags": ["attack", "dark", "aoe"]}],
+      "prerequisite": "1A", "tier": 2, "exclusions": []
     },
     "2B_from_1B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 5,
-          "duration": 2,
-          "target": "ENEMY_SINGLE",
-          "stacking": "stack",
-          "tags": [
-            "dot"
-          ]
-        }
-      ],
-      "prerequisite": "1B",
-      "tier": 2,
-      "exclusions": []
+      "added_effects": [{"stat": "Defense", "operation": "PCT_SUB", "value": 12, "duration": 2, "target": "ENEMY_SINGLE", "stacking": "stack", "tags": ["shred", "dark"]}],
+      "prerequisite": "1B", "tier": 2, "exclusions": []
     },
     "3A_from_2A": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 8,
-          "duration": 0,
-          "target": "ENEMY_ALL",
-          "stacking": "replace",
-          "tags": [
-            "aoe"
-          ]
-        }
-      ],
-      "prerequisite": "2A_from_1A",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_ADD", "value": 3, "duration": 0, "target": "SELF", "stacking": "replace", "tags": ["heal", "lifesteal"]}],
+      "prerequisite": "2A_from_1A", "tier": 3, "exclusions": []
     },
     "3B_from_2B": {
-      "added_effects": [
-        {
-          "stat": "HP",
-          "operation": "FLAT_SUB",
-          "value": 10,
-          "duration": 0,
-          "target": "ENEMY_SINGLE",
-          "stacking": "replace",
-          "tags": [
-            "attack"
-          ]
-        }
-      ],
-      "prerequisite": "2B_from_1B",
-      "tier": 3,
-      "exclusions": []
+      "added_effects": [{"stat": "HP", "operation": "FLAT_SUB", "value": 10, "duration": 0, "target": "ENEMY_SINGLE", "stacking": "replace", "tags": ["attack", "dark"]}],
+      "prerequisite": "2B_from_1B", "tier": 3, "exclusions": []
     }
   }
 }
