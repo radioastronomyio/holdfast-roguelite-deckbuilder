@@ -24,10 +24,11 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 
 ## Current State
 
-- **Phase:** M1 Complete
+- **Phase:** M2a Complete
 - **GDD:** v1.1 (flavor system, tags, fixed-point arithmetic)
-- **Next work:** M2 — Resolver engine, CT system, combat loop in `simulation/`
+- **Next work:** M2b — Campaign loop, real enemy AI heuristics, procedural generation
 - **M1 delivered:** All data schemas, Pydantic models, JSON data files, and 95 passing tests
+- **M2a delivered:** Stat resolver, CT turn order, combat/hazard/event resolution, greedy enemy AI, resolver special handlers — 192 total tests passing
 
 ## Core Concept: Universal Modifier Engine
 
