@@ -15,6 +15,7 @@ from engine.turn_order import (
 )
 from engine.stats import calculate_stat, apply_stacking
 from engine.enemy_ai import pick_enemy_action
+from agents.enemy_ai_v2 import pick_enemy_action_v2
 
 COMBAT_TURN_CAP = 200
 
@@ -143,6 +144,7 @@ def resolve_combat(
     cards_by_id: dict[str, Card] | None = None,
     region_modifiers: list[Modifier] | None = None,
     world_modifiers: list[Modifier] | None = None,
+    player_strategy=None,
 ) -> CombatResult:
     """Execute a full combat encounter."""
     logs = []
@@ -212,7 +214,12 @@ def resolve_combat(
             player_cards = []
             if cards_by_id and actor.card_pool:
                 player_cards = [cards_by_id[cid] for cid in actor.card_pool if cid in cards_by_id]
-            action = _player_pick_card(actor, player_cards, enemies)
+            if player_strategy:
+                living_allies = [e for e in party if e.is_alive]
+                living_enemies_list = [e for e in enemies if e.is_alive]
+                action = player_strategy.select_card(actor, player_cards, living_allies, living_enemies_list)
+            else:
+                action = _player_pick_card(actor, player_cards, enemies)
             if action:
                 card, targets = action
                 turn_logs = play_card(card, actor, targets, all_entities)
@@ -222,7 +229,9 @@ def resolve_combat(
             enemy_cards = []
             if cards_by_id and actor.card_pool:
                 enemy_cards = [cards_by_id[cid] for cid in actor.card_pool if cid in cards_by_id]
-            action = pick_enemy_action(actor, enemy_cards, party)
+            # Use enhanced enemy AI (v2) which falls back to greedy
+            enemy_allies = [e for e in enemies if e.is_alive and e is not actor]
+            action = pick_enemy_action_v2(actor, enemy_cards, party, enemy_allies, turns_taken)
             if action:
                 card, targets = action
                 turn_logs = play_card(card, actor, targets, all_entities)
