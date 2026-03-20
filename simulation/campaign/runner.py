@@ -172,11 +172,12 @@ def run_campaign(seed: int, game_data: GameData, strategy=None) -> CampaignResul
             assigned_difficulty=diff,
         ))
 
-    # Start with 3 generated characters, pick the best (highest total stats)
-    candidates = [generate_character(rng, game_data.generation_bounds, game_data.flavor) for _ in range(3)]
-    best = max(candidates, key=lambda c: sum(c.base_stats.values()))
-    state.roster.append(best)
-    state.campaign_log.append(f"Starting character: {best.name}")
+    # Start with 2 characters — generate 5 candidates, pick the best 2 by total stats
+    candidates = [generate_character(rng, game_data.generation_bounds, game_data.flavor) for _ in range(5)]
+    candidates.sort(key=lambda c: sum(c.base_stats.values()), reverse=True)
+    for starter in candidates[:2]:
+        state.roster.append(starter)
+        state.campaign_log.append(f"Starting character: {starter.name}")
 
     # Reveal 1 random region at research level 1
     unrevealed = [rs for rs in state.region_states if rs.research_level == 0]
