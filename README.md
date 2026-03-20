@@ -4,8 +4,8 @@ title: "Holdfast — Browser-Based Roguelite Deckbuilder"
 description: "A finite-campaign roguelite deckbuilder where everything runs on a universal modifier engine"
 author: "CrainBramp"
 date: "2026-03-03"
-version: "0.1.0"
-status: "Pre-Implementation"
+version: "0.2.0"
+status: "Phase 1 Simulation Complete"
 tags:
   - type: project-root
   - domain: [game-dev, card-game, roguelite]
@@ -61,11 +61,16 @@ Each milestone is specified as an [OpenSpec](https://github.com/Fission-AI/OpenS
 | Game Design Document | ✅ Complete | Full mechanical spec — [GDD](docs/game-design-document.md) |
 | Research Validation | ✅ Complete | Gemini Deep Research (NSB-bounded) |
 | Repo & Tooling Setup | ✅ Complete | Repository, OpenSpec, GitHub milestones/issues |
-| M1: Data Schemas & Foundations | 🔄 In Progress | JSON schemas, Pydantic validation, test fixtures — [spec](openspec/changes/m1-data-schemas/) |
-| M2: Simulation Engine | ⬜ Planned | Resolver engine, combat system, campaign generator, AI heuristics |
-| M3: Simulation Validation & Tuning | ⬜ Planned | Monte Carlo harness, balance analysis, tuning iteration |
+| M1: Data Schemas | ✅ Complete | Pydantic models, JSON data files, 95 tests |
+| M2a: Resolver Engine & Combat | ✅ Complete | Stat resolver, CT turn order, encounter resolution, enemy AI, special handlers |
+| M2b: Procedural Generation | ✅ Complete | Character/enemy/region/encounter generators from seeded RNG |
+| M2c: Campaign Loop | ✅ Complete | Data loader, campaign state machine, full macro loop |
+| M2d: AI Heuristics & Monte Carlo | ✅ Complete | 3 player AIs, enhanced enemy AI, Monte Carlo runner |
+| M3: Balance Tuning | ⬜ Planned | Run Monte Carlo at scale, tune card/region/upgrade values |
 | M4: Minimal Playable Frontend | ⬜ Planned | React browser game — ugly but functional |
 | M5: Visual Polish | ⬜ Planned | Asset integration, animations, effects |
+
+**295 tests passing** across the full simulation stack. Run: `pytest simulation/tests/ -v` from repo root.
 
 ---
 
@@ -89,20 +94,25 @@ The simulation targets 40-70% win rate across seeds. It validates card math and 
 holdfast-roguelite-deckbuilder/
 ├── 📂 assets/                # Game art (2D Pixel Quest UI pack — local only, gitignored)
 ├── 📂 mods/                  # Mod-ready content layer — game always loads from here
-│   └── default/              # Base word pools, epithet conditions, element-stat maps
-├── 📂 data/                  # Shared JSON definitions (cards, characters, regions)
+│   └── default/flavor/       # Word pools, epithet conditions, element-stat maps
+├── 📂 data/                  # Shared JSON definitions (cards, characters, regions, world deck)
 ├── 📂 docs/                  # Design documentation and research
 │   ├── game-design-document.md
 │   └── research/             # GDR output, reference material
 ├── 📂 game/                  # React frontend (M4+)
-├── 📂 openspec/              # Spec-driven development — change proposals and specs
-│   ├── changes/              # Active and archived change proposals
-│   └── specs/                # Accumulated capability specs
-├── 📂 simulation/            # Python Monte Carlo (M1-M3)
+├── 📂 spec/                  # Standalone milestone specs (agent execution targets)
+├── 📂 openspec/              # OpenSpec metadata and archived change proposals
+├── 📂 simulation/            # Python Monte Carlo simulation (Phase 1)
+│   ├── models/               # Pydantic data models (M1)
+│   ├── engine/               # Resolver engine — stats, turn order, encounters (M2a)
+│   ├── generation/           # Procedural generators — characters, enemies, regions (M2b)
+│   ├── campaign/             # Campaign loop — loader, state, runner (M2c)
+│   ├── agents/               # AI heuristics and Monte Carlo runner (M2d)
+│   └── tests/                # 295 tests
 ├── 📂 scratch/               # Temporary working files (gitignored)
 ├── 📄 AGENTS.md              # Agent context and session pattern
 ├── 📄 README.md              # This file
-└── 📄 [config]               # .gitignore, cspell, markdownlint, .vscode, openspec
+└── 📄 [config]               # .gitignore, cspell, markdownlint, .vscode, pyproject.toml
 ```
 
 ---
@@ -129,15 +139,45 @@ The procedural generator does not guarantee solvable campaigns. This is the game
 
 ## 🚀 Getting Started
 
-> M1 (Data Schemas & Foundations) is in progress. No runnable code yet.
+### Prerequisites
+
+- Python 3.12+
+- `pip install -r simulation/requirements.txt` (pydantic, pytest)
+
+### Run the Tests
+
+```bash
+pytest simulation/tests/ -v
+```
+
+### Run a Campaign
+
+```python
+from campaign.loader import load_game_data
+from campaign.runner import run_campaign
+from agents.heuristics import BalancedAI
+
+game_data = load_game_data()
+result = run_campaign(seed=42, game_data=game_data, strategy=BalancedAI())
+print(f"Victory: {result.victory}, Regions cleared: {result.regions_cleared}")
+```
+
+### Run Monte Carlo
+
+```python
+from campaign.loader import load_game_data
+from agents.monte_carlo import run_monte_carlo, MonteCarloConfig, monte_carlo_to_json
+from pathlib import Path
+
+game_data = load_game_data()
+config = MonteCarloConfig(seed_start=1, seed_count=100)
+result = run_monte_carlo(config, game_data)
+monte_carlo_to_json(result, Path("monte_carlo_results.json"))
+```
 
 ### Read the Design
 
 The [Game Design Document](docs/game-design-document.md) is the source of truth for all mechanics, systems, and architecture decisions.
-
-### Current Work
-
-M1 defines JSON schemas and Pydantic validation for every data type in the game. The active spec is at [`openspec/changes/m1-data-schemas/`](openspec/changes/m1-data-schemas/). Once M1 lands, M2 builds the resolver engine and combat system on top of these schemas.
 
 ---
 
@@ -155,4 +195,4 @@ This project is licensed under the MIT License — see [LICENSE](LICENSE) for de
 
 ---
 
-Last Updated: 2026-03-04 | Status: M1 In Progress
+Last Updated: 2026-03-19 | Status: Phase 1 Simulation Complete — 295 Tests Passing

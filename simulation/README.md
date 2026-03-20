@@ -3,9 +3,9 @@
 title: "Balance Simulation"
 description: "Python Monte Carlo simulation for card math validation and balance testing"
 author: "CrainBramp"
-date: "2026-03-03"
-version: "0.1.0"
-status: "Pre-Implementation"
+date: "2026-03-17"
+version: "0.2.0"
+status: "M2a Complete — Resolver Engine & Combat System delivered"
 tags:
   - type: directory-readme
   - domain: [simulation, balance, monte-carlo]
@@ -24,11 +24,37 @@ Python Monte Carlo simulation that validates card math, detects degenerate combo
 ```
 simulation/
 ├── README.md               # This file
-├── engine/                  # ResolverEngine — universal modifier resolution (planned)
-├── agents/                  # AI heuristics: aggressive, defensive, balanced (planned)
-├── campaign/                # Campaign generation and macro loop (planned)
-├── analysis/                # Output analysis and reporting (planned)
-└── requirements.txt         # Python dependencies (planned)
+├── __init__.py
+├── requirements.txt        # Python dependencies (pydantic, pytest)
+├── engine/                 # ResolverEngine — stat resolution, combat, encounters
+│   ├── __init__.py
+│   ├── stats.py            # calculate_stat(), apply_stacking()
+│   ├── turn_order.py       # CombatEntity, CT turn order, process_turn_start()
+│   ├── encounters.py       # resolve_combat(), resolve_hazard(), resolve_event(), play_card()
+│   ├── enemy_ai.py         # pick_enemy_action() — greedy AI (M2a minimal)
+│   └── special_handlers.py # SPECIAL_HANDLERS dispatch dict, 3 resolver_special handlers
+├── models/                 # Pydantic data models (M1)
+│   ├── __init__.py
+│   ├── enums.py            # Stat, Operation, Target, Stacking, AiHeuristic, etc.
+│   ├── modifier.py         # Modifier model, STAT_SCALE = 1000
+│   ├── card.py             # Card, UpgradeEntry, UpgradeTree
+│   ├── entity.py           # Character, Enemy, CharacterGenerationBounds
+│   ├── campaign.py         # Region, Encounter types, WorldCard, OutpostUpgrade
+│   └── flavor.py           # EpithetCondition, ElementStatMap, FlavorPools
+└── tests/                  # 192 passing tests (M1 + M2a)
+    ├── __init__.py
+    ├── fixtures/            # Valid/invalid JSON test fixtures
+    ├── test_modifier.py
+    ├── test_card.py
+    ├── test_entity.py
+    ├── test_flavor.py
+    ├── test_campaign.py
+    ├── test_integration.py
+    ├── test_stats.py
+    ├── test_turn_order.py
+    ├── test_encounters.py
+    ├── test_enemy_ai.py
+    └── test_special_handlers.py
 ```
 
 ---
@@ -49,7 +75,19 @@ Three AI heuristics play thousands of campaigns. If all three converge on the sa
 
 ---
 
-## 3. Relationship to React Frontend
+## 3. Milestone Status
+
+| Milestone | Status | Delivered |
+|-----------|--------|-----------|
+| M1 — Data Schemas | Complete | Pydantic models, JSON data files, 95 tests |
+| M2a — Resolver Engine & Combat | Complete | Stat resolver, CT turn order, encounter resolution, enemy AI, special handlers (+97 tests) |
+| M2b — Procedural Generation | Planned | Character gen, region gen, encounter gen from flavor pools and generation bounds |
+| M2c — Campaign Loop | Planned | Full campaign execution: region selection, world phase, draft, upgrades |
+| M2d — AI Heuristics | Planned | Aggressive/defensive/balanced player AI, real enemy AI |
+
+---
+
+## 4. Relationship to React Frontend
 
 The simulation's `ResolverEngine` is the authoritative implementation of combat resolution. The React frontend in `../game/` must produce identical results for the same inputs. Both consume shared JSON definitions from `../data/`.
 
@@ -57,7 +95,7 @@ The engine operates as pure functions — deterministic input/output with no sid
 
 ---
 
-## 4. Related
+## 5. Related
 
 | Document | Relationship |
 |----------|--------------|

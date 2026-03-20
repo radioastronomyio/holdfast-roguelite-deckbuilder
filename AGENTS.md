@@ -10,6 +10,7 @@
 |------|---------|
 | [docs/game-design-document.md](docs/game-design-document.md) | Source of truth for all mechanics, systems, and architecture |
 | [data/](data/) | Shared JSON definitions — the contract between simulation and frontend |
+| [spec/](spec/) | Standalone milestone specs — agent execution targets |
 | [docs/research/](docs/research/) | Gemini Deep Research output — reference material, not spec |
 
 ## Architecture
@@ -24,10 +25,52 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 
 ## Current State
 
-- **Phase:** M1 Complete
+- **Phase:** M3-Prep complete — balance bugs fixed, Monte Carlo baseline established
 - **GDD:** v1.1 (flavor system, tags, fixed-point arithmetic)
-- **Next work:** M2 — Resolver engine, CT system, combat loop in `simulation/`
-- **M1 delivered:** All data schemas, Pydantic models, JSON data files, and 95 passing tests
+- **Tests:** 295 passing (`pytest simulation/tests/ -v` from repo root)
+- **Baseline:** `reports/m3-prep-baseline.json` — 1000 seeds × 3 strategies, all in 40-70% range
+- **Next work:** M3 (balance tuning, deeper difficulty scaling) or Phase 2 (React frontend)
+
+### M3-Prep Balance Fixes Applied (branch: m3-prep-balance-fixes)
+
+Six compounding bugs caused 0% win rate. All fixed:
+
+| Bug | Fix | File(s) |
+|-----|-----|---------|
+| Enemy hazard cards | Filter "hazard"-tagged cards before building enemy pool | `enemies.py`, `encounters.py`, `regions.py`, `runner.py` |
+| Player hazard cards | Exclude hazard-tagged cards from `all_card_ids` in runner | `runner.py` |
+| Enemy Energy on combat budget | Remove Energy from stat distribution; set fixed 2-5 / 3-6 range | `enemies.py` |
+| Enemy Defense invulnerability | Cap Defense at 20 (normal) / 30 (elite); redirect overflow to HP | `enemies.py` |
+| Difficulty 1 budget too high | Base budget 90 (down from 150); slope 25; redistributed role weights | `enemies.py` |
+| 1 starting character vs 1-3 enemies | Start with 2 characters (5 candidates, pick best 2) | `runner.py` |
+| AI world card evaluation bugs | Fix operation-type check and catastrophic-loss guard (both AIs) | `heuristics.py` |
+| DefensiveAI region selection | Free intel on hard region caused early difficult assault; now sorts by difficulty first | `heuristics.py` |
+| DefensiveAI combat targeting | 70% HP heal threshold wasted turns; now heals only at <30% and targets highest-Power enemy | `heuristics.py` |
+
+### Final Baseline (1000 seeds)
+
+| Strategy | Win Rate | Avg Regions | Avg Turns |
+|----------|----------|-------------|-----------|
+| aggressive | 45.2% | 4.27 | 76.0 |
+| defensive | 40.2% | 4.11 | 113.6 |
+| balanced | 51.1% | 4.42 | 118.0 |
+| **Spread** | **0.109** | — | — |
+
+### Delivered Milestones
+
+| Milestone | Spec | Delivered |
+|-----------|------|-----------|
+| **M1** | `openspec/changes/archive/2026-03-17-m1-data-schemas/` | Pydantic models, JSON data files, 95 tests |
+| **M2a** | `spec/m2a-resolver-combat-spec.md` | Stat resolver, CT turn order, encounter resolution, greedy enemy AI, special handlers |
+| **M2b** | `spec/m2b-procedural-generation-spec.md` | Character/enemy/region/encounter generators |
+| **M2c** | `spec/m2c-campaign-loop-spec.md` | Data loader (STAT_SCALE normalization), campaign state, full macro loop |
+| **M2d** | `spec/m2d-ai-heuristics-spec.md` | AggressiveAI/DefensiveAI/BalancedAI, enhanced enemy AI, Monte Carlo runner |
+
+## Critical: STAT_SCALE Awareness
+
+`STAT_SCALE = 1000`. Entity `base_stats` in JSON are pre-scaled (HP 140 stored as 140000). **Card effect values in JSON are at display scale** (Arcane Strike FLAT_SUB value: 15, not 15000). The M2c data loader scales FLAT card values by STAT_SCALE at load time. PCT and MULTIPLY values are NOT scaled. Read the M2c spec "Critical: Card Value Scaling" section before touching the campaign loop.
+
+Generation bounds (`data/entities/generation-bounds.json`) are at display scale. M2b generators handle their own scaling.
 
 ## Core Concept: Universal Modifier Engine
 
@@ -40,11 +83,15 @@ Everything in the game is modifier arrays on a 5-stat model (HP, Power, Speed, D
 - Speed percentage modifiers scale exponentially with the CT system — must be capped or taxed
 - ResolverEngine must be pure functions — deterministic, no side effects, no UI coupling
 - All game state must be serializable as JSON at any point
+- All generators use `random.Random(seed)` instances, never global `random`
+- Integer-only arithmetic in all game math — no floats
 
 ## Session Pattern
 
 1. Read this file
-2. Read the GDD if working on mechanics or data schemas
-3. Check directory READMEs for the area you're working in
-4. Do work
-5. Update this file's "Current State" section if project state changed
+2. Read the spec for the milestone you're working on (in `spec/`)
+3. Read the GDD if working on mechanics or data schemas
+4. Check directory READMEs for the area you're working in
+5. Do work
+6. Run `pytest simulation/tests/ -v` — all tests must pass
+7. Update this file's "Current State" section if project state changed
