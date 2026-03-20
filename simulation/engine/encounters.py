@@ -21,12 +21,32 @@ COMBAT_TURN_CAP = 200
 
 
 @dataclass
+class CardPlayRecord:
+    turn_number: int
+    caster_id: str
+    card_id: str
+    energy_cost: int
+    targets: list[str]          # target entity IDs
+    damage_total: int           # total damage dealt by this play (sum across targets, display scale)
+    healing_total: int          # total healing from this play (display scale)
+
+
+@dataclass
 class CombatResult:
     player_won: bool
     turns_taken: int
     survivors: list[str]
     combat_log: list[str]
     final_state: list[CombatEntity]
+    # New telemetry fields
+    card_plays: list[CardPlayRecord] = field(default_factory=list)
+    entity_turns: dict[str, int] = field(default_factory=dict)         # entity_id → turn count
+    damage_dealt: dict[str, int] = field(default_factory=dict)         # entity_id → total damage dealt
+    damage_taken: dict[str, int] = field(default_factory=dict)         # entity_id → total damage taken
+    healing_done: dict[str, int] = field(default_factory=dict)         # entity_id → total healing done
+    final_hp: dict[str, int] = field(default_factory=dict)             # entity_id → HP at combat end
+    hit_turn_cap: bool = False                                          # did this combat reach 200 turns?
+    speed_action_ratios: dict[str, float] = field(default_factory=dict) # entity_id → turns_taken / avg_enemy_turns
 
 
 @dataclass
@@ -138,6 +158,11 @@ def _player_pick_card(
     return (card, targets)
 
 
+def _snapshot_hp(entities: list[CombatEntity]) -> dict[str, int]:
+    """Snapshot all entity HP at display scale."""
+    return {e.id: e.base_stats[Stat.HP] // STAT_SCALE for e in entities}
+
+
 def resolve_combat(
     party: list[CombatEntity],
     enemies: list[CombatEntity],
@@ -170,41 +195,55 @@ def resolve_combat(
 
     turns_taken = 0
 
+    # Telemetry accumulators
+    entity_turns: dict[str, int] = {e.id: 0 for e in all_entities}
+    damage_dealt: dict[str, int] = {e.id: 0 for e in all_entities}
+    damage_taken_telem: dict[str, int] = {e.id: 0 for e in all_entities}
+    healing_done: dict[str, int] = {e.id: 0 for e in all_entities}
+    card_plays: list[CardPlayRecord] = []
+
+    def _make_result(player_won: bool, survivors: list[str], hit_cap: bool) -> CombatResult:
+        # Speed action ratios: player entity turns / mean enemy turns
+        enemy_ids = [e.id for e in enemies]
+        enemy_turn_counts = [entity_turns[eid] for eid in enemy_ids if eid in entity_turns]
+        avg_enemy_turns = sum(enemy_turn_counts) / len(enemy_turn_counts) if enemy_turn_counts else 1
+        speed_ratios = {}
+        for e in party:
+            speed_ratios[e.id] = entity_turns[e.id] / avg_enemy_turns if avg_enemy_turns > 0 else 0.0
+        return CombatResult(
+            player_won=player_won,
+            turns_taken=turns_taken,
+            survivors=survivors,
+            combat_log=logs,
+            final_state=all_entities,
+            card_plays=card_plays,
+            entity_turns=dict(entity_turns),
+            damage_dealt=dict(damage_dealt),
+            damage_taken=dict(damage_taken_telem),
+            healing_done=dict(healing_done),
+            final_hp=_snapshot_hp(all_entities),
+            hit_turn_cap=hit_cap,
+            speed_action_ratios=speed_ratios,
+        )
+
     while True:
         # Check win/loss conditions
         living_party = [e for e in party if e.is_alive]
         living_enemies = [e for e in enemies if e.is_alive]
 
         if not living_enemies:
-            return CombatResult(
-                player_won=True,
-                turns_taken=turns_taken,
-                survivors=[e.id for e in living_party],
-                combat_log=logs,
-                final_state=all_entities,
-            )
+            return _make_result(True, [e.id for e in living_party], False)
         if not living_party:
-            return CombatResult(
-                player_won=False,
-                turns_taken=turns_taken,
-                survivors=[],
-                combat_log=logs,
-                final_state=all_entities,
-            )
+            return _make_result(False, [], False)
         if turns_taken >= COMBAT_TURN_CAP:
-            return CombatResult(
-                player_won=False,
-                turns_taken=turns_taken,
-                survivors=[e.id for e in living_party],
-                combat_log=logs,
-                final_state=all_entities,
-            )
+            return _make_result(False, [e.id for e in living_party], True)
 
         # Get next actor
         actor = tick_until_next_turn(all_entities)
         turn_logs = process_turn_start(actor)
         logs.extend(turn_logs)
         turns_taken += 1
+        entity_turns[actor.id] = entity_turns.get(actor.id, 0) + 1
 
         if not actor.is_alive:
             continue
@@ -222,8 +261,34 @@ def resolve_combat(
                 action = _player_pick_card(actor, player_cards, enemies)
             if action:
                 card, targets = action
+                # Capture HP before play for telemetry
+                hp_before = {e.id: e.base_stats[Stat.HP] for e in all_entities}
                 turn_logs = play_card(card, actor, targets, all_entities)
                 logs.extend(turn_logs)
+                # Record card play telemetry
+                dmg_total = 0
+                heal_total = 0
+                for e in all_entities:
+                    delta = hp_before[e.id] - e.base_stats[Stat.HP]
+                    if delta > 0:
+                        # HP decreased = damage taken by this entity
+                        dmg_total += delta // STAT_SCALE
+                        damage_dealt[actor.id] = damage_dealt.get(actor.id, 0) + delta // STAT_SCALE
+                        damage_taken_telem[e.id] = damage_taken_telem.get(e.id, 0) + delta // STAT_SCALE
+                    elif delta < 0:
+                        # HP increased = healing
+                        healed = (-delta) // STAT_SCALE
+                        heal_total += healed
+                        healing_done[actor.id] = healing_done.get(actor.id, 0) + healed
+                card_plays.append(CardPlayRecord(
+                    turn_number=turns_taken,
+                    caster_id=actor.id,
+                    card_id=card.id,
+                    energy_cost=card.energy_cost,
+                    targets=[t.id for t in targets],
+                    damage_total=dmg_total,
+                    healing_total=heal_total,
+                ))
         else:
             # Enemy AI
             enemy_cards = []
@@ -234,8 +299,32 @@ def resolve_combat(
             action = pick_enemy_action_v2(actor, enemy_cards, party, enemy_allies, turns_taken)
             if action:
                 card, targets = action
+                # Capture HP before play for telemetry
+                hp_before = {e.id: e.base_stats[Stat.HP] for e in all_entities}
                 turn_logs = play_card(card, actor, targets, all_entities)
                 logs.extend(turn_logs)
+                # Record card play telemetry
+                dmg_total = 0
+                heal_total = 0
+                for e in all_entities:
+                    delta = hp_before[e.id] - e.base_stats[Stat.HP]
+                    if delta > 0:
+                        dmg_total += delta // STAT_SCALE
+                        damage_dealt[actor.id] = damage_dealt.get(actor.id, 0) + delta // STAT_SCALE
+                        damage_taken_telem[e.id] = damage_taken_telem.get(e.id, 0) + delta // STAT_SCALE
+                    elif delta < 0:
+                        healed = (-delta) // STAT_SCALE
+                        heal_total += healed
+                        healing_done[actor.id] = healing_done.get(actor.id, 0) + healed
+                card_plays.append(CardPlayRecord(
+                    turn_number=turns_taken,
+                    caster_id=actor.id,
+                    card_id=card.id,
+                    energy_cost=card.energy_cost,
+                    targets=[t.id for t in targets],
+                    damage_total=dmg_total,
+                    healing_total=heal_total,
+                ))
 
 
 def resolve_hazard(

@@ -46,6 +46,15 @@ class CampaignResult:
     resources_spent_on_research: int
     campaign_log: list[str]
     encounter_results: list[Union[CombatResult, HazardResult, EventResult]]
+    # New telemetry fields
+    world_cards_accepted_ids: list[str] = field(default_factory=list)
+    world_cards_skipped_ids: list[str] = field(default_factory=list)
+    upgrade_branches_chosen: dict[str, str] = field(default_factory=dict)
+    region_order: list[str] = field(default_factory=list)
+    region_difficulties: dict[str, int] = field(default_factory=dict)
+    starting_roster_ids: list[str] = field(default_factory=list)
+    drafted_character_ids: list[str] = field(default_factory=list)
+    card_pool_ids: list[str] = field(default_factory=list)
 
 
 def character_to_combat_entity(
@@ -148,6 +157,15 @@ def run_campaign(seed: int, game_data: GameData, strategy=None) -> CampaignResul
     world_cards_skipped = 0
     resources_spent = 0
 
+    # Telemetry accumulators
+    world_cards_accepted_ids: list[str] = []
+    world_cards_skipped_ids: list[str] = []
+    upgrade_branches_chosen: dict[str, str] = {}
+    region_order: list[str] = []
+    region_difficulties: dict[str, int] = {}
+    starting_roster_ids: list[str] = []
+    drafted_character_ids_telem: list[str] = []
+
     # Remaining world deck cards for this campaign
     remaining_world_deck = list(game_data.world_deck)
 
@@ -167,10 +185,9 @@ def run_campaign(seed: int, game_data: GameData, strategy=None) -> CampaignResul
     # Generate 6 regions at difficulties 1-6
     for diff in range(1, 7):
         region = generate_region(rng, diff, all_card_ids, game_data.flavor, region_adjectives, enemy_registry, cards_by_id=local_cards)
-        state.region_states.append(RegionState(
-            region=region,
-            assigned_difficulty=diff,
-        ))
+        rs = RegionState(region=region, assigned_difficulty=diff)
+        state.region_states.append(rs)
+        region_difficulties[region.id] = diff
 
     # Start with 2 characters — generate 5 candidates, pick the best 2 by total stats
     candidates = [generate_character(rng, game_data.generation_bounds, game_data.flavor) for _ in range(5)]
@@ -178,6 +195,7 @@ def run_campaign(seed: int, game_data: GameData, strategy=None) -> CampaignResul
     for starter in candidates[:2]:
         state.roster.append(starter)
         state.campaign_log.append(f"Starting character: {starter.name}")
+        starting_roster_ids.append(starter.id)
 
     # Reveal 1 random region at research level 1
     unrevealed = [rs for rs in state.region_states if rs.research_level == 0]
@@ -239,6 +257,7 @@ def run_campaign(seed: int, game_data: GameData, strategy=None) -> CampaignResul
         else:
             target_rs = min(unconquered, key=lambda rs: rs.assigned_difficulty)
         state.campaign_log.append(f"Assaulting {target_rs.region.name} (difficulty {target_rs.assigned_difficulty})")
+        region_order.append(target_rs.region.id)
 
         # Select party
         if strategy:
@@ -384,6 +403,7 @@ def run_campaign(seed: int, game_data: GameData, strategy=None) -> CampaignResul
                         local_cards[card_id], branch_key, game_data.upgrade_trees
                     )
                 state.campaign_log.append(f"Applied upgrade {branch_key} to {card_id}")
+                upgrade_branches_chosen[card_id] = branch_key
 
         # Character draft
         draft_candidates = [
@@ -397,6 +417,7 @@ def run_campaign(seed: int, game_data: GameData, strategy=None) -> CampaignResul
         state.roster.append(drafted)
         state.drafted_characters.append(drafted.id)
         state.campaign_log.append(f"Drafted: {drafted.name}")
+        drafted_character_ids_telem.append(drafted.id)
 
         # WORLD PHASE: draw 3 cards
         rng.shuffle(remaining_world_deck)
@@ -418,15 +439,18 @@ def run_campaign(seed: int, game_data: GameData, strategy=None) -> CampaignResul
                 for mod in wc.upside + wc.downside:
                     state.active_world_modifiers.append(mod)
                 state.campaign_log.append(f"Accepted world card: {wc.name}")
+                world_cards_accepted_ids.append(wc.id)
             else:
                 if state.skip_tokens > 0:
                     state.skip_tokens -= 1
                     world_cards_skipped += 1
                     state.campaign_log.append(f"Skipped world card: {wc.name}")
+                    world_cards_skipped_ids.append(wc.id)
                 else:
                     for mod in wc.upside + wc.downside:
                         state.active_world_modifiers.append(mod)
                     state.campaign_log.append(f"Forced to accept world card: {wc.name}")
+                    world_cards_accepted_ids.append(wc.id)
 
     return CampaignResult(
         seed=seed,
@@ -439,4 +463,12 @@ def run_campaign(seed: int, game_data: GameData, strategy=None) -> CampaignResul
         resources_spent_on_research=resources_spent,
         campaign_log=state.campaign_log,
         encounter_results=encounter_results,
+        world_cards_accepted_ids=world_cards_accepted_ids,
+        world_cards_skipped_ids=world_cards_skipped_ids,
+        upgrade_branches_chosen=upgrade_branches_chosen,
+        region_order=region_order,
+        region_difficulties=region_difficulties,
+        starting_roster_ids=starting_roster_ids,
+        drafted_character_ids=drafted_character_ids_telem,
+        card_pool_ids=list(all_card_ids),
     )

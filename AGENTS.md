@@ -25,11 +25,30 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 
 ## Current State
 
-- **Phase:** M3-Prep complete — balance bugs fixed, Monte Carlo baseline established
+- **Phase:** M3a complete — deep simulation telemetry instrumented, 5000-seed analysis generated
 - **GDD:** v1.1 (flavor system, tags, fixed-point arithmetic)
-- **Tests:** 295 passing (`pytest simulation/tests/ -v` from repo root)
+- **Tests:** 332 passing (`pytest simulation/tests/ -v` from repo root)
 - **Baseline:** `reports/m3-prep-baseline.json` — 1000 seeds × 3 strategies, all in 40-70% range
-- **Next work:** M3 (balance tuning, deeper difficulty scaling) or Phase 2 (React frontend)
+- **M3a Analysis:** `reports/m3-analysis/` — 5000-seed run, balance report, 15 plots, 9 JSON exports
+- **Next work:** M3b (balance tuning — scope after human review of `reports/m3-analysis/balance-report.md`)
+
+### M3a Key Findings (5000 seeds)
+
+| Strategy | Win Rate | Avg Regions | Avg Turns |
+|----------|----------|-------------|-----------|
+| aggressive | 47.4% | 4.35 | 77.6 |
+| defensive | 41.1% | 4.17 | 112.8 |
+| balanced | 50.2% | 4.42 | 117.4 |
+| **Spread** | **9.0%** | — | — |
+
+**GDD Degenerate Signal Checklist:**
+- Signal 1 (Win rate in band): ✅ PASS — all strategies 40-70%
+- Signal 2 (Upgrade dominance): N/A — no upgrade trees in data yet
+- Signal 3 (World card auto-accept/skip): ✅ PASS — no card >90%
+- Signal 4 (Speed ceiling): ❌ FAIL — 12.3% of entity-combats >3x, max ratio 597x (speed collapse occurring)
+- Signal 5 (Card combo win rate): ❌ FAIL — `deep_focus_01` win correlation 3.05 (anomaly requiring investigation)
+
+**Convergence warning:** All strategies pick same first region 100% of the time (likely difficulty=1 forced).
 
 ### M3-Prep Balance Fixes Applied (branch: m3-prep-balance-fixes)
 
@@ -65,6 +84,7 @@ Six compounding bugs caused 0% win rate. All fixed:
 | **M2b** | `spec/m2b-procedural-generation-spec.md` | Character/enemy/region/encounter generators |
 | **M2c** | `spec/m2c-campaign-loop-spec.md` | Data loader (STAT_SCALE normalization), campaign state, full macro loop |
 | **M2d** | `spec/m2d-ai-heuristics-spec.md` | AggressiveAI/DefensiveAI/BalancedAI, enhanced enemy AI, Monte Carlo runner |
+| **M3a** | `staging/m3a-balance-analysis-spec.md` | Combat+campaign telemetry, analysis package, 5000-seed run, 15 plots, 9 JSON exports, balance report |
 
 ## Critical: STAT_SCALE Awareness
 
