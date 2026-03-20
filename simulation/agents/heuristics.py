@@ -99,9 +99,15 @@ def _affordable_cards(caster: CombatEntity, cards: list[Card]) -> list[Card]:
     return [c for c in cards if c.energy_cost <= caster.current_energy]
 
 
-def _lowest_hp_enemy(enemies: list[CombatEntity]) -> CombatEntity:
-    living = [e for e in enemies if e.is_alive]
-    return min(living, key=lambda e: get_current_stat(e, Stat.HP))
+def _hp_ratio(entity: CombatEntity) -> int:
+    """Return entity HP as a 0-100 integer percentage.
+    Both get_current_stat and base_stats are in STAT_SCALE units, so the ratio
+    is scale-independent. Returns 100 if max_hp is 0 to avoid division by zero."""
+    current_hp = get_current_stat(entity, Stat.HP)
+    max_hp = entity.base_stats.get(Stat.HP, current_hp)
+    if max_hp <= 0:
+        return 100
+    return current_hp * 100 // max_hp
 
 
 def _target_for_card(card: Card, enemies: list[CombatEntity]) -> list[CombatEntity]:
@@ -110,7 +116,7 @@ def _target_for_card(card: Card, enemies: list[CombatEntity]) -> list[CombatEnti
         return []
     if _is_aoe(card):
         return living
-    return [_lowest_hp_enemy(enemies)]
+    return [min(living, key=lambda e: get_current_stat(e, Stat.HP))]
 
 
 class AggressiveAI:
@@ -225,12 +231,8 @@ class DefensiveAI:
         if not affordable:
             return None
 
-        # Heal only when critically low (< 30% HP) — healing above this is usually counterproductive
-        current_hp = get_current_stat(caster, Stat.HP)
-        max_hp = caster.base_stats.get(Stat.HP, current_hp)
-        hp_ratio = current_hp * 100 // max_hp if max_hp > 0 else 100
-
-        if hp_ratio < 30:
+        # Heal only when critically low (< 30% HP)
+        if _hp_ratio(caster) < 30:
             heal_cards = [c for c in affordable if _is_healing_card(c)]
             if heal_cards:
                 best_heal = max(heal_cards, key=lambda c: sum(
@@ -241,7 +243,6 @@ class DefensiveAI:
                 return (best_heal, [lowest_ally])
 
         # Attack the highest-Power enemy to eliminate the biggest damage threat first
-        # This is the defensive goal: reduce incoming damage as fast as possible
         damage_cards = [c for c in affordable if _damage_score(c) > 0]
         if damage_cards:
             best = max(damage_cards, key=_damage_score)
@@ -359,9 +360,7 @@ class BalancedAI:
 
             # Low HP ally? Strongly weight healing cards
             for ally in living_allies:
-                ally_hp = get_current_stat(ally, Stat.HP)
-                ally_max = ally.base_stats.get(Stat.HP, ally_hp)
-                if ally_max > 0 and ally_hp * 100 // ally_max < 40:
+                if _hp_ratio(ally) < 40:
                     if _is_healing_card(card):
                         return 999999  # Always prioritize healing when ally critical
                     break

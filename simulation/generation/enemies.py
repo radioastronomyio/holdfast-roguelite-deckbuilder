@@ -84,12 +84,16 @@ def generate_enemy(
     # Energy is a resource stat — set from a fixed range independent of combat budget
     stats[Stat.Energy] = rng.randint(3, 6) if is_elite else rng.randint(2, 5)
 
-    # 3. Card pool
-    if is_elite:
-        pool_size = rng.randint(3, min(5, len(available_card_ids)))
+    # 3. Card pool — guard against empty pool after hazard filtering
+    if not available_card_ids:
+        card_pool = []
     else:
-        pool_size = rng.randint(2, min(4, len(available_card_ids)))
-    card_pool = rng.sample(available_card_ids, pool_size)
+        min_pool = 3 if is_elite else 2
+        min_pool = min(min_pool, len(available_card_ids))
+        max_pool = 5 if is_elite else 4
+        max_pool = min(max_pool, len(available_card_ids))
+        pool_size = rng.randint(min_pool, max_pool)
+        card_pool = rng.sample(available_card_ids, pool_size)
 
     # 4. Name generation
     if flavor and flavor.region_nouns and flavor.archetypes:

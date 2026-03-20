@@ -24,5 +24,5 @@ print(f"  Spread: {result.win_rate_spread:.2f} (healthy: < 0.30)")
 print(f"  Convergence: {result.convergence_warning}")
 print(f"  Time: {elapsed:.1f}s")
 
-all_ok = all(0.30 <= m.win_rate <= 0.75 for m in result.strategy_results)
+all_ok = all(0.40 <= m.win_rate <= 0.70 for m in result.strategy_results)
 print(f"\n{'PASS' if all_ok else 'NEEDS TUNING'}: {'All strategies in range' if all_ok else 'Some strategies out of range'}")
