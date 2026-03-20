@@ -5,7 +5,7 @@ from __future__ import annotations
 from models.entity import Character
 from models.card import Card, UpgradeEntry
 from models.campaign import WorldCard, EventChoice
-from models.modifier import Modifier
+from models.modifier import Modifier, STAT_SCALE
 from models.enums import Stat, Operation, Target
 from engine.turn_order import CombatEntity, get_current_stat
 from campaign.state import CampaignState, RegionState
@@ -140,9 +140,22 @@ class AggressiveAI:
         return (best, _target_for_card(best, enemies))
 
     def evaluate_world_card(self, card: WorldCard, state: CampaignState, game_data: GameData) -> bool:
-        # Accept if Power or Speed upside
-        for mod in card.upside:
-            if mod.stat in (Stat.Power, Stat.Speed):
+        # Reject if any modifier has a catastrophic ally FLAT_SUB (>= 50 display scale)
+        ally_targets = (Target.SELF, Target.ALLY_SINGLE, Target.ALLY_ALL)
+        for mod in card.upside + card.downside:
+            if (
+                mod.operation == Operation.FLAT_SUB
+                and mod.value >= 50 * STAT_SCALE
+                and mod.target in ally_targets
+            ):
+                return False
+        # Accept if there's a beneficial Power or Speed mod targeting allies
+        for mod in card.upside + card.downside:
+            if (
+                mod.stat in (Stat.Power, Stat.Speed)
+                and mod.operation in (Operation.FLAT_ADD, Operation.PCT_ADD)
+                and mod.target in ally_targets
+            ):
                 return True
         return False
 
@@ -184,12 +197,10 @@ class DefensiveAI:
 
     def select_region(self, state: CampaignState, game_data: GameData) -> RegionState:
         unconquered = state.unconquered_regions
-        # Prefer fully researched regions
-        fully_researched = [rs for rs in unconquered if rs.research_level >= 4]
-        if fully_researched:
-            return min(fully_researched, key=lambda rs: rs.assigned_difficulty)
-        # Otherwise pick highest-researched
-        return max(unconquered, key=lambda rs: (rs.research_level, -rs.assigned_difficulty))
+        # Always prefer lowest difficulty — research level breaks ties (more intel = better)
+        # Bug fix: research level must not override difficulty ordering; free intel can point
+        # to a high-difficulty region which would otherwise be assaulted first.
+        return min(unconquered, key=lambda rs: (rs.assigned_difficulty, -rs.research_level))
 
     def select_party(self, state: CampaignState, game_data: GameData, region: RegionState) -> list[Character]:
         sorted_roster = sorted(
@@ -214,37 +225,54 @@ class DefensiveAI:
         if not affordable:
             return None
 
-        # Check if HP is low
+        # Heal only when critically low (< 30% HP) — healing above this is usually counterproductive
         current_hp = get_current_stat(caster, Stat.HP)
         max_hp = caster.base_stats.get(Stat.HP, current_hp)
         hp_ratio = current_hp * 100 // max_hp if max_hp > 0 else 100
 
-        if hp_ratio < 70:
-            # Prioritize healing/defense cards
-            heal_cards = [c for c in affordable if _is_healing_card(c) or _is_defense_card(c)]
+        if hp_ratio < 30:
+            heal_cards = [c for c in affordable if _is_healing_card(c)]
             if heal_cards:
-                card = heal_cards[0]
-                # Target self for heals/buffs
-                if _is_healing_card(card):
-                    lowest_ally = min(living_allies, key=lambda a: get_current_stat(a, Stat.HP))
-                    return (card, [lowest_ally])
-                return (card, [caster])
+                best_heal = max(heal_cards, key=lambda c: sum(
+                    e.value for e in c.effects
+                    if e.stat == Stat.HP and e.operation == Operation.FLAT_ADD
+                ))
+                lowest_ally = min(living_allies, key=lambda a: get_current_stat(a, Stat.HP))
+                return (best_heal, [lowest_ally])
 
-        # Otherwise attack lowest HP enemy
-        best = max(affordable, key=_damage_score)
-        return (best, _target_for_card(best, enemies))
+        # Attack the highest-Power enemy to eliminate the biggest damage threat first
+        # This is the defensive goal: reduce incoming damage as fast as possible
+        damage_cards = [c for c in affordable if _damage_score(c) > 0]
+        if damage_cards:
+            best = max(damage_cards, key=_damage_score)
+            if _is_aoe(best):
+                return (best, living_enemies)
+            # Target highest Power enemy (most dangerous), not lowest HP
+            highest_threat = max(living_enemies, key=lambda e: e.base_stats.get(Stat.Power, 0))
+            return (best, [highest_threat])
+        # No damage cards — apply support to self
+        best = affordable[0]
+        return (best, [caster])
 
     def evaluate_world_card(self, card: WorldCard, state: CampaignState, game_data: GameData) -> bool:
-        # Accept only if HP or Defense upside AND downside doesn't reduce HP/Defense
-        has_good_upside = any(
-            mod.stat in (Stat.HP, Stat.Defense) for mod in card.upside
-        )
-        has_bad_downside = any(
-            mod.stat in (Stat.HP, Stat.Defense)
-            and mod.operation in (Operation.FLAT_SUB, Operation.PCT_SUB)
-            for mod in card.downside
-        )
-        return has_good_upside and not has_bad_downside
+        # Reject if any modifier has a catastrophic ally FLAT_SUB (>= 50 display scale)
+        ally_targets = (Target.SELF, Target.ALLY_SINGLE, Target.ALLY_ALL)
+        for mod in card.upside + card.downside:
+            if (
+                mod.operation == Operation.FLAT_SUB
+                and mod.value >= 50 * STAT_SCALE
+                and mod.target in ally_targets
+            ):
+                return False
+        # Accept if there's a beneficial HP or Defense mod targeting allies
+        for mod in card.upside + card.downside:
+            if (
+                mod.stat in (Stat.HP, Stat.Defense)
+                and mod.operation in (Operation.FLAT_ADD, Operation.PCT_ADD)
+                and mod.target in ally_targets
+            ):
+                return True
+        return False
 
     def select_event_choice(self, choices: list[EventChoice], state: CampaignState) -> int:
         # Lowest cost option
