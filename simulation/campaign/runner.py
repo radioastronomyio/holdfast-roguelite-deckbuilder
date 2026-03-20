@@ -157,8 +157,8 @@ def run_campaign(seed: int, game_data: GameData, strategy=None) -> CampaignResul
     # Local copy of cards — avoids mutating game_data when upgrades are applied
     local_cards = dict(game_data.cards_by_id)
 
-    # All base card IDs for player card pools
-    all_card_ids = list(local_cards.keys())
+    # All base card IDs for player card pools — exclude hazard cards (debuff allies when played)
+    all_card_ids = [cid for cid, card in local_cards.items() if "hazard" not in card.tags]
 
     # Registry for generated enemies — populated during region generation
     enemy_registry: dict = {}
