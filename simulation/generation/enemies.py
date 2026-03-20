@@ -9,18 +9,23 @@ from models.enums import Stat, AiHeuristic
 from generation.characters import FlavorData
 
 
-# Role weight profiles: {stat: weight}
+# Role weight profiles: {stat: weight} — 4 combat stats only, Energy set separately
+# Defensive role tanks via HP, not invulnerable Defense; weights sum to 1.0
 _ROLE_WEIGHTS = {
     AiHeuristic.aggressive: {
-        Stat.HP: 0.15, Stat.Power: 0.35, Stat.Speed: 0.25, Stat.Defense: 0.10, Stat.Energy: 0.15,
+        Stat.HP: 0.20, Stat.Power: 0.45, Stat.Speed: 0.25, Stat.Defense: 0.10,
     },
     AiHeuristic.defensive: {
-        Stat.HP: 0.35, Stat.Power: 0.10, Stat.Speed: 0.15, Stat.Defense: 0.25, Stat.Energy: 0.15,
+        Stat.HP: 0.50, Stat.Power: 0.15, Stat.Speed: 0.15, Stat.Defense: 0.20,
     },
     AiHeuristic.balanced: {
-        Stat.HP: 0.25, Stat.Power: 0.20, Stat.Speed: 0.20, Stat.Defense: 0.20, Stat.Energy: 0.15,
+        Stat.HP: 0.32, Stat.Power: 0.24, Stat.Speed: 0.24, Stat.Defense: 0.20,
     },
 }
+
+# Hard cap on Defense in display-scale to prevent invulnerability
+_DEFENSE_CAP_NORMAL = 20
+_DEFENSE_CAP_ELITE = 30
 
 
 def generate_enemy(
@@ -39,35 +44,45 @@ def generate_enemy(
             if "hazard" not in (cards_by_id[cid].tags if cid in cards_by_id else [])
         ]
 
-    # 1. Base stat budget
-    budget = 150 + (difficulty * 30)
+    # 1. Base stat budget (reduced from 150 so diff-1 enemies are clearly weaker than players)
+    budget = 90 + (difficulty * 25)
     if is_elite:
         budget = int(budget * 1.5)
 
-    # 2. Role selection and stat distribution
+    # 2. Role selection and stat distribution across 4 combat stats (HP/Power/Speed/Defense)
     role = rng.choice([AiHeuristic.aggressive, AiHeuristic.defensive, AiHeuristic.balanced])
     weights = _ROLE_WEIGHTS[role]
 
-    all_stats = [Stat.HP, Stat.Power, Stat.Speed, Stat.Defense, Stat.Energy]
+    combat_stats = [Stat.HP, Stat.Power, Stat.Speed, Stat.Defense]
     stats: dict[Stat, int] = {}
     remaining = budget
-    for i, stat in enumerate(all_stats):
-        if i == len(all_stats) - 1:
+    for i, stat in enumerate(combat_stats):
+        if i == len(combat_stats) - 1:
             stats[stat] = remaining
         else:
             # Allocate proportionally with some variance
             base_alloc = int(budget * weights[stat])
             variance = max(1, base_alloc // 4)
             alloc = rng.randint(max(1, base_alloc - variance), base_alloc + variance)
-            alloc = min(alloc, remaining - (len(all_stats) - i - 1))  # leave at least 1 per remaining stat
+            alloc = min(alloc, remaining - (len(combat_stats) - i - 1))  # leave at least 1 per remaining stat
             alloc = max(1, alloc)
             stats[stat] = alloc
             remaining -= alloc
 
-    # Ensure all stats are at least 1
-    for stat in all_stats:
+    # Ensure all combat stats are at least 1
+    for stat in combat_stats:
         if stats[stat] < 1:
             stats[stat] = 1
+
+    # Cap Defense to prevent invulnerability (player best single-hit is ~50 raw at diff 1)
+    defense_cap = _DEFENSE_CAP_ELITE if is_elite else _DEFENSE_CAP_NORMAL
+    if stats[Stat.Defense] > defense_cap:
+        overflow = stats[Stat.Defense] - defense_cap
+        stats[Stat.Defense] = defense_cap
+        stats[Stat.HP] += overflow  # redirect excess Defense budget into HP
+
+    # Energy is a resource stat — set from a fixed range independent of combat budget
+    stats[Stat.Energy] = rng.randint(3, 6) if is_elite else rng.randint(2, 5)
 
     # 3. Card pool
     if is_elite:
