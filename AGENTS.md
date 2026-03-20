@@ -25,20 +25,20 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 
 ## Current State
 
-- **Phase:** M2a Complete — M2b/M2c/M2d specs ready for execution
+- **Phase:** Phase 1 Simulation Complete (M1 + M2a–M2d)
 - **GDD:** v1.1 (flavor system, tags, fixed-point arithmetic)
-- **M1 delivered:** All data schemas, Pydantic models, JSON data files, and 95 passing tests
-- **M2a delivered:** Stat resolver, CT turn order, combat/hazard/event resolution, greedy enemy AI, resolver special handlers — 192 total tests passing
+- **Tests:** 295 passing (`pytest simulation/tests/ -v` from repo root)
+- **Next work:** M3 (balance tuning via Monte Carlo) or Phase 2 (React frontend)
 
-### Next Work (Sequential Dependency Chain)
+### Delivered Milestones
 
-| Milestone | Spec | Scope | Depends On |
-|-----------|------|-------|------------|
-| **M2b** | `spec/m2b-procedural-generation-spec.md` | Character/enemy/region/encounter generators | M2a (complete) |
-| **M2c** | `spec/m2c-campaign-loop-spec.md` | Data loader, campaign state, full macro loop | M2b |
-| **M2d** | `spec/m2d-ai-heuristics-spec.md` | 3 player AIs, enhanced enemy AI, Monte Carlo runner | M2c |
-
-**Execute in order.** Each spec lists its own completion criteria. Run `pytest simulation/tests/ -v` after each milestone — all previous tests must still pass.
+| Milestone | Spec | Delivered |
+|-----------|------|-----------|
+| **M1** | `openspec/changes/archive/2026-03-17-m1-data-schemas/` | Pydantic models, JSON data files, 95 tests |
+| **M2a** | `spec/m2a-resolver-combat-spec.md` | Stat resolver, CT turn order, encounter resolution, greedy enemy AI, special handlers |
+| **M2b** | `spec/m2b-procedural-generation-spec.md` | Character/enemy/region/encounter generators |
+| **M2c** | `spec/m2c-campaign-loop-spec.md` | Data loader (STAT_SCALE normalization), campaign state, full macro loop |
+| **M2d** | `spec/m2d-ai-heuristics-spec.md` | AggressiveAI/DefensiveAI/BalancedAI, enhanced enemy AI, Monte Carlo runner |
 
 ## Critical: STAT_SCALE Awareness
 
