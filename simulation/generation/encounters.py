@@ -153,6 +153,7 @@ def _generate_combat(
     flavor: FlavorData,
     force_elite: bool = False,
     enemy_registry: dict | None = None,
+    cards_by_id: dict | None = None,
 ) -> CombatEncounter:
     """Generate a combat encounter. If enemy_registry is provided, generated Enemy objects are stored there."""
     from models.entity import Enemy as EnemyModel
@@ -167,13 +168,13 @@ def _generate_combat(
 
     if force_elite:
         # Stronghold: 1 elite + 0-2 adds
-        _add(generate_enemy(rng, difficulty, available_card_ids, is_elite=True, flavor=flavor))
+        _add(generate_enemy(rng, difficulty, available_card_ids, is_elite=True, flavor=flavor, cards_by_id=cards_by_id))
         for _ in range(rng.randint(0, 2)):
-            _add(generate_enemy(rng, difficulty, available_card_ids, is_elite=False, flavor=flavor))
+            _add(generate_enemy(rng, difficulty, available_card_ids, is_elite=False, flavor=flavor, cards_by_id=cards_by_id))
     else:
         # Settlement: 1-3 non-elite
         for _ in range(rng.randint(1, 3)):
-            _add(generate_enemy(rng, difficulty, available_card_ids, is_elite=False, flavor=flavor))
+            _add(generate_enemy(rng, difficulty, available_card_ids, is_elite=False, flavor=flavor, cards_by_id=cards_by_id))
 
     # Deduplicate enemy_cards while preserving order
     seen: set[str] = set()
@@ -198,6 +199,7 @@ def generate_encounter(
     available_card_ids: list[str],
     flavor: FlavorData,
     enemy_registry: dict | None = None,
+    cards_by_id: dict | None = None,
 ) -> Encounter:
     """Generate a single encounter based on narrative position."""
     if position == NarrativePosition.approach:
@@ -210,11 +212,11 @@ def generate_encounter(
     elif position == NarrativePosition.settlement:
         roll = rng.random()
         if roll < 0.7:
-            return _generate_combat(rng, position, difficulty, available_card_ids, flavor, enemy_registry=enemy_registry)
+            return _generate_combat(rng, position, difficulty, available_card_ids, flavor, enemy_registry=enemy_registry, cards_by_id=cards_by_id)
         else:
             return _generate_event(rng, position, difficulty, flavor)
 
     elif position == NarrativePosition.stronghold:
-        return _generate_combat(rng, position, difficulty, available_card_ids, flavor, force_elite=True, enemy_registry=enemy_registry)
+        return _generate_combat(rng, position, difficulty, available_card_ids, flavor, force_elite=True, enemy_registry=enemy_registry, cards_by_id=cards_by_id)
 
     raise ValueError(f"Unknown narrative position: {position}")

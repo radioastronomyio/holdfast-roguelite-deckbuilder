@@ -166,7 +166,7 @@ def run_campaign(seed: int, game_data: GameData, strategy=None) -> CampaignResul
     # --- INIT ---
     # Generate 6 regions at difficulties 1-6
     for diff in range(1, 7):
-        region = generate_region(rng, diff, all_card_ids, game_data.flavor, region_adjectives, enemy_registry)
+        region = generate_region(rng, diff, all_card_ids, game_data.flavor, region_adjectives, enemy_registry, cards_by_id=local_cards)
         state.region_states.append(RegionState(
             region=region,
             assigned_difficulty=diff,

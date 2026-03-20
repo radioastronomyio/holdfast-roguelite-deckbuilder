@@ -25,6 +25,7 @@ def generate_region(
     flavor: FlavorData,
     region_adjectives: list[str] | None = None,
     enemy_registry: dict | None = None,
+    cards_by_id: dict | None = None,
 ) -> Region:
     """Generate a procedural region."""
     # Load adjectives if not provided
@@ -68,9 +69,9 @@ def generate_region(
 
     # 4. Generate 3 encounters
     encounters = [
-        generate_encounter(rng, NarrativePosition.approach, difficulty, available_card_ids, flavor, enemy_registry),
-        generate_encounter(rng, NarrativePosition.settlement, difficulty, available_card_ids, flavor, enemy_registry),
-        generate_encounter(rng, NarrativePosition.stronghold, difficulty, available_card_ids, flavor, enemy_registry),
+        generate_encounter(rng, NarrativePosition.approach, difficulty, available_card_ids, flavor, enemy_registry, cards_by_id=cards_by_id),
+        generate_encounter(rng, NarrativePosition.settlement, difficulty, available_card_ids, flavor, enemy_registry, cards_by_id=cards_by_id),
+        generate_encounter(rng, NarrativePosition.stronghold, difficulty, available_card_ids, flavor, enemy_registry, cards_by_id=cards_by_id),
     ]
 
     # 5. Meta-reward

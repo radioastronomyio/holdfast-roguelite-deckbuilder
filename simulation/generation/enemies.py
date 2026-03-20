@@ -29,8 +29,16 @@ def generate_enemy(
     available_card_ids: list[str],
     is_elite: bool = False,
     flavor: FlavorData | None = None,
+    cards_by_id: dict | None = None,
 ) -> Enemy:
     """Generate a procedural enemy."""
+    # Filter out hazard cards — enemies must not play cards that debuff their own side
+    if cards_by_id is not None:
+        available_card_ids = [
+            cid for cid in available_card_ids
+            if "hazard" not in (cards_by_id[cid].tags if cid in cards_by_id else [])
+        ]
+
     # 1. Base stat budget
     budget = 150 + (difficulty * 30)
     if is_elite:
