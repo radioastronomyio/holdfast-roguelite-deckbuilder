@@ -25,10 +25,36 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 
 ## Current State
 
-- **Phase:** Phase 1 Simulation Complete (M1 + M2a–M2d)
+- **Phase:** M3-Prep complete — balance bugs fixed, Monte Carlo baseline established
 - **GDD:** v1.1 (flavor system, tags, fixed-point arithmetic)
 - **Tests:** 295 passing (`pytest simulation/tests/ -v` from repo root)
-- **Next work:** M3 (balance tuning via Monte Carlo) or Phase 2 (React frontend)
+- **Baseline:** `reports/m3-prep-baseline.json` — 1000 seeds × 3 strategies, all in 40-70% range
+- **Next work:** M3 (balance tuning, deeper difficulty scaling) or Phase 2 (React frontend)
+
+### M3-Prep Balance Fixes Applied (branch: m3-prep-balance-fixes)
+
+Six compounding bugs caused 0% win rate. All fixed:
+
+| Bug | Fix | File(s) |
+|-----|-----|---------|
+| Enemy hazard cards | Filter "hazard"-tagged cards before building enemy pool | `enemies.py`, `encounters.py`, `regions.py`, `runner.py` |
+| Player hazard cards | Exclude hazard-tagged cards from `all_card_ids` in runner | `runner.py` |
+| Enemy Energy on combat budget | Remove Energy from stat distribution; set fixed 2-5 / 3-6 range | `enemies.py` |
+| Enemy Defense invulnerability | Cap Defense at 20 (normal) / 30 (elite); redirect overflow to HP | `enemies.py` |
+| Difficulty 1 budget too high | Base budget 90 (down from 150); slope 25; redistributed role weights | `enemies.py` |
+| 1 starting character vs 1-3 enemies | Start with 2 characters (5 candidates, pick best 2) | `runner.py` |
+| AI world card evaluation bugs | Fix operation-type check and catastrophic-loss guard (both AIs) | `heuristics.py` |
+| DefensiveAI region selection | Free intel on hard region caused early difficult assault; now sorts by difficulty first | `heuristics.py` |
+| DefensiveAI combat targeting | 70% HP heal threshold wasted turns; now heals only at <30% and targets highest-Power enemy | `heuristics.py` |
+
+### Final Baseline (1000 seeds)
+
+| Strategy | Win Rate | Avg Regions | Avg Turns |
+|----------|----------|-------------|-----------|
+| aggressive | 45.2% | 4.27 | 76.0 |
+| defensive | 40.2% | 4.11 | 113.6 |
+| balanced | 51.1% | 4.42 | 118.0 |
+| **Spread** | **0.109** | — | — |
 
 ### Delivered Milestones
 
