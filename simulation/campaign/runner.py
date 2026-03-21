@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import random
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import List, Union
 
 from models.entity import Character, Enemy
@@ -170,7 +171,8 @@ def run_campaign(seed: int, game_data: GameData, strategy=None) -> CampaignResul
     remaining_world_deck = list(game_data.world_deck)
 
     # Region adjectives for generation
-    region_adjectives = _load_region_adjectives()
+    _default_mods = Path(__file__).resolve().parent.parent.parent / "mods" / "default" / "flavor"
+    region_adjectives = _load_region_adjectives(_default_mods)
 
     # Local copy of cards — avoids mutating game_data when upgrades are applied
     local_cards = dict(game_data.cards_by_id)
@@ -310,6 +312,7 @@ def run_campaign(seed: int, game_data: GameData, strategy=None) -> CampaignResul
                     cards_by_id=local_cards,
                     region_modifiers=target_rs.region.modifier_stack,
                     player_strategy=strategy,
+                    rng=rng,
                 )
                 encounter_results.append(result)
                 total_turns += result.turns_taken

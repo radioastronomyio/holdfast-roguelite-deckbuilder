@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import random as _random_module
 from dataclasses import dataclass, field
 
 from models.modifier import Modifier, STAT_SCALE
@@ -12,6 +13,11 @@ from engine.turn_order import (
     tick_until_next_turn,
     process_turn_start,
     CT_THRESHOLD,
+    HAND_SIZE,
+    initialize_deck,
+    draw_cards,
+    discard_hand,
+    discard_card,
 )
 from engine.stats import calculate_stat, apply_stacking
 from engine.enemy_ai import pick_enemy_action
@@ -163,6 +169,42 @@ def _snapshot_hp(entities: list[CombatEntity]) -> dict[str, int]:
     return {e.id: e.base_stats[Stat.HP] // STAT_SCALE for e in entities}
 
 
+def _record_card_play(
+    actor: CombatEntity,
+    card: Card,
+    targets: list[CombatEntity],
+    all_entities: list[CombatEntity],
+    hp_before: dict[str, int],
+    turns_taken: int,
+    card_plays: list[CardPlayRecord],
+    damage_dealt: dict[str, int],
+    damage_taken_telem: dict[str, int],
+    healing_done: dict[str, int],
+) -> None:
+    """Record a single card play in all telemetry accumulators."""
+    dmg_total = 0
+    heal_total = 0
+    for e in all_entities:
+        delta = hp_before[e.id] - e.base_stats[Stat.HP]
+        if delta > 0:
+            dmg_total += delta // STAT_SCALE
+            damage_dealt[actor.id] = damage_dealt.get(actor.id, 0) + delta // STAT_SCALE
+            damage_taken_telem[e.id] = damage_taken_telem.get(e.id, 0) + delta // STAT_SCALE
+        elif delta < 0:
+            healed = (-delta) // STAT_SCALE
+            heal_total += healed
+            healing_done[actor.id] = healing_done.get(actor.id, 0) + healed
+    card_plays.append(CardPlayRecord(
+        turn_number=turns_taken,
+        caster_id=actor.id,
+        card_id=card.id,
+        energy_cost=card.energy_cost,
+        targets=[t.id for t in targets],
+        damage_total=dmg_total,
+        healing_total=heal_total,
+    ))
+
+
 def resolve_combat(
     party: list[CombatEntity],
     enemies: list[CombatEntity],
@@ -170,8 +212,13 @@ def resolve_combat(
     region_modifiers: list[Modifier] | None = None,
     world_modifiers: list[Modifier] | None = None,
     player_strategy=None,
+    rng: _random_module.Random | None = None,
 ) -> CombatResult:
-    """Execute a full combat encounter."""
+    """Execute a full combat encounter with hand/draw/discard deck mechanics."""
+    # Use provided rng or fall back to an unseeded one for backward compat
+    if rng is None:
+        rng = _random_module.Random()
+
     logs = []
 
     # Apply region and world modifiers
@@ -193,6 +240,11 @@ def resolve_combat(
     for e in all_entities:
         e.current_energy = get_current_stat(e, Stat.Energy)
 
+    # Initialize decks and draw initial hands
+    for e in all_entities:
+        initialize_deck(e, cards_by_id or {}, rng)
+        draw_cards(e, HAND_SIZE, rng)
+
     turns_taken = 0
 
     # Telemetry accumulators
@@ -203,7 +255,6 @@ def resolve_combat(
     card_plays: list[CardPlayRecord] = []
 
     def _make_result(player_won: bool, survivors: list[str], hit_cap: bool) -> CombatResult:
-        # Speed action ratios: player entity turns / mean enemy turns
         enemy_ids = [e.id for e in enemies]
         enemy_turn_counts = [entity_turns[eid] for eid in enemy_ids if eid in entity_turns]
         avg_enemy_turns = sum(enemy_turn_counts) / len(enemy_turn_counts) if enemy_turn_counts else 1
@@ -248,83 +299,53 @@ def resolve_combat(
         if not actor.is_alive:
             continue
 
-        # Execute turn
+        # Discard remaining hand from previous turn, draw fresh hand
+        discard_hand(actor)
+        draw_cards(actor, HAND_SIZE, rng)
+
+        # Execute turn — multi-play loop (entity plays as many cards as Energy allows)
         if actor.is_player:
-            player_cards = []
-            if cards_by_id and actor.card_pool:
-                player_cards = [cards_by_id[cid] for cid in actor.card_pool if cid in cards_by_id]
-            if player_strategy:
-                living_allies = [e for e in party if e.is_alive]
-                living_enemies_list = [e for e in enemies if e.is_alive]
-                action = player_strategy.select_card(actor, player_cards, living_allies, living_enemies_list)
-            else:
-                action = _player_pick_card(actor, player_cards, enemies)
-            if action:
+            while actor.is_alive:
+                living_enemies_now = [e for e in enemies if e.is_alive]
+                if not living_enemies_now:
+                    break
+                hand_cards = [cards_by_id[cid] for cid in actor.hand if cards_by_id and cid in cards_by_id]
+                if player_strategy:
+                    living_allies = [e for e in party if e.is_alive]
+                    action = player_strategy.select_card(actor, hand_cards, living_allies, living_enemies_now)
+                else:
+                    action = _player_pick_card(actor, hand_cards, enemies)
+                if not action:
+                    break
                 card, targets = action
-                # Capture HP before play for telemetry
                 hp_before = {e.id: e.base_stats[Stat.HP] for e in all_entities}
                 turn_logs = play_card(card, actor, targets, all_entities)
                 logs.extend(turn_logs)
-                # Record card play telemetry
-                dmg_total = 0
-                heal_total = 0
-                for e in all_entities:
-                    delta = hp_before[e.id] - e.base_stats[Stat.HP]
-                    if delta > 0:
-                        # HP decreased = damage taken by this entity
-                        dmg_total += delta // STAT_SCALE
-                        damage_dealt[actor.id] = damage_dealt.get(actor.id, 0) + delta // STAT_SCALE
-                        damage_taken_telem[e.id] = damage_taken_telem.get(e.id, 0) + delta // STAT_SCALE
-                    elif delta < 0:
-                        # HP increased = healing
-                        healed = (-delta) // STAT_SCALE
-                        heal_total += healed
-                        healing_done[actor.id] = healing_done.get(actor.id, 0) + healed
-                card_plays.append(CardPlayRecord(
-                    turn_number=turns_taken,
-                    caster_id=actor.id,
-                    card_id=card.id,
-                    energy_cost=card.energy_cost,
-                    targets=[t.id for t in targets],
-                    damage_total=dmg_total,
-                    healing_total=heal_total,
-                ))
+                discard_card(actor, card.id)
+                _record_card_play(
+                    actor, card, targets, all_entities, hp_before, turns_taken,
+                    card_plays, damage_dealt, damage_taken_telem, healing_done,
+                )
         else:
-            # Enemy AI
-            enemy_cards = []
-            if cards_by_id and actor.card_pool:
-                enemy_cards = [cards_by_id[cid] for cid in actor.card_pool if cid in cards_by_id]
-            # Use enhanced enemy AI (v2) which falls back to greedy
-            enemy_allies = [e for e in enemies if e.is_alive and e is not actor]
-            action = pick_enemy_action_v2(actor, enemy_cards, party, enemy_allies, turns_taken)
-            if action:
+            # Enemy multi-play loop
+            while actor.is_alive:
+                living_party_now = [e for e in party if e.is_alive]
+                if not living_party_now:
+                    break
+                hand_cards = [cards_by_id[cid] for cid in actor.hand if cards_by_id and cid in cards_by_id]
+                enemy_allies = [e for e in enemies if e.is_alive and e is not actor]
+                action = pick_enemy_action_v2(actor, hand_cards, party, enemy_allies, turns_taken)
+                if not action:
+                    break
                 card, targets = action
-                # Capture HP before play for telemetry
                 hp_before = {e.id: e.base_stats[Stat.HP] for e in all_entities}
                 turn_logs = play_card(card, actor, targets, all_entities)
                 logs.extend(turn_logs)
-                # Record card play telemetry
-                dmg_total = 0
-                heal_total = 0
-                for e in all_entities:
-                    delta = hp_before[e.id] - e.base_stats[Stat.HP]
-                    if delta > 0:
-                        dmg_total += delta // STAT_SCALE
-                        damage_dealt[actor.id] = damage_dealt.get(actor.id, 0) + delta // STAT_SCALE
-                        damage_taken_telem[e.id] = damage_taken_telem.get(e.id, 0) + delta // STAT_SCALE
-                    elif delta < 0:
-                        healed = (-delta) // STAT_SCALE
-                        heal_total += healed
-                        healing_done[actor.id] = healing_done.get(actor.id, 0) + healed
-                card_plays.append(CardPlayRecord(
-                    turn_number=turns_taken,
-                    caster_id=actor.id,
-                    card_id=card.id,
-                    energy_cost=card.energy_cost,
-                    targets=[t.id for t in targets],
-                    damage_total=dmg_total,
-                    healing_total=heal_total,
-                ))
+                discard_card(actor, card.id)
+                _record_card_play(
+                    actor, card, targets, all_entities, hp_before, turns_taken,
+                    card_plays, damage_dealt, damage_taken_telem, healing_done,
+                )
 
 
 def resolve_hazard(

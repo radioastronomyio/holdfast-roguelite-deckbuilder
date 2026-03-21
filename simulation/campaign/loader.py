@@ -82,6 +82,24 @@ def load_game_data(
         if card.upgrade_paths:
             upgrade_trees[card.id] = card.upgrade_paths
 
+    # Load upgrade trees from separate file and merge (overrides inline upgrade_paths)
+    upgrade_trees_path = data_path / "cards" / "upgrade-trees.json"
+    if upgrade_trees_path.exists():
+        with open(upgrade_trees_path) as f:
+            raw_trees = json.load(f)
+        for card_id, branches in raw_trees.items():
+            scaled_branches: dict[str, UpgradeEntry] = {}
+            for branch_key, entry_data in branches.items():
+                if "added_effects" in entry_data:
+                    scaled_added = []
+                    for eff in entry_data["added_effects"]:
+                        mod = Modifier(**eff)
+                        scaled = scale_modifier(mod)
+                        scaled_added.append(scaled.model_dump())
+                    entry_data = {**entry_data, "added_effects": scaled_added}
+                scaled_branches[branch_key] = UpgradeEntry(**entry_data)
+            upgrade_trees[card_id] = scaled_branches
+
     # Load characters (base_stats already at STAT_SCALE — do NOT double-scale)
     with open(data_path / "entities" / "example-characters.json") as f:
         raw_chars = json.load(f)

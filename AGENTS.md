@@ -25,28 +25,44 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 
 ## Current State
 
-- **Phase:** M3a complete — deep simulation telemetry instrumented, 5000-seed analysis generated
+- **Phase:** M3b complete — deck mechanics, upgrade trees, deep_focus_01 fix, fresh 5000-seed analysis
 - **GDD:** v1.1 (flavor system, tags, fixed-point arithmetic)
-- **Tests:** 332 passing (`pytest simulation/tests/ -v` from repo root)
+- **Tests:** 336 passing (`pytest simulation/tests/ -v` from simulation/ dir); 7 pre-existing failures (path issues in test_campaign_telemetry/test_collectors/test_campaign_loop — relative-path CWD bug, not M3b regression)
 - **Baseline:** `reports/m3-prep-baseline.json` — 1000 seeds × 3 strategies, all in 40-70% range
-- **M3a Analysis:** `reports/m3-analysis/` — 5000-seed run, balance report, 15 plots, 9 JSON exports
-- **Next work:** M3b (balance tuning — scope after human review of `reports/m3-analysis/balance-report.md`)
+- **M3a Analysis (pre-deck):** `reports/m3-analysis-pre-deck-mechanics/` — archived baseline before deck mechanics
+- **M3b Analysis (post-deck):** `reports/m3-analysis/` — fresh 5000-seed run with full deck mechanics + upgrade trees
+- **Next work:** M3c (balance tuning — scope after human review of `reports/m3-analysis/balance-report.md`)
 
-### M3a Key Findings (5000 seeds)
+### M3b Key Findings (5000 seeds × 3 strategies, post-deck-mechanics)
 
 | Strategy | Win Rate | Avg Regions | Avg Turns |
 |----------|----------|-------------|-----------|
-| aggressive | 47.4% | 4.35 | 77.6 |
-| defensive | 41.1% | 4.17 | 112.8 |
-| balanced | 50.2% | 4.42 | 117.4 |
-| **Spread** | **9.0%** | — | — |
+| aggressive | 34.0% | 3.84 | 59 |
+| defensive | 43.6% | 4.20 | 47 |
+| balanced | 60.7% | 4.68 | 52 |
+| **Spread** | **26.7%** | — | — |
 
-**GDD Degenerate Signal Checklist:**
-- Signal 1 (Win rate in band): ✅ PASS — all strategies 40-70%
-- Signal 2 (Upgrade dominance): N/A — no upgrade trees in data yet
-- Signal 3 (World card auto-accept/skip): ✅ PASS — no card >90%
-- Signal 4 (Speed ceiling): ❌ FAIL — 12.3% of entity-combats >3x, max ratio 597x (speed collapse occurring)
-- Signal 5 (Card combo win rate): ❌ FAIL — `deep_focus_01` win correlation 3.05 (anomaly requiring investigation)
+**GDD Degenerate Signal Checklist (post-deck-mechanics):**
+- Signal 1 (Win rate in band): ⚠️ PARTIAL — balanced at 60.7% (in band), aggressive at 34.0% (below 40% floor)
+- Signal 2 (Upgrade dominance): Now populated — upgrade trees loaded from `upgrade-trees.json`
+- Signal 3 (World card auto-accept/skip): Check balance report
+- Signal 4 (Speed ceiling): IMPROVED — max ratio 77x (down from 597x); remaining high ratios from stun-loop mechanic (shield_bash PCT_SUB Speed 100%), not energy exploit
+- Signal 5 (Card combo win rate): deep_focus_01 fixed (cost 1, value 1 Energy) — energy loop eliminated
+
+**Convergence warning:** All strategies pick same first region >80% of the time (difficulty ordering forced).
+
+### M3b Changes Applied
+
+| Change | Details |
+|--------|---------|
+| `deck_copies` on Card model | Field added to `models/card.py`; all 15 base cards + 6 hazard cards updated in JSON |
+| deep_focus_01 fix | energy_cost 0→1, FLAT_ADD Energy value 3→1 (eliminated infinite energy loop) |
+| Deck system | `initialize_deck`, `draw_cards`, `discard_hand`, `discard_card` added to `engine/turn_order.py` |
+| Combat loop rewrite | `resolve_combat()` now uses hand/draw/discard mechanics + multi-play per turn + seeded RNG |
+| Upgrade tree loader | `loader.py` loads `data/cards/upgrade-trees.json`; `GameData.upgrade_trees` now populated |
+| Campaign runner | `run_campaign()` passes seeded `rng` to `resolve_combat()`; fixed `_load_region_adjectives` path |
+| Stun deadlock fix | `tick_until_next_turn` handles all-speed-0 case (falls back to list-order, no more RuntimeError) |
+| New tests | `test_deck_system.py` (8 tests), `test_upgrade_loader.py` (3 tests), `test_deep_focus_fix.py` (3 tests) |
 
 **Convergence warning:** All strategies pick same first region 100% of the time (likely difficulty=1 forced).
 
@@ -85,6 +101,7 @@ Six compounding bugs caused 0% win rate. All fixed:
 | **M2c** | `spec/m2c-campaign-loop-spec.md` | Data loader (STAT_SCALE normalization), campaign state, full macro loop |
 | **M2d** | `spec/m2d-ai-heuristics-spec.md` | AggressiveAI/DefensiveAI/BalancedAI, enhanced enemy AI, Monte Carlo runner |
 | **M3a** | `staging/m3a-balance-analysis-spec.md` | Combat+campaign telemetry, analysis package, 5000-seed run, 15 plots, 9 JSON exports, balance report |
+| **M3b** | `staging/m3b-deck-mechanics-spec.md` | deck_copies field, hand/draw/discard system, multi-play per turn, upgrade tree loader, deep_focus_01 fix, 15 new tests, fresh analysis |
 
 ## Critical: STAT_SCALE Awareness
 
