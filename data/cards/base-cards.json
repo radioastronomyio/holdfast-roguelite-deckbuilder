@@ -57,11 +57,11 @@
       {
         "stat": "Speed",
         "operation": "PCT_SUB",
-        "value": 100,
+        "value": 50,
         "duration": 1,
         "target": "ENEMY_SINGLE",
         "stacking": "replace",
-        "tags": ["debuff", "stun"]
+        "tags": ["debuff", "slow"]
       }
     ],
     "tags": ["attack", "physical", "control"],

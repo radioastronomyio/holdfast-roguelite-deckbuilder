@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import random as _random_module
+
 from models.entity import Character
 from models.card import Card, UpgradeEntry
 from models.campaign import WorldCard, EventChoice
@@ -70,10 +72,14 @@ def _pick_greedy_upgrade(
     upgrade_trees: dict[str, dict[str, UpgradeEntry]],
     applied_upgrades: dict[str, list[str]],
     prefer_stat: Stat | None = None,
+    rng: _random_module.Random | None = None,
 ) -> tuple[str, str] | None:
-    """Generic upgrade picker with optional stat preference."""
-    best = None
-    best_score = -1
+    """Generic upgrade picker with optional stat preference.
+
+    When multiple branches tie on score, randomly selects among them using
+    the provided RNG (same seed = same result; None = deterministic first-pick).
+    """
+    candidates: list[tuple[int, str, str]] = []  # (score, card_id, branch_key)
     for card_id in roster_cards:
         tree = upgrade_trees.get(card_id, {})
         already = applied_upgrades.get(card_id, [])
@@ -89,10 +95,17 @@ def _pick_greedy_upgrade(
                 e.stat == prefer_stat for e in entry.added_effects
             ):
                 score += 10
-            if score > best_score:
-                best_score = score
-                best = (card_id, branch_key)
-    return best
+            candidates.append((score, card_id, branch_key))
+
+    if not candidates:
+        return None
+
+    max_score = max(s for s, _, _ in candidates)
+    top = [(cid, bk) for (s, cid, bk) in candidates if s == max_score]
+
+    if rng and len(top) > 1:
+        return rng.choice(top)
+    return top[0]
 
 
 def _affordable_cards(caster: CombatEntity, cards: list[Card]) -> list[Card]:
@@ -126,8 +139,18 @@ class AggressiveAI:
         return min(state.unconquered_regions, key=lambda rs: rs.assigned_difficulty)
 
     def select_party(self, state: CampaignState, game_data: GameData, region: RegionState) -> list[Character]:
-        sorted_roster = sorted(state.roster, key=lambda c: c.base_stats[Stat.Power], reverse=True)
-        return sorted_roster[:state.party_size]
+        sorted_by_power = sorted(state.roster, key=lambda c: c.base_stats[Stat.Power], reverse=True)
+        party = sorted_by_power[:state.party_size]
+        # If all selected party members have below-median HP, swap weakest Power member for tankiest
+        if len(state.roster) > state.party_size:
+            all_hp = sorted(c.base_stats[Stat.HP] for c in state.roster)
+            median_hp = all_hp[len(all_hp) // 2]
+            if all(c.base_stats[Stat.HP] < median_hp for c in party):
+                tankiest = max(state.roster, key=lambda c: c.base_stats[Stat.HP])
+                if tankiest not in party:
+                    party = list(party)
+                    party[-1] = tankiest
+        return party
 
     def select_card(
         self,
@@ -153,70 +176,75 @@ class AggressiveAI:
                 ))
                 return (best_heal, [caster])
 
-        # 2. Score each card for aggressive play
+        # 2. Score each card — combo-aware: debuff shred before damage
         best_damage_score = max((_damage_score(c) for c in affordable), default=0)
 
         def _agg_score(card: Card) -> int:
             dmg = _damage_score(card)
 
+            # Defense shred played before damage cards multiplies all subsequent damage
+            if _is_debuff(card) and dmg == 0:
+                has_damage_followup = any(_damage_score(c) > 0 for c in affordable if c is not card)
+                if has_damage_followup:
+                    defense_shred = sum(
+                        e.value for e in card.effects
+                        if e.stat == Stat.Defense
+                        and e.operation in (Operation.PCT_SUB, Operation.FLAT_SUB)
+                    )
+                    if defense_shred > 0:
+                        return best_damage_score + defense_shred
+
             # AoE bonus when multiple enemies alive
             if _is_aoe(card) and len(living_enemies) > 1:
                 dmg = dmg * len(living_enemies)
 
-            # Overkill prevention: if best single target is nearly dead, don't waste a big card
-            if dmg > 0 and not _is_aoe(card):
-                target = min(living_enemies, key=lambda e: get_current_stat(e, Stat.HP))
-                target_hp = get_current_stat(target, Stat.HP) // 1000  # display scale
-                if target_hp > 0 and dmg // 1000 >= target_hp * 3 and len(living_enemies) > 1:
-                    # Overkill on a nearly-dead enemy — redirect to healthiest enemy instead
-                    return dmg // 2  # penalize to prefer other targets
-
-            # Buff value: Power/Speed buffs score at 50% of top damage card
+            # Buff value: score at 40% of top damage card
             if dmg == 0 and _is_buff(card):
-                has_power_speed = any(
-                    e.stat in (Stat.Power, Stat.Speed)
-                    and e.operation in (Operation.PCT_ADD, Operation.FLAT_ADD)
-                    for e in card.effects
-                )
-                if has_power_speed:
-                    return max(best_damage_score // 2, 1)
+                return max(best_damage_score * 40 // 100, 1)
+
+            # Non-emergency heals are lowest priority
+            if dmg == 0 and _is_healing_card(card):
+                return 1
 
             return dmg
 
         best = max(affordable, key=_agg_score)
 
-        # 3. Targeting: for single-target damage, prefer highest-HP enemy (not overkill target)
+        # 3. Focus-fire targeting: kill lowest-HP enemy fast to reduce incoming damage
+        #    Exception: skip massive overkill when another target exists
         if _damage_score(best) > 0 and not _is_aoe(best):
-            target_hp = min(living_enemies, key=lambda e: get_current_stat(e, Stat.HP))
-            target_best = max(living_enemies, key=lambda e: get_current_stat(e, Stat.HP))
-            low_hp = get_current_stat(target_hp, Stat.HP) // 1000
-            card_dmg = _damage_score(best) // 1000
-            # Switch to highest-HP target if lowest is already going to die to this card
-            # and there's a better target to hit
-            if low_hp > 0 and card_dmg >= low_hp * 2 and len(living_enemies) > 1:
-                return (best, [target_best])
+            target_low = min(living_enemies, key=lambda e: get_current_stat(e, Stat.HP))
+            low_hp = get_current_stat(target_low, Stat.HP) // STAT_SCALE
+            card_dmg = _damage_score(best) // STAT_SCALE
+            if low_hp > 0 and card_dmg >= low_hp * 3 and len(living_enemies) > 1:
+                # Massive overkill — pick next-lowest HP enemy instead
+                sorted_enemies = sorted(living_enemies, key=lambda e: get_current_stat(e, Stat.HP))
+                return (best, [sorted_enemies[min(1, len(sorted_enemies) - 1)]])
+            return (best, [target_low])
 
         return (best, _target_for_card(best, enemies))
 
     def evaluate_world_card(self, card: WorldCard, state: CampaignState, game_data: GameData) -> bool:
-        # Reject if any modifier has a catastrophic ally FLAT_SUB (>= 50 display scale)
+        # Reject only if catastrophic HP loss to allies (≥ 30 display scale)
         ally_targets = (Target.SELF, Target.ALLY_SINGLE, Target.ALLY_ALL)
-        for mod in card.upside + card.downside:
+        for mod in card.downside:
             if (
-                mod.operation == Operation.FLAT_SUB
-                and mod.value >= 50 * STAT_SCALE
+                mod.stat == Stat.HP
+                and mod.operation == Operation.FLAT_SUB
+                and mod.value >= 30 * STAT_SCALE
                 and mod.target in ally_targets
             ):
                 return False
-        # Accept if there's a beneficial Power or Speed mod targeting allies
-        for mod in card.upside + card.downside:
-            if (
-                mod.stat in (Stat.Power, Stat.Speed)
-                and mod.operation in (Operation.FLAT_ADD, Operation.PCT_ADD)
-                and mod.target in ally_targets
-            ):
-                return True
-        return False
+        # Accept if net positive (upside minus downside by raw modifier value)
+        upside = sum(
+            m.value for m in card.upside
+            if m.operation in (Operation.FLAT_ADD, Operation.PCT_ADD)
+        )
+        downside = sum(
+            m.value for m in card.downside
+            if m.operation in (Operation.FLAT_SUB, Operation.PCT_SUB)
+        )
+        return upside >= downside
 
     def select_event_choice(self, choices: list[EventChoice], state: CampaignState) -> int:
         # Pick choice with most offensive effect
@@ -242,7 +270,7 @@ class AggressiveAI:
         applied_upgrades: dict[str, list[str]],
         state: CampaignState,
     ) -> tuple[str, str] | None:
-        return _pick_greedy_upgrade(roster_cards, upgrade_trees, applied_upgrades, Stat.Power)
+        return _pick_greedy_upgrade(roster_cards, upgrade_trees, applied_upgrades, Stat.Power, state.rng)
 
     def select_research(self, state: CampaignState, game_data: GameData) -> RegionState | None:
         return None  # Never research
@@ -346,7 +374,7 @@ class DefensiveAI:
         applied_upgrades: dict[str, list[str]],
         state: CampaignState,
     ) -> tuple[str, str] | None:
-        return _pick_greedy_upgrade(roster_cards, upgrade_trees, applied_upgrades, Stat.Defense)
+        return _pick_greedy_upgrade(roster_cards, upgrade_trees, applied_upgrades, Stat.Defense, state.rng)
 
     def select_research(self, state: CampaignState, game_data: GameData) -> RegionState | None:
         # Always research if resources available, cheapest layer first
@@ -465,7 +493,7 @@ class BalancedAI:
     ) -> tuple[str, str] | None:
         # Alternate between offense and defense
         prefer = Stat.Power if state.turn_number % 2 == 0 else Stat.Defense
-        return _pick_greedy_upgrade(roster_cards, upgrade_trees, applied_upgrades, prefer)
+        return _pick_greedy_upgrade(roster_cards, upgrade_trees, applied_upgrades, prefer, state.rng)
 
     def select_research(self, state: CampaignState, game_data: GameData) -> RegionState | None:
         # Research to level 2 before assault, cheapest first

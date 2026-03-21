@@ -86,9 +86,12 @@ class TestCalculateStat:
         mods = [make_mod(Stat.Power, Operation.FLAT_ADD, 50000)]
         assert calculate_stat(100000, mods, Stat.HP) == 100000
 
-    def test_speed_floors_at_zero(self):
+    def test_speed_floors_at_minimum(self):
+        """Speed debuffed below zero is clamped to SPEED_MIN_FLOOR * STAT_SCALE (M3d)."""
+        from engine.stats import SPEED_MIN_FLOOR
+        from models.modifier import STAT_SCALE
         mods = [make_mod(Stat.Speed, Operation.FLAT_SUB, 200000)]
-        assert calculate_stat(100000, mods, Stat.Speed) == 0
+        assert calculate_stat(100000, mods, Stat.Speed) == SPEED_MIN_FLOOR * STAT_SCALE
 
     def test_energy_floors_at_zero(self):
         mods = [make_mod(Stat.Energy, Operation.FLAT_SUB, 200000)]

@@ -1,38 +1,38 @@
 {
   "0": {
     "region_index": 0,
-    "win_rate": 0.438,
-    "death_rate": 0.041,
+    "win_rate": 0.4779333333333333,
+    "death_rate": 0.0486,
     "ordering_frequency": 1.0
   },
   "1": {
     "region_index": 1,
-    "win_rate": 0.456725755995829,
-    "death_rate": 0.10433333333333333,
-    "ordering_frequency": 0.959
+    "win_rate": 0.5023474178403756,
+    "death_rate": 0.096,
+    "ordering_frequency": 0.9514
   },
   "2": {
     "region_index": 2,
-    "win_rate": 0.5124804992199687,
-    "death_rate": 0.10586666666666666,
-    "ordering_frequency": 0.8546666666666667
+    "win_rate": 0.5587249629802822,
+    "death_rate": 0.09006666666666667,
+    "ordering_frequency": 0.8554
   },
   "3": {
     "region_index": 3,
-    "win_rate": 0.5849358974358975,
-    "death_rate": 0.11153333333333333,
-    "ordering_frequency": 0.7488
+    "win_rate": 0.6244773519163763,
+    "death_rate": 0.09773333333333334,
+    "ordering_frequency": 0.7653333333333333
   },
   "4": {
     "region_index": 4,
-    "win_rate": 0.6873103881159117,
-    "death_rate": 0.10913333333333333,
-    "ordering_frequency": 0.6372666666666666
+    "win_rate": 0.7158977431595765,
+    "death_rate": 0.098,
+    "ordering_frequency": 0.6676
   },
   "5": {
     "region_index": 5,
-    "win_rate": 0.829336026255996,
-    "death_rate": 0.09013333333333333,
-    "ordering_frequency": 0.5281333333333333
+    "win_rate": 0.8390683520599251,
+    "death_rate": 0.09166666666666666,
+    "ordering_frequency": 0.5696
   }
 }

@@ -30,12 +30,17 @@ class TestSpeedCap:
         assert result == expected_capped, f"Expected {expected_capped}, got {result}"
         assert result < expected_uncapped, "Cap did not reduce the value"
 
-    def test_speed_negative_not_capped(self):
-        """Negative Speed debuffs (-200%) are not capped — speed floors at 0."""
+    def test_speed_negative_not_capped_by_speed_pct_cap(self):
+        """Negative Speed debuffs are not capped by SPEED_PCT_CAP (only positive side is capped).
+        The result floors at SPEED_MIN_FLOOR * STAT_SCALE, not at the cap value (M3d)."""
+        from engine.stats import SPEED_MIN_FLOOR
         base = 50 * STAT_SCALE
         mods = [make_pct_mod(Stat.Speed, Operation.PCT_SUB, 200)]
         result = calculate_stat(base, mods, Stat.Speed)
-        assert result == 0, f"Expected 0 (floored), got {result}"
+        # Negative debuffs bypass SPEED_PCT_CAP; result is clamped to SPEED_MIN_FLOOR
+        assert result == SPEED_MIN_FLOOR * STAT_SCALE, (
+            f"Expected {SPEED_MIN_FLOOR * STAT_SCALE} (min floor), got {result}"
+        )
 
     def test_speed_cap_constant(self):
         """SPEED_PCT_CAP is a named constant with value 75."""

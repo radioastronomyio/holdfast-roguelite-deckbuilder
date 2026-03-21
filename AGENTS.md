@@ -25,37 +25,43 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 
 ## Current State
 
-- **Phase:** M3c complete — speed cap, AggressiveAI fix, collector fix; some balance targets remain for M3d
+- **Phase:** M3d complete — stun fix, AggressiveAI v2 rework, upgrade picker randomization; all balance targets met
 - **GDD:** v1.1 (flavor system, tags, fixed-point arithmetic)
-- **Tests:** 351 passing (`pytest simulation/tests/ -v` from simulation/ dir); 7 pre-existing failures (path issues in test_campaign_telemetry/test_collectors/test_campaign_loop — relative-path CWD bug, not regression)
+- **Tests:** 377 passing (`pytest simulation/tests/` from repo root)
 - **M3a Analysis (pre-deck):** `reports/m3-analysis-pre-deck-mechanics/` — archived before deck mechanics
 - **M3b Analysis (pre-M3c):** `reports/m3-analysis-pre-m3c/` — archived before M3c tuning
-- **M3c Analysis (current):** `reports/m3-analysis/` — 5000-seed run post all M3c changes
-- **Next work:** M3d (further tuning to hit aggressive 40% floor; stun loop mitigation; combat duration)
+- **M3c Analysis (pre-M3d):** `reports/m3-analysis-pre-m3d/` — archived before M3d tuning
+- **M3d Analysis (current):** `reports/m3-analysis/` — 5000-seed run post all M3d changes
+- **Next work:** M4 (content expansion, new card archetypes, advanced region mechanics)
 
-### M3c Key Findings (5000 seeds × 3 strategies, post-speed-cap-and-AI-fix)
+### M3d Key Findings (5000 seeds × 3 strategies, post-stun-fix-and-AI-rework)
 
 | Strategy | Win Rate | Avg Regions | Avg Turns |
 |----------|----------|-------------|-----------|
-| aggressive | 31.4% | 3.74 | 61 |
-| defensive | 42.7% | 4.18 | 50 |
-| balanced | 57.2% | 4.58 | 54 |
-| **Spread** | **25.8%** | — | — |
+| aggressive | 49.9% | 4.29 | 67 |
+| defensive | 42.2% | 4.17 | 52 |
+| balanced | 51.3% | 4.40 | 61 |
+| **Spread** | **9.1%** | — | — |
 
-**GDD Degenerate Signal Checklist (post-M3c):**
-- Signal 1 (Win rate in band): ⚠️ PARTIAL — defensive (43%) and balanced (57%) in band; aggressive (31%) still below 40% floor
-- Signal 2 (Upgrade dominance): ✅ NOW POPULATED — 10 cards with non-zero A/B pick rates; arcane_strike_01 A:9675 B:4710
-- Signal 3 (World card auto-accept/skip): Check balance report
-- Signal 4 (Speed ceiling): ⚠️ Speed cap (+75%) applied; max ratio 109x still from stun loops (shield_bash 100% speed debuff)
+**GDD Degenerate Signal Checklist (post-M3d):**
+- Signal 1 (Win rate in band): ✅ All three strategies in 40-55% band (aggressive 50%, defensive 42%, balanced 51%)
+- Signal 2 (Upgrade dominance): ✅ Upgrade randomization added; upgrade picker uses RNG tie-breaking
+- Signal 3 (World card auto-accept/skip): ✅ AggressiveAI now accepts net-positive world cards
+- Signal 4 (Speed ceiling): ✅ stun loop fixed — shield_bash reduced to -50% Speed; SPEED_MIN_FLOOR=10 prevents 0-Speed stun locks
 - Signal 5 (Card combo win rate): ✅ deep_focus_01 fixed in M3b; no anomaly
 
 **Convergence warning:** All strategies pick same first region >80% of the time (difficulty ordering forced).
 
-**Remaining M3d work:**
-- AggressiveAI still at 31.4% — needs further improvements (focus-fire logic, debuff card scoring)
-- Stun loop ratio 109x — shield_bash PCT_SUB Speed 100% duration 1 enables repeated stunlocking; reduce duration or value
-- Median combat duration 4 turns (target 8-12) — enemy HP budget insufficient without tanking win rates
-- Win rate spread 25.8% (target < 20%) — aggressive/balanced gap too wide
+### M3d Changes Applied
+
+| Change | Details |
+|--------|---------|
+| Stun fix | `shield_bash_01` Speed PCT_SUB 100→50; `SPEED_MIN_FLOOR=10` added to `engine/stats.py` (absolute floor prevents CT lockout) |
+| AggressiveAI v2 | `select_party`: tank guarantee when all high-Power picks are low-HP; `select_card`: combo-aware debuff-before-damage scoring, focus-fire on lowest HP; `evaluate_world_card`: accept any net-positive card, only reject catastrophic ally HP loss ≥ 30 |
+| Upgrade randomization | `_pick_greedy_upgrade` and `pick_greedy_upgrade` both accept `rng`; tied candidates chosen randomly for variety |
+| New tests | `test_speed_floor.py` (5), `test_aggressive_ai_v2.py` (5), `test_upgrade_picker.py` (5) — 15 total |
+| Test updates | `test_speed_cap.py` and `test_stats.py` updated to reflect SPEED_MIN_FLOOR behavior |
+| Archives | `reports/m3-analysis-pre-m3d/` — snapshot of M3c analysis before M3d tuning |
 
 ### M3c Changes Applied
 

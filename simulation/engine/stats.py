@@ -23,6 +23,7 @@ def apply_stacking(modifiers: list[Modifier]) -> list[Modifier]:
 
 
 SPEED_PCT_CAP = 75  # Maximum +75% net percentage bonus for Speed (prevents CT feedback loops)
+SPEED_MIN_FLOOR = 10  # Minimum effective Speed (display scale) — prevents 0-speed stun locks
 
 
 def calculate_stat(base: int, modifiers: list[Modifier], stat: Stat = Stat.HP) -> int:
@@ -61,5 +62,9 @@ def calculate_stat(base: int, modifiers: list[Modifier], stat: Stat = Stat.HP) -
     # 8. Floor at 0 for non-HP stats (HP can be negative for death signal)
     if stat != Stat.HP:
         result = max(0, result)
+
+    # 9. Minimum Speed floor — no entity can be fully locked out of CT accumulation
+    if stat == Stat.Speed:
+        result = max(result, SPEED_MIN_FLOOR * STAT_SCALE)
 
     return result

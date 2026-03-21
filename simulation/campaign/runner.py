@@ -111,26 +111,28 @@ def pick_greedy_upgrade(
     roster_cards: list[str],
     upgrade_trees: dict[str, dict[str, UpgradeEntry]],
     applied_upgrades: dict[str, list[str]],
+    rng: random.Random | None = None,
 ) -> tuple[str, str] | None:
-    """Placeholder greedy upgrade selection."""
-    best = None
-    best_tier = -1
+    """Placeholder greedy upgrade selection with optional RNG tiebreaking."""
+    candidates: list[tuple[int, str, str]] = []
     for card_id in roster_cards:
         tree = upgrade_trees.get(card_id, {})
         already = applied_upgrades.get(card_id, [])
         for branch_key, entry in tree.items():
             if branch_key in already:
                 continue
-            # Check prerequisite
             if entry.prerequisite and entry.prerequisite not in already:
                 continue
-            # Check exclusions
             if any(ex in already for ex in entry.exclusions):
                 continue
-            if entry.tier > best_tier:
-                best_tier = entry.tier
-                best = (card_id, branch_key)
-    return best
+            candidates.append((entry.tier, card_id, branch_key))
+    if not candidates:
+        return None
+    max_tier = max(s for s, _, _ in candidates)
+    top = [(cid, bk) for (s, cid, bk) in candidates if s == max_tier]
+    if rng and len(top) > 1:
+        return rng.choice(top)
+    return top[0]
 
 
 def _evaluate_world_card_net_impact(card_mods: list[Modifier]) -> int:
@@ -395,7 +397,7 @@ def run_campaign(seed: int, game_data: GameData, strategy=None) -> CampaignResul
                     all_card_ids, game_data.upgrade_trees, state.card_upgrades_applied, state
                 )
             else:
-                upgrade = pick_greedy_upgrade(all_card_ids, game_data.upgrade_trees, state.card_upgrades_applied)
+                upgrade = pick_greedy_upgrade(all_card_ids, game_data.upgrade_trees, state.card_upgrades_applied, rng)
             if upgrade:
                 card_id, branch_key = upgrade
                 if card_id not in state.card_upgrades_applied:

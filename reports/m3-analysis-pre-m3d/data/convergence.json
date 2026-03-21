@@ -1,20 +1,20 @@
 {
   "first_region_agreement": 1.0,
-  "full_order_agreement": 0.4344,
+  "full_order_agreement": 0.4488,
   "strategy_correlation": {
     "aggressive": {
       "aggressive": 1.0,
-      "defensive": 0.614,
-      "balanced": 0.6648
+      "defensive": 0.6532,
+      "balanced": 0.6212
     },
     "defensive": {
-      "aggressive": 0.614,
+      "aggressive": 0.6532,
       "defensive": 1.0,
-      "balanced": 0.648
+      "balanced": 0.7004
     },
     "balanced": {
-      "aggressive": 0.6648,
-      "defensive": 0.648,
+      "aggressive": 0.6212,
+      "defensive": 0.7004,
       "balanced": 1.0
     }
   }
