@@ -1,0 +1,122 @@
+{
+  "lightning_chain_01": {
+    "card_id": "lightning_chain_01",
+    "total_plays": 74429,
+    "plays_per_campaign": 14.8858,
+    "win_corr": 1.4038793999164163,
+    "avg_damage_per_play": 26.17432721116769,
+    "pick_rate_in_wins": 0.992620460136015
+  },
+  "sweeping_blade_01": {
+    "card_id": "sweeping_blade_01",
+    "total_plays": 158251,
+    "plays_per_campaign": 31.6502,
+    "win_corr": 2.9653525702940264,
+    "avg_damage_per_play": 32.48212017617582,
+    "pick_rate_in_wins": 0.9995659094197656
+  },
+  "adrenaline_01": {
+    "card_id": "adrenaline_01",
+    "total_plays": 72853,
+    "plays_per_campaign": 14.5706,
+    "win_corr": 1.1261976643540512,
+    "avg_damage_per_play": 0.03868063085940181,
+    "pick_rate_in_wins": 0.9855303139921864
+  },
+  "shield_bash_01": {
+    "card_id": "shield_bash_01",
+    "total_plays": 157309,
+    "plays_per_campaign": 31.4618,
+    "win_corr": 2.241692286752219,
+    "avg_damage_per_play": 16.50702756994196,
+    "pick_rate_in_wins": 0.9998553031399219
+  },
+  "cleanse_01": {
+    "card_id": "cleanse_01",
+    "total_plays": 217949,
+    "plays_per_campaign": 43.5898,
+    "win_corr": 3.448637614396876,
+    "avg_damage_per_play": 0.034888896026134555,
+    "pick_rate_in_wins": 0.9995659094197656
+  },
+  "immolate_01": {
+    "card_id": "immolate_01",
+    "total_plays": 150843,
+    "plays_per_campaign": 30.1686,
+    "win_corr": 1.890218372408432,
+    "avg_damage_per_play": 0.045265607287046795,
+    "pick_rate_in_wins": 0.9994212125596874
+  },
+  "acid_flask_01": {
+    "card_id": "acid_flask_01",
+    "total_plays": 148627,
+    "plays_per_campaign": 29.7254,
+    "win_corr": 2.671566677034015,
+    "avg_damage_per_play": 0.03354706749110189,
+    "pick_rate_in_wins": 0.9991318188395312
+  },
+  "stone_wall_01": {
+    "card_id": "stone_wall_01",
+    "total_plays": 73487,
+    "plays_per_campaign": 14.6974,
+    "win_corr": 0.8830701972605128,
+    "avg_damage_per_play": 0.03514907398587505,
+    "pick_rate_in_wins": 0.9811894081898422
+  },
+  "deep_focus_01": {
+    "card_id": "deep_focus_01",
+    "total_plays": 73843,
+    "plays_per_campaign": 14.7686,
+    "win_corr": 0.9887832296321273,
+    "avg_damage_per_play": 0.049510447842043254,
+    "pick_rate_in_wins": 0.9843727391115613
+  },
+  "power_surge_01": {
+    "card_id": "power_surge_01",
+    "total_plays": 74079,
+    "plays_per_campaign": 14.8158,
+    "win_corr": 1.004417502656696,
+    "avg_damage_per_play": 0.02992750982059693,
+    "pick_rate_in_wins": 0.984083345391405
+  },
+  "arcane_strike_01": {
+    "card_id": "arcane_strike_01",
+    "total_plays": 246066,
+    "plays_per_campaign": 49.2132,
+    "win_corr": 6.557024774968118,
+    "avg_damage_per_play": 35.29855404647534,
+    "pick_rate_in_wins": 1.0
+  },
+  "heal_potion_01": {
+    "card_id": "heal_potion_01",
+    "total_plays": 226181,
+    "plays_per_campaign": 45.2362,
+    "win_corr": 2.5949037440317007,
+    "avg_damage_per_play": 0.041692273002595266,
+    "pick_rate_in_wins": 0.9995659094197656
+  },
+  "drain_life_01": {
+    "card_id": "drain_life_01",
+    "total_plays": 156796,
+    "plays_per_campaign": 31.3592,
+    "win_corr": 2.9976496285651812,
+    "avg_damage_per_play": 15.666719814280977,
+    "pick_rate_in_wins": 1.0
+  },
+  "phalanx_01": {
+    "card_id": "phalanx_01",
+    "total_plays": 148917,
+    "plays_per_campaign": 29.7834,
+    "win_corr": 1.7395215923616654,
+    "avg_damage_per_play": 0.029378781468871924,
+    "pick_rate_in_wins": 0.9985530313992186
+  },
+  "frost_bolt_01": {
+    "card_id": "frost_bolt_01",
+    "total_plays": 176645,
+    "plays_per_campaign": 35.329,
+    "win_corr": 3.485432439240064,
+    "avg_damage_per_play": 26.23711398567749,
+    "pick_rate_in_wins": 0.9998553031399219
+  }
+}

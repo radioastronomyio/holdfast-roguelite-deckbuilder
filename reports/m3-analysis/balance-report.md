@@ -6,11 +6,11 @@
 
 **Win-rate band (40.0%–70.0%):** ❌ OUT OF BAND
 
-- ❌ **aggressive**: 34.0% (1699/5000) | avg regions 3.84 | avg turns 58.8
-- ✅ **defensive**: 43.6% (2178/5000) | avg regions 4.20 | avg turns 46.6
-- ✅ **balanced**: 60.7% (3034/5000) | avg regions 4.68 | avg turns 51.9
+- ❌ **aggressive**: 31.4% (1572/5000) | avg regions 3.74 | avg turns 61.2
+- ✅ **defensive**: 42.7% (2136/5000) | avg regions 4.18 | avg turns 49.9
+- ✅ **balanced**: 57.2% (2862/5000) | avg regions 4.58 | avg turns 54.4
 
-**Win-rate spread:** 26.7%
+**Win-rate spread:** 25.8%
 
 **Convergence warning:** YES
 
@@ -18,13 +18,21 @@
 
 ### Signal 1: Win Rate In Range
 
-- aggressive: 34.0% → **FAIL**
-- defensive: 43.6% → **PASS**
-- balanced: 60.7% → **PASS**
+- aggressive: 31.4% → **FAIL**
+- defensive: 42.7% → **PASS**
+- balanced: 57.2% → **PASS**
 
 ### Signal 2: Upgrade Path Pick Rate
 
-- **PASS** — no branch >70% dominance in winning runs
+- **FAIL** — dominant branches detected:
+  - adrenaline_01: Branch B 100.0% in winning runs
+  - power_surge_01: Branch A 100.0% in winning runs
+  - immolate_01: Branch A 100.0% in winning runs
+  - shield_bash_01: Branch A 100.0% in winning runs
+  - phalanx_01: Branch A 100.0% in winning runs
+  - cleanse_01: Branch A 100.0% in winning runs
+  - acid_flask_01: Branch A 100.0% in winning runs
+  - stone_wall_01: Branch A 100.0% in winning runs
 
 ### Signal 3: World Card Skip/Accept Rate
 
@@ -32,29 +40,29 @@
 
 ### Signal 4: Speed Stat Ceiling
 
-- Entities acting >3x/cycle: 3.8% of (entity,combat) pairs → **FAIL**
-- Entities acting >5x/cycle: 2.6%
-- Max observed ratio: 77.00
-- Flagged combats: 5965
+- Entities acting >3x/cycle: 5.1% of (entity,combat) pairs → **FAIL**
+- Entities acting >5x/cycle: 3.5%
+- Max observed ratio: 109.00
+- Flagged combats: 7759
 
 ### Signal 5: Card Combo Win Rate
 
-- **FAIL** — high win correlation cards: arcane_strike_01 (6.557), frost_bolt_01 (3.485)
+- **FAIL** — high win correlation cards: arcane_strike_01 (7.879), cleanse_01 (4.671)
 
 ## 3. Strategy Differentiation
 
 - First-region agreement across strategies: 100.0%
-- Full region-order agreement: 51.3%
-- Seeds where all strategies agree (win or all lose): 51.5%
-- Strategy-dependent seeds: 48.5%
+- Full region-order agreement: 44.9%
+- Seeds where all strategies agree (win or all lose): 48.7%
+- Strategy-dependent seeds: 51.3%
 
 **Pairwise win/loss agreement rate:**
 
 | | aggressive | defensive | balanced |
 |---|---|---|---|
-| **aggressive** | 100.0% | 69.5% | 62.1% |
-| **defensive** | 69.5% | 100.0% | 71.4% |
-| **balanced** | 62.1% | 71.4% | 100.0% |
+| **aggressive** | 100.0% | 65.3% | 62.1% |
+| **defensive** | 65.3% | 100.0% | 70.0% |
+| **balanced** | 62.1% | 70.0% | 100.0% |
 
 ## 4. Card Balance
 
@@ -62,31 +70,31 @@
 
 | Card | Win Corr | Plays/Campaign | Avg Damage/Play |
 |------|----------|----------------|-----------------|
-| arcane_strike_01 | 6.5570 | 49.21 | 35.3 |
-| frost_bolt_01 | 3.4854 | 35.33 | 26.2 |
-| cleanse_01 | 3.4486 | 43.59 | 0.0 |
-| drain_life_01 | 2.9976 | 31.36 | 15.7 |
-| sweeping_blade_01 | 2.9654 | 31.65 | 32.5 |
-| acid_flask_01 | 2.6716 | 29.73 | 0.0 |
-| heal_potion_01 | 2.5949 | 45.24 | 0.0 |
-| shield_bash_01 | 2.2417 | 31.46 | 16.5 |
-| immolate_01 | 1.8902 | 30.17 | 0.0 |
-| phalanx_01 | 1.7395 | 29.78 | 0.0 |
+| arcane_strike_01 | 7.8787 | 53.72 | 32.2 |
+| cleanse_01 | 4.6713 | 48.73 | 0.0 |
+| frost_bolt_01 | 4.4378 | 38.02 | 24.8 |
+| heal_potion_01 | 3.9570 | 49.68 | 0.0 |
+| drain_life_01 | 3.9215 | 34.30 | 14.9 |
+| sweeping_blade_01 | 3.6480 | 34.85 | 30.9 |
+| acid_flask_01 | 3.5303 | 33.25 | 0.1 |
+| shield_bash_01 | 3.1367 | 34.40 | 14.9 |
+| immolate_01 | 2.9702 | 32.62 | 0.0 |
+| phalanx_01 | 2.9449 | 32.12 | 0.0 |
 
 **Bottom 10 cards by win correlation:**
 
 | Card | Win Corr | Plays/Campaign | Avg Damage/Play |
 |------|----------|----------------|-----------------|
-| acid_flask_01 | 2.6716 | 29.73 | 0.0 |
-| heal_potion_01 | 2.5949 | 45.24 | 0.0 |
-| shield_bash_01 | 2.2417 | 31.46 | 16.5 |
-| immolate_01 | 1.8902 | 30.17 | 0.0 |
-| phalanx_01 | 1.7395 | 29.78 | 0.0 |
-| lightning_chain_01 | 1.4039 | 14.89 | 26.2 |
-| adrenaline_01 | 1.1262 | 14.57 | 0.0 |
-| power_surge_01 | 1.0044 | 14.82 | 0.0 |
-| deep_focus_01 | 0.9888 | 14.77 | 0.0 |
-| stone_wall_01 | 0.8831 | 14.70 | 0.0 |
+| sweeping_blade_01 | 3.6480 | 34.85 | 30.9 |
+| acid_flask_01 | 3.5303 | 33.25 | 0.1 |
+| shield_bash_01 | 3.1367 | 34.40 | 14.9 |
+| immolate_01 | 2.9702 | 32.62 | 0.0 |
+| phalanx_01 | 2.9449 | 32.12 | 0.0 |
+| lightning_chain_01 | 1.7832 | 16.46 | 24.3 |
+| adrenaline_01 | 1.4471 | 16.41 | 0.1 |
+| power_surge_01 | 1.3252 | 16.60 | 0.0 |
+| stone_wall_01 | 1.3085 | 16.42 | 0.0 |
+| deep_focus_01 | 1.2695 | 16.48 | 0.0 |
 
 **Never-played cards:** none
 
@@ -94,110 +102,118 @@
 
 | Card | Branch A rate | Branch B rate | A win rate | B win rate |
 |------|---------------|---------------|------------|------------|
-| arcane_strike_01 | 0.0% | 0.0% | 0.0% | 0.0% |
-| adrenaline_01 | 0.0% | 0.0% | 0.0% | 0.0% |
-| deep_focus_01 | 0.0% | 0.0% | 0.0% | 0.0% |
-| power_surge_01 | 0.0% | 0.0% | 0.0% | 0.0% |
-| immolate_01 | 0.0% | 0.0% | 0.0% | 0.0% |
-| shield_bash_01 | 0.0% | 0.0% | 0.0% | 0.0% |
-| phalanx_01 | 0.0% | 0.0% | 0.0% | 0.0% |
-| cleanse_01 | 0.0% | 0.0% | 0.0% | 0.0% |
-| acid_flask_01 | 0.0% | 0.0% | 0.0% | 0.0% |
-| stone_wall_01 | 0.0% | 0.0% | 0.0% | 0.0% |
+| arcane_strike_01 | 67.3% | 32.7% | 51.7% | 33.4% |
+| adrenaline_01 | 0.0% | 100.0% ⚠️ | 0.0% | 48.6% |
+| deep_focus_01 | 30.7% | 69.3% | 56.7% | 52.1% |
+| power_surge_01 | 100.0% ⚠️ | 0.0% | 57.7% | 0.0% |
+| immolate_01 | 100.0% ⚠️ | 0.0% | 75.4% | 0.0% |
+| shield_bash_01 | 100.0% ⚠️ | 0.0% | 100.0% | 0.0% |
+| phalanx_01 | 100.0% ⚠️ | 0.0% | 60.0% | 0.0% |
+| cleanse_01 | 100.0% ⚠️ | 0.0% | 60.0% | 0.0% |
+| acid_flask_01 | 100.0% ⚠️ | 0.0% | 71.7% | 0.0% |
+| stone_wall_01 | 100.0% ⚠️ | 0.0% | 66.5% | 0.0% |
 
 ## 5. Region Analysis
 
 | Region Idx | Win Rate (given reached) | Death Rate | Ordering Freq |
 |------------|--------------------------|------------|---------------|
-| 0 | 46.1% | 3.5% | 100.0% |
-| 1 | 47.7% | 10.5% | 96.5% |
-| 2 | 53.6% | 10.3% | 86.0% |
-| 3 | 60.9% | 10.8% | 75.7% |
-| 4 | 71.0% | 10.1% | 64.9% |
-| 5 | 84.1% | 8.7% | 54.8% |
+| 0 | 43.8% | 4.1% | 100.0% |
+| 1 | 45.7% | 10.4% | 95.9% |
+| 2 | 51.2% | 10.6% | 85.5% |
+| 3 | 58.5% | 11.2% | 74.9% |
+| 4 | 68.7% | 10.9% | 63.7% |
+| 5 | 82.9% | 9.0% | 52.8% |
 
 **Difficulty curve (conditional win prob by region):**
 
 | Region Idx | aggressive | defensive | balanced | Attrition |
 |---|---|---|---|---|
-| 0 | 34.0% | 43.6% | 60.7% | 3.5% |
-| 1 | 35.7% | 44.8% | 62.6% | 10.5% |
-| 2 | 41.1% | 50.5% | 68.3% | 10.3% |
-| 3 | 48.5% | 57.7% | 74.4% | 10.8% |
-| 4 | 59.1% | 68.2% | 82.9% | 10.1% |
-| 5 | 76.9% | 81.2% | 91.3% | 8.7% |
+| 0 | 31.4% | 42.7% | 57.2% | 4.1% |
+| 1 | 33.4% | 43.9% | 59.5% | 10.4% |
+| 2 | 38.3% | 49.6% | 65.0% | 10.6% |
+| 3 | 45.8% | 56.7% | 71.1% | 11.2% |
+| 4 | 56.6% | 66.5% | 80.1% | 10.9% |
+| 5 | 75.4% | 81.1% | 89.3% | 9.0% |
 
 ## 6. World Card Economics
 
 | Card | Accept Rate | Skip Rate | Accept (wins) | Accept (losses) |
 |------|-------------|-----------|---------------|-----------------|
-| heavy_armor | 86.8% | 13.2% | 89.0% | 82.7% |
-| vampiric_contract | 86.8% | 13.2% | 89.5% | 81.6% |
-| hyper_metabolism | 86.7% | 13.3% | 90.0% | 80.3% |
-| martyrdom | 86.6% | 13.4% | 90.1% | 79.7% |
-| barricaded | 86.3% | 13.7% | 89.5% | 79.9% |
-| temporal_shift | 84.4% | 15.6% | 85.6% | 82.0% |
-| forced_march | 84.2% | 15.8% | 85.9% | 80.7% |
-| echo_chamber | 84.0% | 16.0% | 86.0% | 79.8% |
-| scavengers_greed | 71.9% | 28.1% | 77.8% | 59.8% |
-| rations_cut | 71.0% | 29.0% | 74.8% | 63.3% |
-| leyline_tap | 70.6% | 29.4% | 76.1% | 59.8% |
-| cursed_relic | 70.5% | 29.5% | 75.0% | 61.7% |
-| unstable_mutagen | 58.7% | 41.3% | 56.4% | 63.0% |
-| tunnel_vision | 56.4% | 43.6% | 52.3% | 64.1% |
-| reckless_assault | 55.6% | 44.4% | 52.0% | 62.5% |
-| fog_of_war | 43.3% | 56.7% | 40.2% | 48.7% |
-| pacifism_protocol | 43.0% | 57.0% | 42.8% | 43.3% |
-| blood_magic | 43.0% | 57.0% | 41.7% | 45.4% |
-| glass_cannon | 43.0% | 57.0% | 10.8% | 78.6% |
-| overclocked | 41.7% | 58.3% | 41.0% | 43.2% |
+| martyrdom | 86.9% | 13.1% | 90.2% | 80.8% |
+| vampiric_contract | 86.8% | 13.2% | 90.1% | 81.2% |
+| barricaded | 86.7% | 13.3% | 89.9% | 81.1% |
+| hyper_metabolism | 86.5% | 13.5% | 89.9% | 80.3% |
+| heavy_armor | 86.5% | 13.5% | 89.5% | 81.4% |
+| echo_chamber | 84.7% | 15.3% | 86.2% | 81.8% |
+| temporal_shift | 84.4% | 15.6% | 84.6% | 84.1% |
+| forced_march | 84.0% | 16.0% | 85.9% | 80.5% |
+| rations_cut | 71.5% | 28.5% | 75.9% | 63.6% |
+| scavengers_greed | 71.5% | 28.5% | 76.9% | 61.5% |
+| cursed_relic | 71.4% | 28.6% | 76.1% | 63.2% |
+| leyline_tap | 71.1% | 28.9% | 76.0% | 62.6% |
+| unstable_mutagen | 58.9% | 41.1% | 56.7% | 62.6% |
+| reckless_assault | 55.8% | 44.2% | 52.6% | 61.3% |
+| tunnel_vision | 55.7% | 44.3% | 52.5% | 61.2% |
+| pacifism_protocol | 43.3% | 56.7% | 43.6% | 42.9% |
+| glass_cannon | 42.5% | 57.5% | 11.1% | 75.8% |
+| blood_magic | 42.3% | 57.7% | 41.2% | 44.3% |
+| overclocked | 42.0% | 58.0% | 39.7% | 46.1% |
+| fog_of_war | 41.9% | 58.1% | 38.8% | 47.0% |
 
 ## 7. Speed System Health
 
-- Mean action ratio: 0.360
-- Max observed ratio: 77.000
-- % entity-combats >3x: 3.8%
-- % entity-combats >5x: 2.6%
-- Flagged combats (any entity >3x): 5965
+- Mean action ratio: 0.486
+- Max observed ratio: 109.000
+- % entity-combats >3x: 5.1%
+- % entity-combats >5x: 3.5%
+- Flagged combats (any entity >3x): 7759
 
 ## 8. Seed Characterization
 
 - Total seeds: 5000
-- All-win seeds: 1074 (21.5%)
-- All-loss seeds: 1500 (30.0%)
-- Strategy-dependent seeds: 2426 (48.5%)
-- Sample all-loss seeds: [2, 6, 8, 9, 10]
-- Sample all-win seeds: [1, 4, 5, 12, 13]
+- All-win seeds: 887 (17.7%)
+- All-loss seeds: 1550 (31.0%)
+- Strategy-dependent seeds: 2563 (51.3%)
+- Sample all-loss seeds: [2, 5, 6, 8, 9]
+- Sample all-win seeds: [3, 7, 13, 14, 16]
 
 ## 9. Combat Health
 
-- Mean combat duration: 6.7 turns
-- Median combat duration: 3.0 turns
-- P95 combat duration: 12.0 turns
+- Mean combat duration: 7.1 turns
+- Median combat duration: 4.0 turns
+- P95 combat duration: 13.0 turns
 - Turn-cap hit rate: 1.0%
 
 **Turn-cap rate by region index:**
 
 | Region Idx | Cap Rate |
 |------------|----------|
-| 0 | 1.1% |
-| 1 | 0.4% |
-| 2 | 1.6% |
-| 3 | 0.8% |
-| 4 | 1.0% |
-| 5 | 0.9% |
-| 6 | 1.6% |
-| 7 | 1.2% |
-| 8 | 1.2% |
-| 9 | 0.7% |
+| 0 | 1.0% |
+| 1 | 0.5% |
+| 2 | 1.3% |
+| 3 | 1.0% |
+| 4 | 1.2% |
+| 5 | 1.1% |
+| 6 | 1.2% |
+| 7 | 0.9% |
+| 8 | 1.3% |
+| 9 | 0.8% |
 | 10 | 1.0% |
-| 11 | 0.2% |
+| 11 | 0.5% |
 
-- Aggregate damage dealt (all plays, display scale): 25506566
-- Aggregate healing done (all plays, display scale): 6457992
+- Aggregate damage dealt (all plays, display scale): 25907071
+- Aggregate healing done (all plays, display scale): 7142598
 
 ## 10. Flagged Issues
 
-1. [Signal 1] aggressive win rate 34.0% outside 40.0%–70.0%
-2. [Signal 4] Speed dominance: 3.8% of entity-combats >3x
-3. [Signal 5] Card win correlation: arcane_strike_01 (6.557)
+1. [Signal 1] aggressive win rate 31.4% outside 40.0%–70.0%
+2. [Signal 2] adrenaline_01 Branch B dominance 100.0%
+3. [Signal 2] power_surge_01 Branch A dominance 100.0%
+4. [Signal 2] immolate_01 Branch A dominance 100.0%
+5. [Signal 2] shield_bash_01 Branch A dominance 100.0%
+6. [Signal 2] phalanx_01 Branch A dominance 100.0%
+7. [Signal 2] cleanse_01 Branch A dominance 100.0%
+8. [Signal 2] acid_flask_01 Branch A dominance 100.0%
+9. [Signal 2] stone_wall_01 Branch A dominance 100.0%
+10. [Signal 4] Speed dominance: 5.1% of entity-combats >3x
+11. [Signal 5] Card win correlation: arcane_strike_01 (7.879)

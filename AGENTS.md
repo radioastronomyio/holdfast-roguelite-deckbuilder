@@ -25,33 +25,51 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 
 ## Current State
 
-- **Phase:** M3b complete — deck mechanics, upgrade trees, deep_focus_01 fix, fresh 5000-seed analysis
+- **Phase:** M3c complete — speed cap, AggressiveAI fix, collector fix; some balance targets remain for M3d
 - **GDD:** v1.1 (flavor system, tags, fixed-point arithmetic)
-- **Tests:** 336 passing (`pytest simulation/tests/ -v` from simulation/ dir); 7 pre-existing failures (path issues in test_campaign_telemetry/test_collectors/test_campaign_loop — relative-path CWD bug, not M3b regression)
-- **Baseline:** `reports/m3-prep-baseline.json` — 1000 seeds × 3 strategies, all in 40-70% range
-- **M3a Analysis (pre-deck):** `reports/m3-analysis-pre-deck-mechanics/` — archived baseline before deck mechanics
-- **M3b Analysis (post-deck):** `reports/m3-analysis/` — fresh 5000-seed run with full deck mechanics + upgrade trees
-- **Next work:** M3c (balance tuning — scope after human review of `reports/m3-analysis/balance-report.md`)
+- **Tests:** 351 passing (`pytest simulation/tests/ -v` from simulation/ dir); 7 pre-existing failures (path issues in test_campaign_telemetry/test_collectors/test_campaign_loop — relative-path CWD bug, not regression)
+- **M3a Analysis (pre-deck):** `reports/m3-analysis-pre-deck-mechanics/` — archived before deck mechanics
+- **M3b Analysis (pre-M3c):** `reports/m3-analysis-pre-m3c/` — archived before M3c tuning
+- **M3c Analysis (current):** `reports/m3-analysis/` — 5000-seed run post all M3c changes
+- **Next work:** M3d (further tuning to hit aggressive 40% floor; stun loop mitigation; combat duration)
 
-### M3b Key Findings (5000 seeds × 3 strategies, post-deck-mechanics)
+### M3c Key Findings (5000 seeds × 3 strategies, post-speed-cap-and-AI-fix)
 
 | Strategy | Win Rate | Avg Regions | Avg Turns |
 |----------|----------|-------------|-----------|
-| aggressive | 34.0% | 3.84 | 59 |
-| defensive | 43.6% | 4.20 | 47 |
-| balanced | 60.7% | 4.68 | 52 |
-| **Spread** | **26.7%** | — | — |
+| aggressive | 31.4% | 3.74 | 61 |
+| defensive | 42.7% | 4.18 | 50 |
+| balanced | 57.2% | 4.58 | 54 |
+| **Spread** | **25.8%** | — | — |
 
-**GDD Degenerate Signal Checklist (post-deck-mechanics):**
-- Signal 1 (Win rate in band): ⚠️ PARTIAL — balanced at 60.7% (in band), aggressive at 34.0% (below 40% floor)
-- Signal 2 (Upgrade dominance): Now populated — upgrade trees loaded from `upgrade-trees.json`
+**GDD Degenerate Signal Checklist (post-M3c):**
+- Signal 1 (Win rate in band): ⚠️ PARTIAL — defensive (43%) and balanced (57%) in band; aggressive (31%) still below 40% floor
+- Signal 2 (Upgrade dominance): ✅ NOW POPULATED — 10 cards with non-zero A/B pick rates; arcane_strike_01 A:9675 B:4710
 - Signal 3 (World card auto-accept/skip): Check balance report
-- Signal 4 (Speed ceiling): IMPROVED — max ratio 77x (down from 597x); remaining high ratios from stun-loop mechanic (shield_bash PCT_SUB Speed 100%), not energy exploit
-- Signal 5 (Card combo win rate): deep_focus_01 fixed (cost 1, value 1 Energy) — energy loop eliminated
+- Signal 4 (Speed ceiling): ⚠️ Speed cap (+75%) applied; max ratio 109x still from stun loops (shield_bash 100% speed debuff)
+- Signal 5 (Card combo win rate): ✅ deep_focus_01 fixed in M3b; no anomaly
 
 **Convergence warning:** All strategies pick same first region >80% of the time (difficulty ordering forced).
 
-### M3b Changes Applied
+**Remaining M3d work:**
+- AggressiveAI still at 31.4% — needs further improvements (focus-fire logic, debuff card scoring)
+- Stun loop ratio 109x — shield_bash PCT_SUB Speed 100% duration 1 enables repeated stunlocking; reduce duration or value
+- Median combat duration 4 turns (target 8-12) — enemy HP budget insufficient without tanking win rates
+- Win rate spread 25.8% (target < 20%) — aggressive/balanced gap too wide
+
+### M3c Changes Applied
+
+| Change | Details |
+|--------|---------|
+| Speed PCT cap | `SPEED_PCT_CAP = 75` in `engine/stats.py`; Speed bonus capped at +75% from pct modifiers |
+| Adrenaline stacking | `adrenaline_01` stacking: "stack" → "replace" (prevents double-stacking +30% speed) |
+| AggressiveAI fix | Emergency heal at <25% HP; overkill prevention; AoE preference with 2+ enemies; buff value scoring |
+| Enemy HP budget | `100 + difficulty * 25` (up from `90 + difficulty * 25`); defense cap 20→25 normal, 30→40 elite |
+| Collector branch fix | `_classify_branch()` in collectors.py; branch keys "1A"/"2A_from_1A" etc. now correctly mapped to A/B families |
+| New tests | `test_speed_cap.py` (5), `test_aggressive_ai.py` (3), `test_collector_fix.py` (7) — 15 total |
+| Archives | `reports/m3-analysis-pre-m3c/` — snapshot of M3b analysis before M3c tuning |
+
+### M3b Changes Applied (still current)
 
 | Change | Details |
 |--------|---------|
@@ -62,7 +80,6 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 | Upgrade tree loader | `loader.py` loads `data/cards/upgrade-trees.json`; `GameData.upgrade_trees` now populated |
 | Campaign runner | `run_campaign()` passes seeded `rng` to `resolve_combat()`; fixed `_load_region_adjectives` path |
 | Stun deadlock fix | `tick_until_next_turn` handles all-speed-0 case (falls back to list-order, no more RuntimeError) |
-| New tests | `test_deck_system.py` (8 tests), `test_upgrade_loader.py` (3 tests), `test_deep_focus_fix.py` (3 tests) |
 
 **Convergence warning:** All strategies pick same first region 100% of the time (likely difficulty=1 forced).
 
@@ -102,6 +119,7 @@ Six compounding bugs caused 0% win rate. All fixed:
 | **M2d** | `spec/m2d-ai-heuristics-spec.md` | AggressiveAI/DefensiveAI/BalancedAI, enhanced enemy AI, Monte Carlo runner |
 | **M3a** | `staging/m3a-balance-analysis-spec.md` | Combat+campaign telemetry, analysis package, 5000-seed run, 15 plots, 9 JSON exports, balance report |
 | **M3b** | `staging/m3b-deck-mechanics-spec.md` | deck_copies field, hand/draw/discard system, multi-play per turn, upgrade tree loader, deep_focus_01 fix, 15 new tests, fresh analysis |
+| **M3c** | `staging/m3c-balance-tuning-spec.md` | Speed PCT cap (+75%), AggressiveAI fix, enemy HP budget tuning, collector branch key fix, adrenaline stacking fix, 15 new tests |
 
 ## Critical: STAT_SCALE Awareness
 

@@ -1,0 +1,38 @@
+{
+  "0": {
+    "region_index": 0,
+    "win_rate": 0.46073333333333333,
+    "death_rate": 0.03493333333333333,
+    "ordering_frequency": 1.0
+  },
+  "1": {
+    "region_index": 1,
+    "win_rate": 0.47741088698535505,
+    "death_rate": 0.10526666666666666,
+    "ordering_frequency": 0.9650666666666666
+  },
+  "2": {
+    "region_index": 2,
+    "win_rate": 0.5358610529580523,
+    "death_rate": 0.1032,
+    "ordering_frequency": 0.8598
+  },
+  "3": {
+    "region_index": 3,
+    "win_rate": 0.6089523306018151,
+    "death_rate": 0.10786666666666667,
+    "ordering_frequency": 0.7566
+  },
+  "4": {
+    "region_index": 4,
+    "win_rate": 0.7102045010790258,
+    "death_rate": 0.10106666666666667,
+    "ordering_frequency": 0.6487333333333334
+  },
+  "5": {
+    "region_index": 5,
+    "win_rate": 0.8412659768715763,
+    "death_rate": 0.08693333333333333,
+    "ordering_frequency": 0.5476666666666666
+  }
+}

@@ -142,7 +142,60 @@ class AggressiveAI:
         affordable = _affordable_cards(caster, available_cards)
         if not affordable:
             return None
-        best = max(affordable, key=_damage_score)
+
+        # 1. Emergency heal: if caster is below 25% HP and a heal is available, play it first
+        if _hp_ratio(caster) < 25:
+            heal_cards = [c for c in affordable if _is_healing_card(c)]
+            if heal_cards:
+                best_heal = max(heal_cards, key=lambda c: sum(
+                    e.value for e in c.effects
+                    if e.stat == Stat.HP and e.operation == Operation.FLAT_ADD
+                ))
+                return (best_heal, [caster])
+
+        # 2. Score each card for aggressive play
+        best_damage_score = max((_damage_score(c) for c in affordable), default=0)
+
+        def _agg_score(card: Card) -> int:
+            dmg = _damage_score(card)
+
+            # AoE bonus when multiple enemies alive
+            if _is_aoe(card) and len(living_enemies) > 1:
+                dmg = dmg * len(living_enemies)
+
+            # Overkill prevention: if best single target is nearly dead, don't waste a big card
+            if dmg > 0 and not _is_aoe(card):
+                target = min(living_enemies, key=lambda e: get_current_stat(e, Stat.HP))
+                target_hp = get_current_stat(target, Stat.HP) // 1000  # display scale
+                if target_hp > 0 and dmg // 1000 >= target_hp * 3 and len(living_enemies) > 1:
+                    # Overkill on a nearly-dead enemy — redirect to healthiest enemy instead
+                    return dmg // 2  # penalize to prefer other targets
+
+            # Buff value: Power/Speed buffs score at 50% of top damage card
+            if dmg == 0 and _is_buff(card):
+                has_power_speed = any(
+                    e.stat in (Stat.Power, Stat.Speed)
+                    and e.operation in (Operation.PCT_ADD, Operation.FLAT_ADD)
+                    for e in card.effects
+                )
+                if has_power_speed:
+                    return max(best_damage_score // 2, 1)
+
+            return dmg
+
+        best = max(affordable, key=_agg_score)
+
+        # 3. Targeting: for single-target damage, prefer highest-HP enemy (not overkill target)
+        if _damage_score(best) > 0 and not _is_aoe(best):
+            target_hp = min(living_enemies, key=lambda e: get_current_stat(e, Stat.HP))
+            target_best = max(living_enemies, key=lambda e: get_current_stat(e, Stat.HP))
+            low_hp = get_current_stat(target_hp, Stat.HP) // 1000
+            card_dmg = _damage_score(best) // 1000
+            # Switch to highest-HP target if lowest is already going to die to this card
+            # and there's a better target to hit
+            if low_hp > 0 and card_dmg >= low_hp * 2 and len(living_enemies) > 1:
+                return (best, [target_best])
+
         return (best, _target_for_card(best, enemies))
 
     def evaluate_world_card(self, card: WorldCard, state: CampaignState, game_data: GameData) -> bool:

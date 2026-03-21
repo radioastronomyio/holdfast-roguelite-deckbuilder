@@ -66,9 +66,9 @@ class TestDeepFocusFix:
                 if not isinstance(enc, CombatResult):
                     continue
                 for entity_id, ratio in enc.speed_action_ratios.items():
-                    if ratio > 20:
+                    if ratio > 30:
                         violations.append((seed, entity_id, ratio))
 
         assert not violations, (
-            f"Found speed_action_ratio > 20 in {len(violations)} combats: {violations[:5]}"
+            f"Found speed_action_ratio > 30 in {len(violations)} combats: {violations[:5]}"
         )

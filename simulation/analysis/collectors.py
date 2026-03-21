@@ -179,6 +179,20 @@ def collect_card_stats(result: MonteCarloResult) -> dict[str, CardAnalysis]:
     return out
 
 
+def _classify_branch(branch_key: str) -> str:
+    """Classify a branch key as 'A' or 'B' family.
+
+    Keys follow the pattern "1A", "1B", "2A_from_1A", "2B_from_1B", etc.
+    The first 'A' or 'B' character found determines the family.
+    """
+    for char in branch_key:
+        if char == 'A':
+            return 'A'
+        if char == 'B':
+            return 'B'
+    return 'unknown'
+
+
 def collect_upgrade_stats(result: MonteCarloResult) -> dict[str, UpgradeAnalysis]:
     """Branch A vs B pick rates, win rate per branch."""
     branch_picks: dict[str, dict[str, int]] = {}  # card_id → {branch: count}
@@ -198,23 +212,20 @@ def collect_upgrade_stats(result: MonteCarloResult) -> dict[str, UpgradeAnalysis
                 total_with_upgrade[card_id] += 1
 
     out: dict[str, UpgradeAnalysis] = {}
-    total_runs = sum(
-        len(list(strats.values()))
-        for strats in result.per_seed_results.values()
-    )
     total_wins = sum(
         1 for strats in result.per_seed_results.values()
         for cr in strats.values() if cr.victory
     )
 
     for card_id, picks in branch_picks.items():
-        a_picks = picks.get("A", 0)
-        b_picks = picks.get("B", 0)
+        a_picks = sum(count for key, count in picks.items() if _classify_branch(key) == 'A')
+        b_picks = sum(count for key, count in picks.items() if _classify_branch(key) == 'B')
         total = a_picks + b_picks
         a_rate = a_picks / total if total > 0 else 0.0
         b_rate = b_picks / total if total > 0 else 0.0
-        a_wins = branch_wins[card_id].get("A", 0)
-        b_wins = branch_wins[card_id].get("B", 0)
+        wins_by_branch = branch_wins[card_id]
+        a_wins = sum(count for key, count in wins_by_branch.items() if _classify_branch(key) == 'A')
+        b_wins = sum(count for key, count in wins_by_branch.items() if _classify_branch(key) == 'B')
         a_win_rate = a_wins / a_picks if a_picks > 0 else 0.0
         b_win_rate = b_wins / b_picks if b_picks > 0 else 0.0
         pick_rate_win = total_with_upgrade[card_id] / max(total_wins, 1)

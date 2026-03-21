@@ -120,7 +120,7 @@
         "value": 30,
         "duration": 3,
         "target": "ALLY_SINGLE",
-        "stacking": "stack",
+        "stacking": "replace",
         "tags": ["buff", "speed"]
       }
     ],

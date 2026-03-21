@@ -22,11 +22,15 @@ def apply_stacking(modifiers: list[Modifier]) -> list[Modifier]:
     return result
 
 
+SPEED_PCT_CAP = 75  # Maximum +75% net percentage bonus for Speed (prevents CT feedback loops)
+
+
 def calculate_stat(base: int, modifiers: list[Modifier], stat: Stat = Stat.HP) -> int:
     """
     Resolve a single stat value from base + active modifiers.
     stat param: used to filter modifiers and determine floor-at-0 rule.
     Resolution: (base + flat_sum) * (100 + pct_sum) // 100, then sequential MULTIPLY.
+    Speed percentage bonuses are capped at SPEED_PCT_CAP to prevent CT feedback loops.
     """
     # 1. Filter to matching stat
     stat_mods = [m for m in modifiers if m.stat == stat]
@@ -42,15 +46,19 @@ def calculate_stat(base: int, modifiers: list[Modifier], stat: Stat = Stat.HP) -
     pct_sum = sum(m.value for m in stat_mods if m.operation == Operation.PCT_ADD)
     pct_sum -= sum(m.value for m in stat_mods if m.operation == Operation.PCT_SUB)
 
-    # 5. Apply flat+pct formula
+    # 5. Cap Speed percentage bonus (only positive side; negative debuffs remain uncapped)
+    if stat == Stat.Speed and pct_sum > SPEED_PCT_CAP:
+        pct_sum = SPEED_PCT_CAP
+
+    # 6. Apply flat+pct formula
     result = (base + flat_sum) * (100 + pct_sum) // 100
 
-    # 6. Apply MULTIPLY modifiers sequentially
+    # 7. Apply MULTIPLY modifiers sequentially
     for m in stat_mods:
         if m.operation == Operation.MULTIPLY:
             result = result * m.value // 1000
 
-    # 7. Floor at 0 for non-HP stats (HP can be negative for death signal)
+    # 8. Floor at 0 for non-HP stats (HP can be negative for death signal)
     if stat != Stat.HP:
         result = max(0, result)
 

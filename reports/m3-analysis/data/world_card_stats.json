@@ -1,202 +1,202 @@
 {
-  "barricaded": {
-    "card_id": "barricaded",
-    "total_drawn": 9393,
-    "total_accepted": 8104,
-    "total_skipped": 1289,
-    "accept_rate": 0.8627701479825401,
-    "skip_rate": 0.1372298520174598,
-    "accept_rate_in_wins": 0.8945181396835544,
-    "accept_rate_in_losses": 0.7994260204081632
-  },
-  "rations_cut": {
-    "card_id": "rations_cut",
-    "total_drawn": 9368,
-    "total_accepted": 6648,
-    "total_skipped": 2720,
-    "accept_rate": 0.7096498719043552,
-    "skip_rate": 0.29035012809564475,
-    "accept_rate_in_wins": 0.7478010554933632,
-    "accept_rate_in_losses": 0.6330658105939004
+  "forced_march": {
+    "card_id": "forced_march",
+    "total_drawn": 9131,
+    "total_accepted": 7674,
+    "total_skipped": 1457,
+    "accept_rate": 0.8404336874383966,
+    "skip_rate": 0.15956631256160334,
+    "accept_rate_in_wins": 0.8591336467427804,
+    "accept_rate_in_losses": 0.8053543307086615
   },
   "reckless_assault": {
     "card_id": "reckless_assault",
-    "total_drawn": 9441,
-    "total_accepted": 5251,
-    "total_skipped": 4190,
-    "accept_rate": 0.5561910814532359,
-    "skip_rate": 0.44380891854676413,
-    "accept_rate_in_wins": 0.5204772653982587,
-    "accept_rate_in_losses": 0.6245754862611917
+    "total_drawn": 9320,
+    "total_accepted": 5196,
+    "total_skipped": 4124,
+    "accept_rate": 0.5575107296137339,
+    "skip_rate": 0.4424892703862661,
+    "accept_rate_in_wins": 0.5256215119228818,
+    "accept_rate_in_losses": 0.6128558849427649
   },
-  "echo_chamber": {
-    "card_id": "echo_chamber",
-    "total_drawn": 9401,
-    "total_accepted": 7894,
-    "total_skipped": 1507,
-    "accept_rate": 0.839697904478247,
-    "skip_rate": 0.160302095521753,
-    "accept_rate_in_wins": 0.8602917856010149,
-    "accept_rate_in_losses": 0.7977382875605816
+  "leyline_tap": {
+    "card_id": "leyline_tap",
+    "total_drawn": 9359,
+    "total_accepted": 6658,
+    "total_skipped": 2701,
+    "accept_rate": 0.7114007906827653,
+    "skip_rate": 0.28859920931723476,
+    "accept_rate_in_wins": 0.7596314907872697,
+    "accept_rate_in_losses": 0.6264384774269696
   },
   "fog_of_war": {
     "card_id": "fog_of_war",
-    "total_drawn": 9656,
-    "total_accepted": 4177,
-    "total_skipped": 5479,
-    "accept_rate": 0.4325807787903894,
-    "skip_rate": 0.5674192212096106,
-    "accept_rate_in_wins": 0.4022283222993703,
-    "accept_rate_in_losses": 0.4868611030898065
+    "total_drawn": 9454,
+    "total_accepted": 3958,
+    "total_skipped": 5496,
+    "accept_rate": 0.41865876877512165,
+    "skip_rate": 0.5813412312248784,
+    "accept_rate_in_wins": 0.3883201879509985,
+    "accept_rate_in_losses": 0.4703862660944206
   },
   "hyper_metabolism": {
     "card_id": "hyper_metabolism",
-    "total_drawn": 9494,
-    "total_accepted": 8235,
-    "total_skipped": 1259,
-    "accept_rate": 0.86738993048241,
-    "skip_rate": 0.13261006951759005,
-    "accept_rate_in_wins": 0.9002871729419273,
-    "accept_rate_in_losses": 0.8034717916924985
+    "total_drawn": 9204,
+    "total_accepted": 7964,
+    "total_skipped": 1240,
+    "accept_rate": 0.8652759669708823,
+    "skip_rate": 0.13472403302911778,
+    "accept_rate_in_wins": 0.8992430613961312,
+    "accept_rate_in_losses": 0.8033138999693158
   },
-  "martyrdom": {
-    "card_id": "martyrdom",
-    "total_drawn": 9430,
-    "total_accepted": 8166,
-    "total_skipped": 1264,
-    "accept_rate": 0.8659597030752916,
-    "skip_rate": 0.13404029692470837,
-    "accept_rate_in_wins": 0.900846239821172,
-    "accept_rate_in_losses": 0.7969687401326176
+  "scavengers_greed": {
+    "card_id": "scavengers_greed",
+    "total_drawn": 9119,
+    "total_accepted": 6519,
+    "total_skipped": 2600,
+    "accept_rate": 0.7148810176554447,
+    "skip_rate": 0.28511898234455535,
+    "accept_rate_in_wins": 0.7686089592455372,
+    "accept_rate_in_losses": 0.6145866079849104
+  },
+  "tunnel_vision": {
+    "card_id": "tunnel_vision",
+    "total_drawn": 9424,
+    "total_accepted": 5252,
+    "total_skipped": 4172,
+    "accept_rate": 0.5573005093378608,
+    "skip_rate": 0.4426994906621392,
+    "accept_rate_in_wins": 0.5245064669843431,
+    "accept_rate_in_losses": 0.6116121758737317
   },
   "unstable_mutagen": {
     "card_id": "unstable_mutagen",
-    "total_drawn": 9525,
-    "total_accepted": 5591,
-    "total_skipped": 3934,
-    "accept_rate": 0.5869816272965879,
-    "skip_rate": 0.4130183727034121,
-    "accept_rate_in_wins": 0.5642960346765131,
-    "accept_rate_in_losses": 0.6298543689320388
+    "total_drawn": 9414,
+    "total_accepted": 5542,
+    "total_skipped": 3872,
+    "accept_rate": 0.5886976842999787,
+    "skip_rate": 0.41130231570002124,
+    "accept_rate_in_wins": 0.5674317306081421,
+    "accept_rate_in_losses": 0.625544267053701
+  },
+  "echo_chamber": {
+    "card_id": "echo_chamber",
+    "total_drawn": 9160,
+    "total_accepted": 7759,
+    "total_skipped": 1401,
+    "accept_rate": 0.8470524017467249,
+    "skip_rate": 0.1529475982532751,
+    "accept_rate_in_wins": 0.8623930189629132,
+    "accept_rate_in_losses": 0.8184942205560762
+  },
+  "blood_magic": {
+    "card_id": "blood_magic",
+    "total_drawn": 9318,
+    "total_accepted": 3945,
+    "total_skipped": 5373,
+    "accept_rate": 0.4233741146168706,
+    "skip_rate": 0.5766258853831294,
+    "accept_rate_in_wins": 0.41236766929927743,
+    "accept_rate_in_losses": 0.44282744282744285
   },
   "temporal_shift": {
     "card_id": "temporal_shift",
-    "total_drawn": 9396,
-    "total_accepted": 7927,
-    "total_skipped": 1469,
-    "accept_rate": 0.8436568752660707,
-    "skip_rate": 0.15634312473392933,
-    "accept_rate_in_wins": 0.8561058235199226,
-    "accept_rate_in_losses": 0.8195182984047544
+    "total_drawn": 9267,
+    "total_accepted": 7821,
+    "total_skipped": 1446,
+    "accept_rate": 0.8439624473939786,
+    "skip_rate": 0.15603755260602137,
+    "accept_rate_in_wins": 0.8458119658119658,
+    "accept_rate_in_losses": 0.8407960199004975
+  },
+  "martyrdom": {
+    "card_id": "martyrdom",
+    "total_drawn": 9253,
+    "total_accepted": 8038,
+    "total_skipped": 1215,
+    "accept_rate": 0.8686912352750459,
+    "skip_rate": 0.13130876472495406,
+    "accept_rate_in_wins": 0.9022379269729093,
+    "accept_rate_in_losses": 0.8084592145015106
+  },
+  "heavy_armor": {
+    "card_id": "heavy_armor",
+    "total_drawn": 9461,
+    "total_accepted": 8181,
+    "total_skipped": 1280,
+    "accept_rate": 0.8647077475953916,
+    "skip_rate": 0.1352922524046084,
+    "accept_rate_in_wins": 0.895234876647516,
+    "accept_rate_in_losses": 0.8137171888230313
+  },
+  "barricaded": {
+    "card_id": "barricaded",
+    "total_drawn": 9276,
+    "total_accepted": 8045,
+    "total_skipped": 1231,
+    "accept_rate": 0.8672919361793877,
+    "skip_rate": 0.13270806382061234,
+    "accept_rate_in_wins": 0.8989541160593792,
+    "accept_rate_in_losses": 0.8112305854241338
+  },
+  "cursed_relic": {
+    "card_id": "cursed_relic",
+    "total_drawn": 9235,
+    "total_accepted": 6597,
+    "total_skipped": 2638,
+    "accept_rate": 0.7143475906876016,
+    "skip_rate": 0.2856524093123985,
+    "accept_rate_in_wins": 0.7614023144996597,
+    "accept_rate_in_losses": 0.6320333432569217
+  },
+  "pacifism_protocol": {
+    "card_id": "pacifism_protocol",
+    "total_drawn": 9191,
+    "total_accepted": 3983,
+    "total_skipped": 5208,
+    "accept_rate": 0.43335872048743335,
+    "skip_rate": 0.5666412795125666,
+    "accept_rate_in_wins": 0.4355630821337849,
+    "accept_rate_in_losses": 0.4293974437005478
+  },
+  "rations_cut": {
+    "card_id": "rations_cut",
+    "total_drawn": 9153,
+    "total_accepted": 6547,
+    "total_skipped": 2606,
+    "accept_rate": 0.7152846061400634,
+    "skip_rate": 0.2847153938599366,
+    "accept_rate_in_wins": 0.7587022642784724,
+    "accept_rate_in_losses": 0.6358578052550232
   },
   "vampiric_contract": {
     "card_id": "vampiric_contract",
     "total_drawn": 9396,
-    "total_accepted": 8155,
-    "total_skipped": 1241,
-    "accept_rate": 0.8679225202213708,
-    "skip_rate": 0.13207747977862921,
-    "accept_rate_in_wins": 0.8947878005486526,
-    "accept_rate_in_losses": 0.8158799624882775
-  },
-  "tunnel_vision": {
-    "card_id": "tunnel_vision",
-    "total_drawn": 9473,
-    "total_accepted": 5346,
-    "total_skipped": 4127,
-    "accept_rate": 0.5643407579436293,
-    "skip_rate": 0.43565924205637074,
-    "accept_rate_in_wins": 0.5228195549780738,
-    "accept_rate_in_losses": 0.6414354644149578
-  },
-  "forced_march": {
-    "card_id": "forced_march",
-    "total_drawn": 9317,
-    "total_accepted": 7846,
-    "total_skipped": 1471,
-    "accept_rate": 0.8421165611248256,
-    "skip_rate": 0.15788343887517442,
-    "accept_rate_in_wins": 0.8587525789557213,
-    "accept_rate_in_losses": 0.8073607427055703
-  },
-  "overclocked": {
-    "card_id": "overclocked",
-    "total_drawn": 9567,
-    "total_accepted": 3994,
-    "total_skipped": 5573,
-    "accept_rate": 0.4174767429706282,
-    "skip_rate": 0.5825232570293718,
-    "accept_rate_in_wins": 0.4095453079651725,
-    "accept_rate_in_losses": 0.4320950965824666
-  },
-  "heavy_armor": {
-    "card_id": "heavy_armor",
-    "total_drawn": 9463,
-    "total_accepted": 8216,
-    "total_skipped": 1247,
-    "accept_rate": 0.8682236077353904,
-    "skip_rate": 0.13177639226460952,
-    "accept_rate_in_wins": 0.8898536742241518,
-    "accept_rate_in_losses": 0.8267570900123304
-  },
-  "scavengers_greed": {
-    "card_id": "scavengers_greed",
-    "total_drawn": 9301,
-    "total_accepted": 6688,
-    "total_skipped": 2613,
-    "accept_rate": 0.7190624664014622,
-    "skip_rate": 0.2809375335985378,
-    "accept_rate_in_wins": 0.77824,
-    "accept_rate_in_losses": 0.5978367748279253
-  },
-  "pacifism_protocol": {
-    "card_id": "pacifism_protocol",
-    "total_drawn": 9460,
-    "total_accepted": 4068,
-    "total_skipped": 5392,
-    "accept_rate": 0.43002114164904864,
-    "skip_rate": 0.5699788583509514,
-    "accept_rate_in_wins": 0.42832084197097753,
-    "accept_rate_in_losses": 0.43336469112574477
-  },
-  "blood_magic": {
-    "card_id": "blood_magic",
-    "total_drawn": 9533,
-    "total_accepted": 4098,
-    "total_skipped": 5435,
-    "accept_rate": 0.4298751704605056,
-    "skip_rate": 0.5701248295394944,
-    "accept_rate_in_wins": 0.41715022566086396,
-    "accept_rate_in_losses": 0.4535896665665365
-  },
-  "leyline_tap": {
-    "card_id": "leyline_tap",
-    "total_drawn": 9379,
-    "total_accepted": 6625,
-    "total_skipped": 2754,
-    "accept_rate": 0.7063652841454313,
-    "skip_rate": 0.29363471585456874,
-    "accept_rate_in_wins": 0.7608904548366432,
-    "accept_rate_in_losses": 0.5977671451355662
+    "total_accepted": 8156,
+    "total_skipped": 1240,
+    "accept_rate": 0.8680289484887186,
+    "skip_rate": 0.13197105151128138,
+    "accept_rate_in_wins": 0.9005534127117223,
+    "accept_rate_in_losses": 0.8115351004951937
   },
   "glass_cannon": {
     "card_id": "glass_cannon",
-    "total_drawn": 11294,
-    "total_accepted": 4854,
-    "total_skipped": 6440,
-    "accept_rate": 0.42978572693465555,
-    "skip_rate": 0.5702142730653444,
-    "accept_rate_in_wins": 0.10757039285112123,
-    "accept_rate_in_losses": 0.7861271676300579
+    "total_drawn": 10933,
+    "total_accepted": 4647,
+    "total_skipped": 6286,
+    "accept_rate": 0.425043446446538,
+    "skip_rate": 0.574956553553462,
+    "accept_rate_in_wins": 0.11120980635992184,
+    "accept_rate_in_losses": 0.7581070889894419
   },
-  "cursed_relic": {
-    "card_id": "cursed_relic",
-    "total_drawn": 9450,
-    "total_accepted": 6663,
-    "total_skipped": 2787,
-    "accept_rate": 0.7050793650793651,
-    "skip_rate": 0.2949206349206349,
-    "accept_rate_in_wins": 0.75,
-    "accept_rate_in_losses": 0.6172607879924953
+  "overclocked": {
+    "card_id": "overclocked",
+    "total_drawn": 9396,
+    "total_accepted": 3950,
+    "total_skipped": 5446,
+    "accept_rate": 0.42039165602383993,
+    "skip_rate": 0.5796083439761601,
+    "accept_rate_in_wins": 0.39650492025788936,
+    "accept_rate_in_losses": 0.4605939463163906
   }
 }

@@ -1,0 +1,102 @@
+{
+  "arcane_strike_01": {
+    "card_id": "arcane_strike_01",
+    "branch_a_picks": 0,
+    "branch_b_picks": 0,
+    "branch_a_rate": 0.0,
+    "branch_b_rate": 0.0,
+    "branch_a_win_rate": 0.0,
+    "branch_b_win_rate": 0.0,
+    "pick_rate_in_wins": 2.094631746491101
+  },
+  "adrenaline_01": {
+    "card_id": "adrenaline_01",
+    "branch_a_picks": 0,
+    "branch_b_picks": 0,
+    "branch_a_rate": 0.0,
+    "branch_b_rate": 0.0,
+    "branch_a_win_rate": 0.0,
+    "branch_b_win_rate": 0.0,
+    "pick_rate_in_wins": 1.3326580813196354
+  },
+  "deep_focus_01": {
+    "card_id": "deep_focus_01",
+    "branch_a_picks": 0,
+    "branch_b_picks": 0,
+    "branch_a_rate": 0.0,
+    "branch_b_rate": 0.0,
+    "branch_a_win_rate": 0.0,
+    "branch_b_win_rate": 0.0,
+    "pick_rate_in_wins": 1.787729706265374
+  },
+  "power_surge_01": {
+    "card_id": "power_surge_01",
+    "branch_a_picks": 0,
+    "branch_b_picks": 0,
+    "branch_a_rate": 0.0,
+    "branch_b_rate": 0.0,
+    "branch_a_win_rate": 0.0,
+    "branch_b_win_rate": 0.0,
+    "pick_rate_in_wins": 1.1283461148893068
+  },
+  "immolate_01": {
+    "card_id": "immolate_01",
+    "branch_a_picks": 0,
+    "branch_b_picks": 0,
+    "branch_a_rate": 0.0,
+    "branch_b_rate": 0.0,
+    "branch_a_win_rate": 0.0,
+    "branch_b_win_rate": 0.0,
+    "pick_rate_in_wins": 0.3196353639126031
+  },
+  "shield_bash_01": {
+    "card_id": "shield_bash_01",
+    "branch_a_picks": 0,
+    "branch_b_picks": 0,
+    "branch_a_rate": 0.0,
+    "branch_b_rate": 0.0,
+    "branch_a_win_rate": 0.0,
+    "branch_b_win_rate": 0.0,
+    "pick_rate_in_wins": 0.2458399652727536
+  },
+  "phalanx_01": {
+    "card_id": "phalanx_01",
+    "branch_a_picks": 0,
+    "branch_b_picks": 0,
+    "branch_a_rate": 0.0,
+    "branch_b_rate": 0.0,
+    "branch_a_win_rate": 0.0,
+    "branch_b_win_rate": 0.0,
+    "pick_rate_in_wins": 1.2141513529156418
+  },
+  "cleanse_01": {
+    "card_id": "cleanse_01",
+    "branch_a_picks": 0,
+    "branch_b_picks": 0,
+    "branch_a_rate": 0.0,
+    "branch_b_rate": 0.0,
+    "branch_a_win_rate": 0.0,
+    "branch_b_win_rate": 0.0,
+    "pick_rate_in_wins": 1.2141513529156418
+  },
+  "acid_flask_01": {
+    "card_id": "acid_flask_01",
+    "branch_a_picks": 0,
+    "branch_b_picks": 0,
+    "branch_a_rate": 0.0,
+    "branch_b_rate": 0.0,
+    "branch_a_win_rate": 0.0,
+    "branch_b_win_rate": 0.0,
+    "pick_rate_in_wins": 1.0269136159745333
+  },
+  "stone_wall_01": {
+    "card_id": "stone_wall_01",
+    "branch_a_picks": 0,
+    "branch_b_picks": 0,
+    "branch_a_rate": 0.0,
+    "branch_b_rate": 0.0,
+    "branch_a_win_rate": 0.0,
+    "branch_b_win_rate": 0.0,
+    "pick_rate_in_wins": 0.46216177108956735
+  }
+}

@@ -24,8 +24,8 @@ _ROLE_WEIGHTS = {
 }
 
 # Hard cap on Defense in display-scale to prevent invulnerability
-_DEFENSE_CAP_NORMAL = 20
-_DEFENSE_CAP_ELITE = 30
+_DEFENSE_CAP_NORMAL = 25
+_DEFENSE_CAP_ELITE = 40
 
 
 def generate_enemy(
@@ -44,8 +44,8 @@ def generate_enemy(
             if "hazard" not in (cards_by_id[cid].tags if cid in cards_by_id else [])
         ]
 
-    # 1. Base stat budget (reduced from 150 so diff-1 enemies are clearly weaker than players)
-    budget = 90 + (difficulty * 25)
+    # 1. Base stat budget
+    budget = 100 + (difficulty * 25)
     if is_elite:
         budget = int(budget * 1.5)
 
