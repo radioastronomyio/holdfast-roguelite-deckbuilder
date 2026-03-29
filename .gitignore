@@ -1,5 +1,5 @@
 # ============================================================================
-# Comprehensive .gitignore for Python / Data Science / AI-ML Repositories
+# .gitignore for Holdfast Roguelite Deckbuilder
 # ============================================================================
 
 # ----------------------------------------------------------------------------
@@ -13,6 +13,10 @@ secrets/
 credentials/
 config.local.*
 *.secrets
+
+# ----------------------------------------------------------------------------
+# LICENSED ASSETS (do not distribute)
+# ----------------------------------------------------------------------------
 assets/2d-pixel-quest-vol3-the-ui-gui/
 
 # ----------------------------------------------------------------------------
@@ -20,25 +24,20 @@ assets/2d-pixel-quest-vol3-the-ui-gui/
 # ----------------------------------------------------------------------------
 *-pending.md
 staging/
+spec/
+internal-files/
 
 # ----------------------------------------------------------------------------
 # IDE & EDITOR
 # ----------------------------------------------------------------------------
-.agents/
-scratch/
 .vscode/
 .idea/
-.internal-files/
-.ai-sandbox/
 .markdownlint.json
 cspell.json
 *.swp
 *.swo
 *~
 .project
-.pydevproject
-.spyderproject
-.spyproject
 
 # ----------------------------------------------------------------------------
 # PYTHON
@@ -74,19 +73,12 @@ env/
 .conda/
 conda-env/
 
-# PyInstaller
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
 # Type checking
 .mypy_cache/
 .dmypy.json
 dmypy.json
 .pytype/
+.ruff_cache/
 
 # Testing
 .tox/
@@ -102,99 +94,11 @@ coverage.xml
 .hypothesis/
 
 # ----------------------------------------------------------------------------
-# JUPYTER / NOTEBOOKS
+# NODE / REACT (game frontend)
 # ----------------------------------------------------------------------------
-.ipynb_checkpoints/
-*/.ipynb_checkpoints/*
-profile_default/
-ipython_config.py
-*.ipynb_meta
-
-# ----------------------------------------------------------------------------
-# DATA SCIENCE / ML / AI
-# ----------------------------------------------------------------------------
-# Model files (large binaries)
-*.h5
-*.hdf5
-*.pkl
-*.pickle
-*.joblib
-*.model
-*.pt
-*.pth
-*.onnx
-*.pb
-*.tflite
-*.safetensors
-*.gguf
-*.bin
-
-# Checkpoints
-checkpoints/
-*.ckpt
-*.ckpt.*
-
-# Datasets (keep structure, exclude data)
-data/raw/
-data/processed/
-data/interim/
-data/external/
-*.csv
-*.parquet
-*.feather
-*.arrow
-*.tsv
-!data/.gitkeep
-
-# FITS and astronomical data
-*.fits
-*.fits.gz
-*.fit
-*.fz
-
-# Large archives
-*.tar
-*.tar.gz
-*.tgz
-*.zip
-*.7z
-*.rar
-
-# MLflow / experiment tracking
-mlruns/
-mlartifacts/
-wandb/
-outputs/
-runs/
-
-# Weights & Biases
-wandb/
-
-# TensorBoard
-logs/
-tensorboard/
-
-# Hugging Face
-.cache/
-models/
-transformers_cache/
-
-# DVC
-.dvc/cache/
-.dvc/tmp/
-*.dvc.lock
-
-# ----------------------------------------------------------------------------
-# VECTOR DATABASES / EMBEDDINGS
-# ----------------------------------------------------------------------------
-*.faiss
-*.index
-chroma/
-chromadb/
-lancedb/
-qdrant_storage/
-weaviate_data/
-milvus_data/
+node_modules/
+package-lock.json
+yarn.lock
 
 # ----------------------------------------------------------------------------
 # BUILD & DOCUMENTATION
@@ -204,12 +108,6 @@ site/
 *.log
 *.tmp
 *.temp
-
-# Sphinx
-docs/_build/
-
-# MkDocs
-site/
 
 # ----------------------------------------------------------------------------
 # OS GENERATED
@@ -224,32 +122,14 @@ Thumbs.db
 desktop.ini
 
 # ----------------------------------------------------------------------------
-# DOCKER
+# LARGE FILES
 # ----------------------------------------------------------------------------
-docker-compose.override.yml
-.docker/
-
-# ----------------------------------------------------------------------------
-# NODE (if any JS tooling)
-# ----------------------------------------------------------------------------
-node_modules/
-package-lock.json
-yarn.lock
-
-# ----------------------------------------------------------------------------
-# ANSIBLE
-# ----------------------------------------------------------------------------
-*.retry
-ansible/inventory/hosts.local
-
-# ----------------------------------------------------------------------------
-# TERRAFORM (if used)
-# ----------------------------------------------------------------------------
-.terraform/
-*.tfstate
-*.tfstate.*
-*.tfvars
-!*.tfvars.example
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.7z
+*.rar
 
 # ----------------------------------------------------------------------------
 # MISC
@@ -258,6 +138,7 @@ ansible/inventory/hosts.local
 *.backup
 tmp/
 temp/
+scratch/
 local/
 .local/
 *.local
