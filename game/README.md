@@ -1,71 +1,41 @@
 <!--
 ---
 title: "Game Frontend"
-description: "React browser-based card game frontend for Holdfast"
+description: "Phaser browser frontend for Holdfast"
 author: "CrainBramp"
-date: "2026-03-03"
-version: "0.1.0"
-status: "Pre-Implementation"
+date: "2026-05-02"
+version: "0.2.0"
+status: "First Playable"
 tags:
   - type: directory-readme
   - domain: [frontend, game-ui, card-game]
-  - tech: [react, tailwind, typescript]
+  - tech: [phaser, typescript, vite]
 ---
 -->
 
 # Game Frontend
 
-React browser-based frontend for Holdfast. Phase 2 deliverable — this directory is empty until the Python simulation (Phase 1) validates card math and balance.
+Phaser 4 browser frontend for Holdfast. The frontend is a renderer and input shell over the browser-safe TypeScript simulation in `src/sim/`.
 
----
+## Commands
 
-## 1. Contents
-
-```
-game/
-├── README.md               # This file
-├── src/                     # React application source (planned)
-│   ├── engine/              # TypeScript port of ResolverEngine
-│   ├── components/          # Card, encounter, map, outpost UI
-│   ├── state/               # Redux-style reducer, game state machine
-│   └── input/               # Keyboard/controller/mouse handlers
-├── public/                  # Static assets (planned)
-└── package.json             # Dependencies (planned)
+```bash
+npm run prepare:public
+npm test
+npm run build
+npm run dev
 ```
 
----
+`prepare:public` copies shared JSON data and normalized licensed Pixel Quest assets into `public/` for Vite. The build checks for required generated files before compiling.
 
-## 2. Design Intent
+## Runtime Shape
 
-The frontend is a dumb renderer. The ResolverEngine calculates full turns synchronously and outputs ActionTuple arrays. React consumes tuples sequentially with CSS transitions. No game logic lives in components.
+```
+src/sim/      # Browser-safe resolver and stepper state machines
+src/scenes/   # Phaser scene lifecycle and transitions
+src/ui/       # Reusable Pixel Quest + BitmapText widgets
+src/assets/   # Semantic asset manifest
+src/systems/  # Browser save/load helpers
+```
 
-### Why React, Not a Game Engine
-
-A card game is state management and click targets. No physics, no collision, no sprite animation, no real-time game loop. React handles this natively. Browser deployment means instant sharing. The 2D Pixel Quest UI pack renders identically in CSS/Canvas.
-
-### Universal Card Interface
-
-All game phases use the same interaction model — a horizontal hand of cards, hotkeys 1-N to select, effects resolve. Combat, world phase, outpost, events — one UI pattern everywhere.
-
----
-
-## 3. Phase 2 vs Phase 3
-
-| Phase | Goal | Visual Quality |
-|-------|------|---------------|
-| Phase 2: Minimal Playable | Cards as rectangles with text, map as clickable nodes, combat log | Functional, ugly |
-| Phase 3: Visual Polish | 2D Pixel Quest integration, card art, animations, sound | Game-quality |
-
-Phase 2 validates whether human decisions feel engaging. Phase 3 makes it look and sound like a game.
-
----
-
-## 4. Related
-
-| Document | Relationship |
-|----------|--------------|
-| [Repository Root](../README.md) | Parent directory |
-| [Game Design Document](../docs/game-design-document.md) | UI specs, component architecture, input model |
-| [data/](../data/README.md) | Shared JSON definitions consumed by frontend |
-| [simulation/](../simulation/README.md) | Authoritative ResolverEngine this must match |
-| [assets/](../assets/README.md) | 2D Pixel Quest UI pack for Phase 3 |
+Game math and state mutation stay in `src/sim/`. Phaser scenes consume stepper state and typed events for rendering and animation.

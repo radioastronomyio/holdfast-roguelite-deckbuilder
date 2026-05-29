@@ -20,7 +20,6 @@ from engine.turn_order import (
     discard_card,
 )
 from engine.stats import calculate_stat, apply_stacking
-from engine.enemy_ai import pick_enemy_action
 from agents.enemy_ai_v2 import pick_enemy_action_v2
 
 COMBAT_TURN_CAP = 200
@@ -411,6 +410,7 @@ def resolve_event(
     # Apply costs to party
     for mod in choice.cost:
         if mod.stat == Stat.HP and mod.operation == Operation.FLAT_SUB:
+            # Event costs bypass Defense intentionally — narrative events are not combat
             for e in party:
                 e.base_stats[Stat.HP] -= mod.value
         else:

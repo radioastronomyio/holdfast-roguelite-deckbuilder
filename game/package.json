@@ -1,0 +1,23 @@
+{
+  "name": "holdfast-sim",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare:public": "node scripts/prepare-public.mjs",
+    "check:public": "node scripts/check-public.mjs",
+    "prebuild": "npm run check:public",
+    "build": "tsc -p tsconfig.json && vite build",
+    "dev": "vite --host 0.0.0.0",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.4",
+    "vitest": "^3.1.2"
+  },
+  "dependencies": {
+    "phaser": "4.0.0"
+  }
+}

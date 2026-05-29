@@ -1,0 +1,52 @@
+{
+  "card_pool_ids": [
+    "arcane_strike_01",
+    "immolate_01",
+    "shield_bash_01",
+    "sweeping_blade_01",
+    "phalanx_01",
+    "adrenaline_01",
+    "cleanse_01",
+    "deep_focus_01",
+    "acid_flask_01",
+    "frost_bolt_01",
+    "power_surge_01",
+    "stone_wall_01",
+    "lightning_chain_01",
+    "heal_potion_01",
+    "drain_life_01"
+  ],
+  "drafted_character_ids": [
+    "nyxis_drifter"
+  ],
+  "region_difficulties": {
+    "blazing_barrens": 6,
+    "crimson_crossing": 5,
+    "ominous_hollow": 1,
+    "ruined_rift": 3,
+    "scorched_canyons": 4,
+    "withered_depths": 2
+  },
+  "region_order": [
+    "ominous_hollow",
+    "withered_depths"
+  ],
+  "regions_cleared": 1,
+  "seed": 42,
+  "starting_roster_ids": [
+    "thorn_shade",
+    "vyn_channeler"
+  ],
+  "total_turns": 212,
+  "upgrade_branches_chosen": {
+    "arcane_strike_01": "1B",
+    "deep_focus_01": "1B"
+  },
+  "victory": false,
+  "world_cards_accepted_ids": [
+    "cursed_relic",
+    "echo_chamber",
+    "martyrdom"
+  ],
+  "world_cards_skipped_ids": []
+}

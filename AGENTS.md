@@ -6,7 +6,7 @@ Entry point for AI coding agents working on this repository.
 
 **Domain:** Game Development / Card Game / Roguelite
 **Repository:** https://github.com/radioastronomyio/holdfast-roguelite-deckbuilder
-**Purpose:** A browser-based roguelite deckbuilder where every mechanic runs on a universal modifier engine. The player conquers 6 procedurally generated regions in a finite campaign. Two applications share a data layer: a Python simulation and a React frontend, both consuming shared JSON definitions.
+**Purpose:** A browser-based roguelite deckbuilder where every mechanic runs on a universal modifier engine. The player conquers 6 procedurally generated regions in a finite campaign. Two applications share a data layer: a Python simulation and a Phaser frontend, both consuming shared JSON definitions.
 
 ## Key Files
 
@@ -22,21 +22,21 @@ Entry point for AI coding agents working on this repository.
 ```
 data/          → Shared JSON (cards, characters, regions, world deck)
 simulation/    → Python Monte Carlo balance testing (Phase 1)
-game/          → React browser frontend (Phase 2+)
+game/          → Phaser browser frontend (Phase 2+)
 ```
 
-Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine is authoritative; the React frontend must produce identical results for the same inputs.
+Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine is authoritative; the Phaser frontend must produce identical results for the same inputs.
 
 ## Current State
 
-- **Phase:** M3d complete; stun fix, AggressiveAI v2 rework, upgrade picker randomization; all balance targets met
+- **Phase:** M4b first playable implemented; Phaser 4 frontend runs on the M4a TypeScript resolver port
 - **GDD:** v1.1 (flavor system, tags, fixed-point arithmetic)
-- **Tests:** 377 passing (`pytest simulation/tests/` from repo root)
+- **Tests:** 367 passing (`pytest simulation/tests/` from repo root); 29 passing (`cd game && npm test`)
 - **M3a Analysis (pre-deck):** `reports/m3-analysis-pre-deck-mechanics/` archived before deck mechanics
 - **M3b Analysis (pre-M3c):** `reports/m3-analysis-pre-m3c/` archived before M3c tuning
 - **M3c Analysis (pre-M3d):** `reports/m3-analysis-pre-m3d/` archived before M3d tuning
 - **M3d Analysis (current):** `reports/m3-analysis/` 5000-seed run post all M3d changes
-- **Next work:** M4 (content expansion, new card archetypes, advanced region mechanics)
+- **Next work:** M4b hardening/polish: richer reward UX, full browser QA, and publish pipeline cleanup
 
 ### M3d Key Findings (5000 seeds x 3 strategies, post-stun-fix-and-AI-rework)
 
@@ -100,6 +100,8 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 | **M3b** | `staging/m3b-deck-mechanics-spec.md` | Deck system, upgrade tree loader, deep_focus_01 fix |
 | **M3c** | `staging/m3c-balance-tuning-spec.md` | Speed cap, AI fixes, enemy HP tuning |
 | **M3d** | (inline fixes) | Stun fix, AggressiveAI v2, upgrade randomization |
+| **M4a** | (TypeScript resolver port) | Browser-safe sim package, parity fixtures, seeded RNG |
+| **M4b** | `spec/m4b-phaser-frontend-spec-v3.md` | Phaser 4 first playable, steppers, scenes, Pixel Quest public prep |
 
 ## Critical: STAT_SCALE Awareness
 

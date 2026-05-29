@@ -1,0 +1,511 @@
+[
+  {
+    "base": 1000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_ADD",
+        "stacking": "stack",
+        "stat": "HP",
+        "tags": [],
+        "target": "SELF",
+        "value": 500
+      }
+    ],
+    "name": "flat add",
+    "result": 1500,
+    "stat": "HP"
+  },
+  {
+    "base": 1000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_SUB",
+        "stacking": "stack",
+        "stat": "HP",
+        "tags": [],
+        "target": "SELF",
+        "value": 2500
+      }
+    ],
+    "name": "flat sub",
+    "result": -1500,
+    "stat": "HP"
+  },
+  {
+    "base": 1000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "PCT_ADD",
+        "stacking": "stack",
+        "stat": "HP",
+        "tags": [],
+        "target": "SELF",
+        "value": 50
+      }
+    ],
+    "name": "pct add",
+    "result": 1500,
+    "stat": "HP"
+  },
+  {
+    "base": 1000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "PCT_SUB",
+        "stacking": "stack",
+        "stat": "HP",
+        "tags": [],
+        "target": "SELF",
+        "value": 150
+      }
+    ],
+    "name": "pct sub",
+    "result": -500,
+    "stat": "HP"
+  },
+  {
+    "base": 1000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "MULTIPLY",
+        "stacking": "stack",
+        "stat": "HP",
+        "tags": [],
+        "target": "SELF",
+        "value": 1500
+      }
+    ],
+    "name": "multiply",
+    "result": 1500,
+    "stat": "HP"
+  },
+  {
+    "base": 100000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "PCT_ADD",
+        "stacking": "stack",
+        "stat": "Speed",
+        "tags": [],
+        "target": "SELF",
+        "value": 125
+      }
+    ],
+    "name": "speed cap",
+    "result": 175000,
+    "stat": "Speed"
+  },
+  {
+    "base": 100000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "PCT_SUB",
+        "stacking": "stack",
+        "stat": "Speed",
+        "tags": [],
+        "target": "SELF",
+        "value": 100
+      }
+    ],
+    "name": "speed floor",
+    "result": 10000,
+    "stat": "Speed"
+  },
+  {
+    "base": 1000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_SUB",
+        "stacking": "stack",
+        "stat": "HP",
+        "tags": [],
+        "target": "SELF",
+        "value": 2500
+      },
+      {
+        "duration": -1,
+        "operation": "PCT_ADD",
+        "stacking": "stack",
+        "stat": "HP",
+        "tags": [],
+        "target": "SELF",
+        "value": 50
+      }
+    ],
+    "name": "negative floor division",
+    "result": -2250,
+    "stat": "HP"
+  },
+  {
+    "base": 9000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_SUB",
+        "stacking": "stack",
+        "stat": "Defense",
+        "tags": [],
+        "target": "SELF",
+        "value": 200
+      },
+      {
+        "duration": -1,
+        "operation": "PCT_ADD",
+        "stacking": "stack",
+        "stat": "Defense",
+        "tags": [],
+        "target": "SELF",
+        "value": 8
+      }
+    ],
+    "name": "generated 8",
+    "result": 9504,
+    "stat": "Defense"
+  },
+  {
+    "base": 10000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_ADD",
+        "stacking": "stack",
+        "stat": "Energy",
+        "tags": [],
+        "target": "SELF",
+        "value": 300
+      },
+      {
+        "duration": -1,
+        "operation": "PCT_SUB",
+        "stacking": "stack",
+        "stat": "Energy",
+        "tags": [],
+        "target": "SELF",
+        "value": 9
+      }
+    ],
+    "name": "generated 9",
+    "result": 9373,
+    "stat": "Energy"
+  },
+  {
+    "base": 11000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_SUB",
+        "stacking": "stack",
+        "stat": "HP",
+        "tags": [],
+        "target": "SELF",
+        "value": 400
+      },
+      {
+        "duration": -1,
+        "operation": "PCT_ADD",
+        "stacking": "stack",
+        "stat": "HP",
+        "tags": [],
+        "target": "SELF",
+        "value": 10
+      }
+    ],
+    "name": "generated 10",
+    "result": 11660,
+    "stat": "HP"
+  },
+  {
+    "base": 12000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_ADD",
+        "stacking": "stack",
+        "stat": "Power",
+        "tags": [],
+        "target": "SELF",
+        "value": 500
+      },
+      {
+        "duration": -1,
+        "operation": "PCT_ADD",
+        "stacking": "stack",
+        "stat": "Power",
+        "tags": [],
+        "target": "SELF",
+        "value": 11
+      }
+    ],
+    "name": "generated 11",
+    "result": 13875,
+    "stat": "Power"
+  },
+  {
+    "base": 13000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_SUB",
+        "stacking": "stack",
+        "stat": "Speed",
+        "tags": [],
+        "target": "SELF",
+        "value": 600
+      },
+      {
+        "duration": -1,
+        "operation": "PCT_SUB",
+        "stacking": "stack",
+        "stat": "Speed",
+        "tags": [],
+        "target": "SELF",
+        "value": 12
+      }
+    ],
+    "name": "generated 12",
+    "result": 10912,
+    "stat": "Speed"
+  },
+  {
+    "base": 14000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_ADD",
+        "stacking": "stack",
+        "stat": "Defense",
+        "tags": [],
+        "target": "SELF",
+        "value": 700
+      },
+      {
+        "duration": -1,
+        "operation": "PCT_ADD",
+        "stacking": "stack",
+        "stat": "Defense",
+        "tags": [],
+        "target": "SELF",
+        "value": 13
+      }
+    ],
+    "name": "generated 13",
+    "result": 16611,
+    "stat": "Defense"
+  },
+  {
+    "base": 15000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_SUB",
+        "stacking": "stack",
+        "stat": "Energy",
+        "tags": [],
+        "target": "SELF",
+        "value": 100
+      },
+      {
+        "duration": -1,
+        "operation": "PCT_ADD",
+        "stacking": "stack",
+        "stat": "Energy",
+        "tags": [],
+        "target": "SELF",
+        "value": 14
+      }
+    ],
+    "name": "generated 14",
+    "result": 16986,
+    "stat": "Energy"
+  },
+  {
+    "base": 16000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_ADD",
+        "stacking": "stack",
+        "stat": "HP",
+        "tags": [],
+        "target": "SELF",
+        "value": 200
+      },
+      {
+        "duration": -1,
+        "operation": "PCT_SUB",
+        "stacking": "stack",
+        "stat": "HP",
+        "tags": [],
+        "target": "SELF",
+        "value": 15
+      }
+    ],
+    "name": "generated 15",
+    "result": 13770,
+    "stat": "HP"
+  },
+  {
+    "base": 17000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_SUB",
+        "stacking": "stack",
+        "stat": "Power",
+        "tags": [],
+        "target": "SELF",
+        "value": 300
+      },
+      {
+        "duration": -1,
+        "operation": "PCT_ADD",
+        "stacking": "stack",
+        "stat": "Power",
+        "tags": [],
+        "target": "SELF",
+        "value": 16
+      }
+    ],
+    "name": "generated 16",
+    "result": 19372,
+    "stat": "Power"
+  },
+  {
+    "base": 18000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_ADD",
+        "stacking": "stack",
+        "stat": "Speed",
+        "tags": [],
+        "target": "SELF",
+        "value": 400
+      },
+      {
+        "duration": -1,
+        "operation": "PCT_ADD",
+        "stacking": "stack",
+        "stat": "Speed",
+        "tags": [],
+        "target": "SELF",
+        "value": 17
+      }
+    ],
+    "name": "generated 17",
+    "result": 21528,
+    "stat": "Speed"
+  },
+  {
+    "base": 19000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_SUB",
+        "stacking": "stack",
+        "stat": "Defense",
+        "tags": [],
+        "target": "SELF",
+        "value": 500
+      },
+      {
+        "duration": -1,
+        "operation": "PCT_SUB",
+        "stacking": "stack",
+        "stat": "Defense",
+        "tags": [],
+        "target": "SELF",
+        "value": 18
+      }
+    ],
+    "name": "generated 18",
+    "result": 15170,
+    "stat": "Defense"
+  },
+  {
+    "base": 20000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_ADD",
+        "stacking": "stack",
+        "stat": "Energy",
+        "tags": [],
+        "target": "SELF",
+        "value": 600
+      },
+      {
+        "duration": -1,
+        "operation": "PCT_ADD",
+        "stacking": "stack",
+        "stat": "Energy",
+        "tags": [],
+        "target": "SELF",
+        "value": 19
+      }
+    ],
+    "name": "generated 19",
+    "result": 24514,
+    "stat": "Energy"
+  },
+  {
+    "base": 21000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_SUB",
+        "stacking": "stack",
+        "stat": "HP",
+        "tags": [],
+        "target": "SELF",
+        "value": 700
+      },
+      {
+        "duration": -1,
+        "operation": "PCT_ADD",
+        "stacking": "stack",
+        "stat": "HP",
+        "tags": [],
+        "target": "SELF",
+        "value": 20
+      }
+    ],
+    "name": "generated 20",
+    "result": 24360,
+    "stat": "HP"
+  },
+  {
+    "base": 22000,
+    "modifiers": [
+      {
+        "duration": -1,
+        "operation": "FLAT_ADD",
+        "stacking": "stack",
+        "stat": "Power",
+        "tags": [],
+        "target": "SELF",
+        "value": 100
+      },
+      {
+        "duration": -1,
+        "operation": "PCT_SUB",
+        "stacking": "stack",
+        "stat": "Power",
+        "tags": [],
+        "target": "SELF",
+        "value": 21
+      }
+    ],
+    "name": "generated 21",
+    "result": 17459,
+    "stat": "Power"
+  }
+]

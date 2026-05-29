@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import random as _random_module
-
 from models.entity import Character
 from models.card import Card, UpgradeEntry
 from models.campaign import WorldCard, EventChoice
@@ -12,6 +10,7 @@ from models.enums import Stat, Operation, Target
 from engine.turn_order import CombatEntity, get_current_stat
 from campaign.state import CampaignState, RegionState
 from campaign.loader import GameData
+from campaign.runner import pick_greedy_upgrade
 
 
 def _damage_score(card: Card) -> int:
@@ -65,47 +64,6 @@ def _net_modifier_impact(mods: list[Modifier]) -> int:
         elif m.operation in (Operation.FLAT_SUB, Operation.PCT_SUB):
             total -= m.value
     return total
-
-
-def _pick_greedy_upgrade(
-    roster_cards: list[str],
-    upgrade_trees: dict[str, dict[str, UpgradeEntry]],
-    applied_upgrades: dict[str, list[str]],
-    prefer_stat: Stat | None = None,
-    rng: _random_module.Random | None = None,
-) -> tuple[str, str] | None:
-    """Generic upgrade picker with optional stat preference.
-
-    When multiple branches tie on score, randomly selects among them using
-    the provided RNG (same seed = same result; None = deterministic first-pick).
-    """
-    candidates: list[tuple[int, str, str]] = []  # (score, card_id, branch_key)
-    for card_id in roster_cards:
-        tree = upgrade_trees.get(card_id, {})
-        already = applied_upgrades.get(card_id, [])
-        for branch_key, entry in tree.items():
-            if branch_key in already:
-                continue
-            if entry.prerequisite and entry.prerequisite not in already:
-                continue
-            if any(ex in already for ex in entry.exclusions):
-                continue
-            score = entry.tier
-            if prefer_stat and any(
-                e.stat == prefer_stat for e in entry.added_effects
-            ):
-                score += 10
-            candidates.append((score, card_id, branch_key))
-
-    if not candidates:
-        return None
-
-    max_score = max(s for s, _, _ in candidates)
-    top = [(cid, bk) for (s, cid, bk) in candidates if s == max_score]
-
-    if rng and len(top) > 1:
-        return rng.choice(top)
-    return top[0]
 
 
 def _affordable_cards(caster: CombatEntity, cards: list[Card]) -> list[Card]:
@@ -270,7 +228,7 @@ class AggressiveAI:
         applied_upgrades: dict[str, list[str]],
         state: CampaignState,
     ) -> tuple[str, str] | None:
-        return _pick_greedy_upgrade(roster_cards, upgrade_trees, applied_upgrades, Stat.Power, state.rng)
+        return pick_greedy_upgrade(roster_cards, upgrade_trees, applied_upgrades, state.rng, Stat.Power)
 
     def select_research(self, state: CampaignState, game_data: GameData) -> RegionState | None:
         return None  # Never research
@@ -374,7 +332,7 @@ class DefensiveAI:
         applied_upgrades: dict[str, list[str]],
         state: CampaignState,
     ) -> tuple[str, str] | None:
-        return _pick_greedy_upgrade(roster_cards, upgrade_trees, applied_upgrades, Stat.Defense, state.rng)
+        return pick_greedy_upgrade(roster_cards, upgrade_trees, applied_upgrades, state.rng, Stat.Defense)
 
     def select_research(self, state: CampaignState, game_data: GameData) -> RegionState | None:
         # Always research if resources available, cheapest layer first
@@ -493,7 +451,7 @@ class BalancedAI:
     ) -> tuple[str, str] | None:
         # Alternate between offense and defense
         prefer = Stat.Power if state.turn_number % 2 == 0 else Stat.Defense
-        return _pick_greedy_upgrade(roster_cards, upgrade_trees, applied_upgrades, prefer, state.rng)
+        return pick_greedy_upgrade(roster_cards, upgrade_trees, applied_upgrades, state.rng, prefer)
 
     def select_research(self, state: CampaignState, game_data: GameData) -> RegionState | None:
         # Research to level 2 before assault, cheapest first

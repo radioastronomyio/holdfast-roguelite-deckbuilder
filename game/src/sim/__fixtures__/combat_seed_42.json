@@ -1,0 +1,11 @@
+{
+  "final_hp": {
+    "scavenger_patrol": -6,
+    "vanguard_sentinel": 140
+  },
+  "player_won": true,
+  "survivors": [
+    "vanguard_sentinel"
+  ],
+  "turns_taken": 1
+}

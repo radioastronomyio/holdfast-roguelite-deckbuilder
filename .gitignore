@@ -18,6 +18,7 @@ config.local.*
 # LICENSED ASSETS (do not distribute)
 # ----------------------------------------------------------------------------
 assets/2d-pixel-quest-vol3-the-ui-gui/
+game/public/assets/
 
 # ----------------------------------------------------------------------------
 # VAULT / AGENT WORKFLOW

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import math
 import random as _random_module
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
@@ -54,7 +53,7 @@ def tick_until_next_turn(entities: list[CombatEntity]) -> CombatEntity:
         if speed <= 0:
             continue
         needed = max(0, CT_THRESHOLD - e.ct)
-        ticks = math.ceil(needed / speed) if needed > 0 else 0
+        ticks = -(-needed // speed) if needed > 0 else 0
         if min_ticks is None or ticks < min_ticks:
             min_ticks = ticks
 
@@ -74,7 +73,7 @@ def tick_until_next_turn(entities: list[CombatEntity]) -> CombatEntity:
     # Find ready entities (CT >= threshold)
     ready = [e for e in living if e.ct >= CT_THRESHOLD]
     if not ready:
-        # Should not happen, but guard against floating-point edge cases.
+        # Should not happen, but guard against zero-speed edge case where no entity reaches threshold.
         ready = living
 
     # Sort: highest overflow first, then highest speed, then list order

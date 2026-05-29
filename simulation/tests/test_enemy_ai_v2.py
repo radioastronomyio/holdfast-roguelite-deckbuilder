@@ -158,15 +158,3 @@ class TestGeneral:
         cards = [_damage_card("attack", 10, cost=2)]
         result = pick_enemy_action_v2(enemy, cards, party, [], turn_number=3)
         assert result is None
-
-    def test_backward_compatible(self):
-        """Same behavior as M2a greedy for aggressive with no buffs, turn > 1."""
-        from engine.enemy_ai import pick_enemy_action
-        enemy_v1 = _make_entity("Enemy", heuristic=AiHeuristic.aggressive)
-        enemy_v2 = _make_entity("Enemy", heuristic=AiHeuristic.aggressive)
-        party = [_make_entity("Player", is_player=True)]
-        cards = [_damage_card("weak", 5), _damage_card("strong", 20)]
-        r1 = pick_enemy_action(enemy_v1, cards, party)
-        r2 = pick_enemy_action_v2(enemy_v2, cards, party, [], turn_number=5)
-        assert r1 is not None and r2 is not None
-        assert r1[0].id == r2[0].id

@@ -1,0 +1,18 @@
+{
+  "per_stat_min": {
+    "HP": 50,
+    "Power": 8,
+    "Speed": 60,
+    "Defense": 3,
+    "Energy": 2
+  },
+  "per_stat_max": {
+    "HP": 150,
+    "Power": 35,
+    "Speed": 130,
+    "Defense": 25,
+    "Energy": 7
+  },
+  "total_budget_min": 150,
+  "total_budget_max": 350
+}

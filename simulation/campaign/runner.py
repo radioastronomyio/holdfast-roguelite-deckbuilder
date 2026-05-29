@@ -112,8 +112,13 @@ def pick_greedy_upgrade(
     upgrade_trees: dict[str, dict[str, UpgradeEntry]],
     applied_upgrades: dict[str, list[str]],
     rng: random.Random | None = None,
+    prefer_stat: Stat | None = None,
 ) -> tuple[str, str] | None:
-    """Placeholder greedy upgrade selection with optional RNG tiebreaking."""
+    """Greedy upgrade selection with optional stat preference and RNG tiebreaking.
+
+    When multiple branches tie on score, randomly selects among them using
+    the provided RNG (same seed = same result; None = deterministic first-pick).
+    """
     candidates: list[tuple[int, str, str]] = []
     for card_id in roster_cards:
         tree = upgrade_trees.get(card_id, {})
@@ -125,11 +130,16 @@ def pick_greedy_upgrade(
                 continue
             if any(ex in already for ex in entry.exclusions):
                 continue
-            candidates.append((entry.tier, card_id, branch_key))
+            score = entry.tier
+            if prefer_stat and any(
+                e.stat == prefer_stat for e in entry.added_effects
+            ):
+                score += 10
+            candidates.append((score, card_id, branch_key))
     if not candidates:
         return None
-    max_tier = max(s for s, _, _ in candidates)
-    top = [(cid, bk) for (s, cid, bk) in candidates if s == max_tier]
+    max_score = max(s for s, _, _ in candidates)
+    top = [(cid, bk) for (s, cid, bk) in candidates if s == max_score]
     if rng and len(top) > 1:
         return rng.choice(top)
     return top[0]

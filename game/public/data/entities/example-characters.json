@@ -1,0 +1,77 @@
+[
+  {
+    "id": "vanguard_sentinel",
+    "name": "Vanguard Sentinel",
+    "base_stats": {
+      "HP": 140000,
+      "Power": 12000,
+      "Speed": 80000,
+      "Defense": 20000,
+      "Energy": 3000
+    },
+    "innate_passive": {
+      "stat": "Defense",
+      "operation": "PCT_ADD",
+      "value": 15,
+      "duration": -1,
+      "target": "SELF",
+      "stacking": "stack",
+      "tags": ["passive"]
+    },
+    "name_parts": {
+      "first_name": "Alvino",
+      "title": "Vanguard Sentinel",
+      "origin": "Mountains of Kud"
+    }
+  },
+  {
+    "id": "ember_mage",
+    "name": "Ember Mage",
+    "base_stats": {
+      "HP": 65000,
+      "Power": 28000,
+      "Speed": 115000,
+      "Defense": 5000,
+      "Energy": 4000
+    },
+    "innate_passive": {
+      "stat": "Power",
+      "operation": "PCT_ADD",
+      "value": 20,
+      "duration": -1,
+      "target": "SELF",
+      "stacking": "stack",
+      "tags": ["conditional_hp_threshold_50"]
+    },
+    "name_parts": {
+      "first_name": "Mira",
+      "title": "Ember Mage",
+      "origin": "Volcanic Ridge"
+    }
+  },
+  {
+    "id": "field_tactician",
+    "name": "Field Tactician",
+    "base_stats": {
+      "HP": 85000,
+      "Power": 15000,
+      "Speed": 105000,
+      "Defense": 12000,
+      "Energy": 5000
+    },
+    "innate_passive": {
+      "stat": "Energy",
+      "operation": "FLAT_ADD",
+      "value": 1000,
+      "duration": -1,
+      "target": "SELF",
+      "stacking": "stack",
+      "tags": ["passive"]
+    },
+    "name_parts": {
+      "first_name": "Cael",
+      "title": "Field Tactician",
+      "origin": "Sunken Basin"
+    }
+  }
+]

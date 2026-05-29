@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from models.modifier import Modifier, STAT_SCALE
 from models.card import UpgradeEntry
 from models.enums import Stat, Operation, Target, Stacking
-from agents.heuristics import _pick_greedy_upgrade
+from campaign.runner import pick_greedy_upgrade as _pick_greedy_upgrade
 
 
 def make_upgrade_entry(tier, stat=Stat.Power, value=10):

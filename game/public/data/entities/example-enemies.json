@@ -1,0 +1,75 @@
+[
+  {
+    "id": "scavenger_patrol",
+    "name": "Scavenger Patrol",
+    "base_stats": {
+      "HP": 60000,
+      "Power": 10000,
+      "Speed": 70000,
+      "Defense": 5000,
+      "Energy": 3000
+    },
+    "card_pool": [
+      "arcane_strike_01",
+      "shield_bash_01",
+      "sweeping_blade_01"
+    ],
+    "ai_heuristic_tag": "aggressive",
+    "is_elite": false
+  },
+  {
+    "id": "stone_guardian",
+    "name": "Stone Guardian",
+    "base_stats": {
+      "HP": 100000,
+      "Power": 8000,
+      "Speed": 40000,
+      "Defense": 15000,
+      "Energy": 2000
+    },
+    "card_pool": [
+      "phalanx_01",
+      "stone_wall_01",
+      "frost_bolt_01"
+    ],
+    "ai_heuristic_tag": "defensive",
+    "is_elite": false
+  },
+  {
+    "id": "warlord_vanguard",
+    "name": "Warlord Vanguard",
+    "base_stats": {
+      "HP": 150000,
+      "Power": 20000,
+      "Speed": 90000,
+      "Defense": 12000,
+      "Energy": 4000
+    },
+    "card_pool": [
+      "arcane_strike_01",
+      "shield_bash_01",
+      "sweeping_blade_01",
+      "power_surge_01"
+    ],
+    "ai_heuristic_tag": "balanced",
+    "is_elite": true
+  },
+  {
+    "id": "fungal_behemoth",
+    "name": "Fungal Behemoth",
+    "base_stats": {
+      "HP": 200000,
+      "Power": 15000,
+      "Speed": 30000,
+      "Defense": 10000,
+      "Energy": 3000
+    },
+    "card_pool": [
+      "acid_flask_01",
+      "immolate_01",
+      "sweeping_blade_01"
+    ],
+    "ai_heuristic_tag": "balanced",
+    "is_elite": true
+  }
+]

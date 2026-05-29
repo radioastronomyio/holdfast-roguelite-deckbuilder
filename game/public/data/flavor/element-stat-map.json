@@ -1,0 +1,22 @@
+{
+  "power": {
+    "default": ["Magma", "Stone", "Thunder"],
+    "rare": ["Inferno"]
+  },
+  "speed": {
+    "default": ["Storm", "Wind", "Void"],
+    "rare": ["Phantom"]
+  },
+  "defense": {
+    "default": ["Iron", "Stone", "Earth"],
+    "rare": ["Bastion"]
+  },
+  "energy": {
+    "default": ["Arcane", "Ether", "Pulse"],
+    "rare": ["Nexus"]
+  },
+  "hp": {
+    "default": ["Blood", "Bone", "Marrow"],
+    "rare": ["Undying"]
+  }
+}

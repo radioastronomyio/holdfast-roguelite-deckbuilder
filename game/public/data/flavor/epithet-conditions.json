@@ -1,0 +1,173 @@
+[
+  {
+    "epithet": "the Strong",
+    "conditions": [{"type": 1, "stat": "Power", "op": ">=", "value": 70}],
+    "pool": "default"
+  },
+  {
+    "epithet": "the Swift",
+    "conditions": [{"type": 1, "stat": "Speed", "op": ">=", "value": 80}],
+    "pool": "default"
+  },
+  {
+    "epithet": "the Ghost",
+    "conditions": [{"type": 1, "stat": "Speed", "op": ">=", "value": 90}],
+    "pool": "rare"
+  },
+  {
+    "epithet": "the Volatile",
+    "conditions": [
+      {
+        "type": 2,
+        "stat_a": "Power",
+        "op_a": ">=",
+        "value_a": 75,
+        "logic": "XOR",
+        "stat_b": "Defense",
+        "op_b": "<=",
+        "value_b": 25
+      }
+    ],
+    "pool": "rare"
+  },
+  {
+    "epithet": "the Enduring",
+    "conditions": [{"type": 1, "stat": "HP", "op": ">=", "value": 120}],
+    "pool": "default"
+  },
+  {
+    "epithet": "the Frail",
+    "conditions": [{"type": 1, "stat": "HP", "op": "<=", "value": 60}],
+    "pool": "rare"
+  },
+  {
+    "epithet": "the Tireless",
+    "conditions": [{"type": 1, "stat": "Energy", "op": ">=", "value": 5}],
+    "pool": "default"
+  },
+  {
+    "epithet": "the Unyielding",
+    "conditions": [{"type": 1, "stat": "Defense", "op": ">=", "value": 18}],
+    "pool": "default"
+  },
+  {
+    "epithet": "the Brittle",
+    "conditions": [{"type": 1, "stat": "Defense", "op": "<=", "value": 8}],
+    "pool": "rare"
+  },
+  {
+    "epithet": "the Wrathful",
+    "conditions": [{"type": 1, "stat": "Power", "op": ">=", "value": 80}],
+    "pool": "default"
+  },
+  {
+    "epithet": "the Balanced",
+    "conditions": [
+      {
+        "type": 2,
+        "stat_a": "Power",
+        "op_a": ">=",
+        "value_a": 70,
+        "logic": "AND",
+        "stat_b": "Speed",
+        "op_b": ">=",
+        "value_b": 70
+      }
+    ],
+    "pool": "rare"
+  },
+  {
+    "epithet": "the Sluggish",
+    "conditions": [{"type": 1, "stat": "Speed", "op": "<=", "value": 50}],
+    "pool": "rare"
+  },
+  {
+    "epithet": "the Energetic",
+    "conditions": [{"type": 1, "stat": "Energy", "op": ">=", "value": 6}],
+    "pool": "default"
+  },
+  {
+    "epithet": "the Robust",
+    "conditions": [{"type": 1, "stat": "Defense", "op": ">=", "value": 20}],
+    "pool": "default"
+  },
+  {
+    "epithet": "the Weak",
+    "conditions": [{"type": 1, "stat": "Power", "op": "<=", "value": 10}],
+    "pool": "rare"
+  },
+  {
+    "epithet": "the Nimble",
+    "conditions": [{"type": 1, "stat": "Speed", "op": ">=", "value": 100}],
+    "pool": "rare"
+  },
+  {
+    "epithet": "the Weary",
+    "conditions": [{"type": 1, "stat": "Energy", "op": "<=", "value": 2}],
+    "pool": "rare"
+  },
+  {
+    "epithet": "the Cursed",
+    "conditions": [
+      {
+        "type": 2,
+        "stat_a": "HP",
+        "op_a": "<=",
+        "value_a": 50,
+        "logic": "OR",
+        "stat_b": "Defense",
+        "op_b": "<=",
+        "value_b": 5
+      }
+    ],
+    "pool": "rare"
+  },
+  {
+    "epithet": "the Mighty",
+    "conditions": [
+      {
+        "type": 2,
+        "stat_a": "Power",
+        "op_a": ">=",
+        "value_a": 85,
+        "logic": "AND",
+        "stat_b": "HP",
+        "op_b": ">=",
+        "value_b": 100
+      }
+    ],
+    "pool": "rare"
+  },
+  {
+    "epithet": "the Steadfast",
+    "conditions": [
+      {
+        "type": 2,
+        "stat_a": "Defense",
+        "op_a": ">=",
+        "value_a": 15,
+        "logic": "AND",
+        "stat_b": "Speed",
+        "op_b": "<",
+        "value_b": 80
+      }
+    ],
+    "pool": "default"
+  },
+  {
+    "epithet": "the Vicious",
+    "conditions": [
+      {
+        "type": 2,
+        "stat_a": "Power",
+        "op_a": ">=",
+        "value_a": 75,
+        "logic": "OR",
+        "stat_b": "Speed",
+        "op_b": ">=",
+        "value_b": 100
+      }
+    ],
+    "pool": "default"
+  }
+]
