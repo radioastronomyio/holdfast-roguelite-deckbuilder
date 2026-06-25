@@ -40,13 +40,15 @@ The router marks the active screen with a `data-screen` attribute on the shell m
 
 The terminal `game-over` screen is reached via the `window.__holdfast.showGameOver()` dev hook (a fresh stepper driven to defeat through the real stepper API), mirroring the proven Within Parameters harness pattern. The natural walk only reaches game-over after a full campaign.
 
+The DEV-only `card-gallery` route (spec 02) is reached via the `window.__holdfast.showCardGallery()` dev hook. It is captured on a **fresh page** in the same browser context (`capture_card_gallery`), not off the walked page: the gallery is a standalone showcase with no campaign dependency, and isolating its render from the walk's pending timers/promises is what makes its dark-fantasy baseline deterministic. The route is `import.meta.env.DEV`-gated and tree-shaken from production builds.
+
 ## Extension points (specs 02–04)
 
 | Hook | What to change |
 |------|----------------|
-| `SCREENS` | Append `(step, filename)` for each new screen (card renderer, combat, flow screens). |
+| `SCREENS` | Append `(step, filename)` for each new screen (combat, flow screens). Spec 02 added `card-gallery`. |
 | `VERIFY` | Add a GameUI selector per new screen to assert the framework component rendered. |
-| `walk` / `capture_game_over` | Add drivers for screens reached outside the linear advance path. |
+| `walk` / `capture_game_over` / `capture_card_gallery` | Drivers for screens reached outside the linear advance path. |
 
 ## Known limitation
 

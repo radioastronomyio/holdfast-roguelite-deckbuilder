@@ -1,0 +1,321 @@
+/* =============================================================================
+   Holdfast Card Renderer
+   -----------------------------------------------------------------------------
+   Composition over the GameUI card primitive (`.gui-card`). These rules add
+   the deckbuilder-specific layer the generic primitive deliberately leaves out:
+   an energy-cost badge, per-modifier effect rows with icons, upgrade-tier pips,
+   a rare/upgraded shine overlay, and the inspect affordance. The primitive's
+   frame, selection ring, and disabled state are untouched.
+
+   Token discipline: every colour, radius, space, font, and motion value flows
+   through a GameUI `--gui-*` token. No raw literals where a token role exists.
+   =============================================================================
+*/
+
+/* -----------------------------------------------------------------------------
+   §1. Card frame hooks
+   --------------------------------------------------------------------------
+
+   `.hf-card` is added to the `.gui-card` root. It carries the resolved accent
+   as `hf-card--<accent>` for any renderer-specific tinting, and the shine /
+   upgraded / rare modifiers. The frame itself stays the primitive's job. */
+
+.hf-card {
+  width: var(--hf-card-width, 200px);
+  min-height: var(--hf-card-min-height, 240px);
+}
+
+/* The energy-cost badge lives in the createCard tag slot (.gui-card__tag).
+   Restyle it as a circular energy gem rather than a pill chip, tinted by the
+   inherited card accent. */
+.hf-card .gui-card__tag {
+  min-width: 28px;
+  height: 28px;
+  padding: 0;
+  gap: 0;
+  border-radius: var(--gui-radius-pill);
+  justify-content: center;
+  font-size: var(--gui-font-size-md);
+  font-weight: 700;
+}
+
+/* -----------------------------------------------------------------------------
+   §2. Effect rows
+   -------------------------------------------------------------------------- */
+
+.hf-card__effects {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gui-space-sm);
+}
+
+.hf-card__effect {
+  display: flex;
+  align-items: center;
+  gap: var(--gui-space-sm);
+}
+
+.hf-card__effect-icon {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6));
+}
+
+.hf-card__effect-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  min-width: 0;
+}
+
+.hf-card__effect-value {
+  font-family: var(--gui-font-display);
+  font-size: var(--gui-font-size-md);
+  font-weight: 700;
+  color: var(--gui-text);
+}
+
+.hf-card__effect-meta {
+  font-size: var(--gui-font-size-sm);
+  color: var(--gui-text-muted);
+}
+
+/* -----------------------------------------------------------------------------
+   §3. Footer: tier pips + inspect button
+   -------------------------------------------------------------------------- */
+
+.hf-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gui-space-sm);
+  width: 100%;
+}
+
+.hf-card__pips {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hf-card__pip {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--gui-radius-pill);
+  background: rgba(var(--card-accent-rgb), 0.18);
+  border: var(--gui-border-width) solid var(--card-accent);
+}
+
+.hf-card__pip--on {
+  background: var(--card-accent);
+  box-shadow: 0 0 var(--gui-glow-blur) rgba(var(--card-accent-rgb), var(--gui-glow-alpha));
+}
+
+.hf-card__inspect {
+  appearance: none;
+  background: transparent;
+  border: var(--gui-border-width) solid var(--gui-border);
+  color: var(--gui-text-muted);
+  border-radius: var(--gui-radius-pill);
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  font-size: var(--gui-font-size-md);
+  line-height: 1;
+  cursor: pointer;
+  transition: color var(--gui-duration-fast) var(--gui-ease-out),
+    border-color var(--gui-duration-fast) var(--gui-ease-out);
+}
+
+.hf-card__inspect:hover {
+  color: var(--card-accent);
+  border-color: var(--card-accent);
+}
+
+.hf-card__inspect:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--gui-surface-strong), 0 0 0 4px var(--card-accent);
+}
+
+/* -----------------------------------------------------------------------------
+   §4. Rare / upgraded shine overlay
+   --------------------------------------------------------------------------
+   A class toggle, not new art. The overlay is a fixed diagonal rainbow sheen
+   drawn in a pseudo-element above the frame. It is intentionally static: the
+   screen harness requires pixel-deterministic baselines, and an infinite sweep
+   animation would be frozen at a timing-dependent phase by the capture step.
+   The reduced-motion block below is retained for completeness. */
+
+.hf-card--shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.hf-card--shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    transparent 38%,
+    rgba(255, 215, 0, 0.10) 46%,
+    rgba(231, 76, 60, 0.10) 52%,
+    rgba(155, 89, 182, 0.12) 58%,
+    rgba(52, 152, 219, 0.10) 64%,
+    transparent 72%
+  );
+  mix-blend-mode: screen;
+}
+
+/* -----------------------------------------------------------------------------
+   §5. Inspect detail modal
+   -------------------------------------------------------------------------- */
+
+.hf-inspect {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gui-space-sm);
+}
+
+.hf-inspect__tags {
+  margin: 0 0 var(--gui-space-xs);
+  color: var(--gui-text-muted);
+  font-size: var(--gui-font-size-sm);
+}
+
+.hf-inspect__heading {
+  margin: var(--gui-space-sm) 0 var(--gui-space-xs);
+  font-family: var(--gui-font-display);
+  font-size: var(--gui-font-size-md);
+  color: var(--gui-text);
+}
+
+.hf-inspect__row {
+  padding: var(--gui-space-sm);
+  border: var(--gui-border-width) solid var(--gui-border);
+  border-radius: var(--gui-radius-md);
+  background: rgba(var(--card-accent-rgb, var(--gui-accent-primary-rgb)), 0.06);
+}
+
+.hf-inspect__row-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gui-space-sm);
+}
+
+.hf-inspect__row-label {
+  font-family: var(--gui-font-display);
+  font-weight: 700;
+  color: var(--gui-text);
+}
+
+.hf-inspect__row-value {
+  font-weight: 700;
+  color: var(--card-accent, var(--gui-accent-primary));
+}
+
+.hf-inspect__row-detail {
+  margin-top: var(--gui-space-xs);
+  color: var(--gui-text-muted);
+  font-size: var(--gui-font-size-sm);
+}
+
+.hf-inspect__path {
+  padding: var(--gui-space-sm);
+  border-left: 3px solid var(--card-accent, var(--gui-accent-primary));
+  background: rgba(var(--card-accent-rgb, var(--gui-accent-primary-rgb)), 0.05);
+  border-radius: var(--gui-radius-sm);
+}
+
+.hf-inspect__path + .hf-inspect__path {
+  margin-top: var(--gui-space-xs);
+}
+
+.hf-inspect__path-head {
+  font-family: var(--gui-font-display);
+  font-weight: 700;
+  color: var(--gui-text);
+}
+
+.hf-inspect__path-effect {
+  color: var(--gui-text-muted);
+  font-size: var(--gui-font-size-sm);
+}
+
+/* -----------------------------------------------------------------------------
+   §6. Reduced motion — freeze the shine sweep
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .hf-card--shine::after {
+    animation: none;
+  }
+}
+
+/* =============================================================================
+   §7. DEV card gallery layout
+   -----------------------------------------------------------------------------
+   The gallery is a standalone showcase, not a gameplay screen. It only needs
+   structure to lay the composed cards out in a scrollable grid; the cards
+   themselves carry all their own styling. DEV-only, never shipped to prod.
+   =============================================================================
+*/
+
+.hf-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gui-space-lg);
+  padding: var(--gui-space-md);
+  overflow-y: auto;
+  height: 100%;
+}
+
+.hf-gallery__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gui-space-md);
+}
+
+.hf-gallery__heading {
+  margin: 0;
+  font-family: var(--gui-font-display);
+  font-size: var(--gui-font-size-md);
+  letter-spacing: 0.04em;
+  color: var(--gui-accent-primary);
+  border-bottom: var(--gui-border-width) solid var(--gui-border);
+  padding-bottom: var(--gui-space-xs);
+}
+
+.hf-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--gui-space-md);
+  align-items: start;
+}
+
+.hf-gallery__pair {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gui-space-lg);
+  align-items: start;
+}
+
+.hf-gallery__labeled {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gui-space-xs);
+}
+
+.hf-gallery__label {
+  font-family: var(--gui-font-display);
+  font-size: var(--gui-font-size-sm);
+  color: var(--gui-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}

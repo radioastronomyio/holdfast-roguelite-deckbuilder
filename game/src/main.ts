@@ -10,7 +10,7 @@
 import { loadGameData } from "./data";
 import { CampaignStepper } from "./sim/campaignStepper";
 import { partySize } from "./sim/campaign";
-import { initRouter, showScreen } from "./ui/router";
+import { initRouter, showScreen, showCardGallery } from "./ui/router";
 
 const DEFAULT_SEED = 12345;
 
@@ -35,8 +35,9 @@ async function main(): Promise<void> {
   // currently blocks that path, so the harness captures game-over through here.
   interface HoldfastDevHook {
     showGameOver: () => void;
+    showCardGallery?: () => void;
   }
-  (window as unknown as { __holdfast?: HoldfastDevHook }).__holdfast = {
+  const devHook: HoldfastDevHook = {
     showGameOver: () => {
       const s = new CampaignStepper(seed, gameData);
       const firstUnconquered = s.state.region_states.findIndex((r) => !r.conquered);
@@ -47,6 +48,14 @@ async function main(): Promise<void> {
       showScreen("game-over", s);
     },
   };
+  // DEV-only card-gallery route is tree-shaken in production builds, so the
+  // hook is only wired up in development.
+  if (import.meta.env.DEV) {
+    devHook.showCardGallery = () => {
+      void showCardGallery();
+    };
+  }
+  (window as unknown as { __holdfast?: HoldfastDevHook }).__holdfast = devHook;
 }
 
 void main().catch((error) => {

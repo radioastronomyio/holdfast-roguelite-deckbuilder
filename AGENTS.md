@@ -31,12 +31,12 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 
 - **Phase:** M4b first playable; full-DOM GameUI dark-fantasy frontend (shell + placeholder screens) on the M4a TypeScript resolver port
 - **GDD:** v1.1 (flavor system, tags, fixed-point arithmetic)
-- **Tests:** 367 passing (`pytest simulation/tests/` from repo root); 29 passing (`cd game && npm test`); 7 dark-fantasy screen baselines (`cd game && npm run test:screens:check`)
+- **Tests:** 367 passing (`pytest simulation/tests/` from repo root); 53 passing (`cd game && npm test`); 8 dark-fantasy screen baselines (`cd game && npm run test:screens:check`)
 - **M3a Analysis (pre-deck):** `reports/m3-analysis-pre-deck-mechanics/` archived before deck mechanics
 - **M3b Analysis (pre-M3c):** `reports/m3-analysis-pre-m3c/` archived before M3c tuning
 - **M3c Analysis (pre-M3d):** `reports/m3-analysis-pre-m3d/` archived before M3d tuning
 - **M3d Analysis (current):** `reports/m3-analysis/` 5000-seed run post all M3d changes
-- **Next work:** M4b hardening: real screen content (card renderer spec 02, combat spec 03, flow screens spec 04), richer reward UX, full browser QA, and a sim-side fix for the world-modifier `tags` parity gap flagged by the screen harness
+- **Next work:** M4b hardening: real screen content (combat spec 03, flow screens spec 04 — both consume the spec 02 card renderer), richer reward UX, full browser QA, and a sim-side fix for the world-modifier `tags` parity gap flagged by the screen harness
 
 ### M3d Key Findings (5000 seeds x 3 strategies, post-stun-fix-and-AI-rework)
 
@@ -103,6 +103,7 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 | **M4a** | (TypeScript resolver port) | Browser-safe sim package, parity fixtures, seeded RNG |
 | **M4b** | `spec/m4b-phaser-frontend-spec-v3.md` | Phaser 4 first playable, steppers, scenes, Pixel Quest public prep |
 | **M4b-GUI** | `spec/2026-06-22-holdfast-spec-01-gameui-vendor-dom-shell.md` | GameUI vendored (dark-fantasy), Phaser removed, vanilla DOM screen router + placeholder screens, Playwright baselines |
+| **M4b-GUI-02** | `spec/2026-06-22-holdfast-spec-02-card-renderer.md` | Data-driven `createHoldfastCard` over `createCard` (energy badge, effect icons, accent tint, upgrade pips, shine, inspect modal), RPG icon staging, DEV-gated card-gallery route + 8th dark-fantasy baseline |
 
 ## Critical: STAT_SCALE Awareness
 

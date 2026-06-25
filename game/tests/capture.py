@@ -67,6 +67,7 @@ SCREENS: list[tuple[str, str]] = [
     ("reward", "05-reward.png"),
     ("world", "06-world.png"),
     ("game-over", "07-game-over.png"),
+    ("card-gallery", "08-card-gallery.png"),
 ]
 SCREEN_MAP: dict[str, str] = dict(SCREENS)
 
@@ -91,6 +92,8 @@ VERIFY: dict[str, str] = {
     "reward": "[data-screen='reward'] .gui-panel .gui-btn[data-advance]",
     "world": "[data-screen='world'] .gui-panel .gui-btn[data-advance]",
     "game-over": "[data-screen='game-over'] .gui-panel .gui-panel__chip",
+    # DEV-only showcase: every card renders as a Holdfast card off shared JSON.
+    "card-gallery": "[data-screen='card-gallery'] .hf-card",
 }
 
 
@@ -258,6 +261,54 @@ def capture_game_over(page: Page, captured: set[str], errors: list[str]) -> None
     capture_screen(page, "game-over", captured, errors)
 
 
+def capture_card_gallery(context, base_url: str, origin: str, captured: set[str], errors: list[str], off_origin: list[str]) -> None:
+    """Reach the DEV-only card-gallery route on a FRESH page.
+
+    The gallery is a standalone showcase with no dependency on the campaign
+    walk, but capturing it off the walked page is non-deterministic: the walk
+    leaves pending timers/promises in the page that perturb the gallery's
+    async JSON fetch + render. A fresh page in the same browser context
+    isolates the gallery's render from that residue and produces a deterministic
+    baseline (the same one a standalone render produces). The dev hook only
+    exists in a DEV build, which is what the harness serves.
+
+    The gallery renders asynchronously (it fetches the shared card JSON), so
+    after triggering the hook we wait for the Holdfast cards to mount and for
+    every effect-icon image to finish decoding before the dark-fantasy baseline
+    is captured."""
+    if "card-gallery" in captured:
+        return
+    page = context.new_page()
+    try:
+        page.on(
+            "console",
+            lambda m: errors.append(f"console.{m.type}: {m.text}") if m.type == "error" else None,
+        )
+        page.on("pageerror", lambda e: errors.append(f"pageerror: {e}"))
+        page.on("requestfinished", lambda r: off_origin.append(r.url) if is_off_origin(r.url, origin) else None)
+        page.on("requestfailed", lambda r: off_origin.append(f"FAILED {r.url}"))
+
+        page.goto(base_url, wait_until="networkidle")
+        page.wait_for_selector("[data-screen='main-menu']", timeout=15000)
+        page.evaluate("document.fonts.ready")
+        page.wait_for_timeout(400)
+        page.evaluate(
+            "window.__holdfast && window.__holdfast.showCardGallery "
+            "&& window.__holdfast.showCardGallery()"
+        )
+        page.wait_for_selector("[data-screen='card-gallery'] .hf-card", timeout=10000)
+        # Wait for the effect-icon images to decode so the baseline is deterministic.
+        page.evaluate(
+            "async () => {"
+            "  const imgs = Array.from(document.querySelectorAll('.hf-card__effect-icon'));"
+            "  await Promise.all(imgs.map((img) => img.complete ? Promise.resolve() : img.decode().catch(() => {})));"
+            "}"
+        )
+        capture_screen(page, "card-gallery", captured, errors)
+    finally:
+        page.close()
+
+
 # =============================================================================
 # Network guards
 # =============================================================================
@@ -314,6 +365,7 @@ def main() -> int:
             captured: set[str] = set()
             walk(page, captured, errors)
             capture_game_over(page, captured, errors)
+            capture_card_gallery(context, base_url, origin, captured, errors, off_origin)
 
             browser.close()
 

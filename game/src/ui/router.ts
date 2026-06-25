@@ -110,3 +110,59 @@ export function showScreen(name: ScreenName, stepper: CampaignStepper): void {
   shell.main.setAttribute("data-render", String(++renderNonce));
   mount.appendChild(shell.el);
 }
+
+/**
+ * DEV-only card-gallery route. Gated behind `import.meta.env.DEV` and a dynamic
+ * import, so the gallery module and its card-renderer dependency are tree-shaken
+ * out of production builds entirely. Has no CampaignStepper: it renders every
+ * card straight from the shared JSON as a standalone showcase.
+ */
+export async function showCardGallery(): Promise<void> {
+  if (!import.meta.env.DEV) return;
+  if (!mount) throw new Error("Router not initialised. Call initRouter(root) first.");
+
+  mount.innerHTML = "";
+  const { renderCardGallery } = await import("./screens/card-gallery");
+  const main = await renderCardGallery();
+
+  const header = document.createElement("div");
+  header.style.display = "flex";
+  header.style.gap = "var(--gui-space-md)";
+  header.style.alignItems = "baseline";
+  const brand = document.createElement("strong");
+  brand.textContent = "HOLDFAST";
+  brand.style.fontFamily = "var(--gui-font-display)";
+  brand.style.letterSpacing = "0.08em";
+  const phase = document.createElement("span");
+  phase.textContent = "Card Gallery (DEV)";
+  phase.style.color = "var(--gui-text-muted)";
+  header.append(brand, phase);
+
+  const side = document.createElement("div");
+  side.className = "gui-panel gui-panel--primary";
+  const sideHead = document.createElement("div");
+  sideHead.className = "gui-panel__header";
+  const sideTitle = document.createElement("div");
+  sideTitle.className = "gui-panel__title";
+  sideTitle.textContent = "Card Gallery";
+  sideHead.appendChild(sideTitle);
+  side.appendChild(sideHead);
+  const sideBody = document.createElement("div");
+  sideBody.className = "gui-panel__body";
+  const note = document.createElement("p");
+  note.textContent = "DEV showcase. Every card renders from shared JSON. Inspect opens a detail modal.";
+  sideBody.appendChild(note);
+  side.appendChild(sideBody);
+
+  const shell = createShell({
+    side: "left",
+    sideWidth: "300px",
+    sideLabel: "Card gallery",
+    header,
+    sideContent: side,
+    mainContent: main,
+  });
+  shell.main.setAttribute("data-screen", "card-gallery");
+  shell.main.setAttribute("data-render", String(++renderNonce));
+  mount.appendChild(shell.el);
+}
