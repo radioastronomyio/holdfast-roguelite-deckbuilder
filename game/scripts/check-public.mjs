@@ -2,13 +2,22 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 
 const root = new URL("..", import.meta.url).pathname;
+
+// Representative members of each staged family. The prebuild check fails loudly
+// and names whatever is missing if `prepare:public` has not staged the GameUI
+// skin, the data, or the card icons. A missing entry means the published build
+// would 404 that asset, so this guards the build before it ships.
 const required = [
-  "public/assets/font/fantasypixelfont.fnt",
-  "public/assets/font/fantasypixelfont.png",
-  "public/assets/panels/panel-a.png",
-  "public/assets/bars/dynamic-bar-a1.png",
+  // Vendored GameUI skin (one of each kind the dark-fantasy CSS references).
+  "public/vendor/gameui/themes/dark-fantasy.css",
+  "public/vendor/gameui/themes/fonts/Cinzel.ttf",
+  "public/vendor/gameui/themes/dark-fantasy-assets/panel-bg.webp",
+  "public/vendor/gameui/components/panels/panels.css",
+  // Shared game data.
   "public/data/cards/base-cards.json",
-  "public/data/flavor/given_names.json"
+  "public/data/flavor/given_names.json",
+  // Card-icon subset (representative).
+  "public/assets/icons/icon-attack.png",
 ];
 
 const missing = required.filter((file) => !existsSync(join(root, file)));

@@ -19,6 +19,7 @@ config.local.*
 # ----------------------------------------------------------------------------
 assets/2d-pixel-quest-vol3-the-ui-gui/
 game/public/assets/
+game/public/vendor/
 
 # ----------------------------------------------------------------------------
 # VAULT / AGENT WORKFLOW

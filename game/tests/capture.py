@@ -13,11 +13,15 @@ Created      : 2026-06-22
 
 Usage
 -----
-    python3 game/tests/capture.py            # capture baselines
+    python3 game/tests/capture.py            # capture baselines (dev server)
     python3 game/tests/capture.py --check    # regression check against .sha1
+    python3 game/tests/capture.py --build    # build + vite preview acceptance gate
 
 The harness starts the Vite dev server itself on an isolated port, so no manual
-`npm run dev` is required. Playwright runs under Chromium headless only.
+`npm run dev` is required. The `--build` mode runs `npm run build`, serves
+`dist/` via `vite preview`, and asserts the dark-fantasy skin renders from the
+build with zero failed asset requests — the proof that `vite build` (not just
+dev) serves the skin. Playwright runs under Chromium headless only.
 
 Walk model
 ----------
@@ -56,6 +60,30 @@ from playwright.sync_api import Page, sync_playwright
 REPO_ROOT = Path(__file__).resolve().parent.parent
 BASELINE_DIR = Path(__file__).resolve().parent / "baseline"
 CHECK_MODE = "--check" in sys.argv
+BUILD_MODE = "--build" in sys.argv
+
+# Vite serves the app under this base (see game/vite.config.ts `base`). The
+# built-output mode navigates here because `vite preview` serves dist/ under it.
+BASE_PATH = "/holdfast/"
+
+# The dark-fantasy preset overrides the --gui-bg token to this value (the token
+# default in tokens.css is #020617). Seeing it proves dark-fantasy.css loaded.
+DARK_FANTASY_BG = "#0c0a08"
+
+# One representative of each asset family the dark-fantasy skin and card
+# renderer depend on, probed explicitly from the preview (see run_build_mode).
+# Fonts and card icons are not requested by any production screen during the
+# walk (the card gallery is DEV-only; combat lands in spec 04) and @font-face
+# files load lazily, so the walk's response stream alone cannot prove they are
+# served. Each maps asset path -> acceptable content-type prefix; a masked 404
+# (vite preview serves index.html, HTTP 200 text/html, for any missing path)
+# fails the expected-type check.
+BUILD_ASSET_PROBES: dict[str, str] = {
+    "vendor/gameui/themes/dark-fantasy.css": "text/css",
+    "vendor/gameui/themes/fonts/Cinzel.ttf": "font/",
+    "vendor/gameui/themes/dark-fantasy-assets/panel-bg.webp": "image/",
+    "assets/icons/icon-attack.png": "image/",
+}
 
 # Each placeholder screen, in capture order. (step name, baseline filename).
 # New screens (spec 02+) append here.
@@ -135,6 +163,54 @@ def start_dev_server(port: int) -> subprocess.Popen:
 
 
 # =============================================================================
+# Build + preview-server lifecycle (built-output acceptance gate)
+# =============================================================================
+
+
+def run_build() -> None:
+    """Run `npm run build` (prebuild -> check:public -> tsc -> vite build) and
+    fail loudly with the tool output if it does not succeed. The build is the
+    thing under test in --build mode, so a build failure must abort the gate."""
+    print("BUILD: npm run build")
+    result = subprocess.run(
+        ["npm", "run", "build"],
+        cwd=str(REPO_ROOT),
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        print("BUILD FAILED:")
+        sys.stdout.write(result.stdout)
+        sys.stderr.write(result.stderr)
+        raise RuntimeError("npm run build failed")
+
+
+def start_preview_server(port: int) -> subprocess.Popen:
+    """Start `vite preview` serving dist/ under BASE_PATH and block until the
+    app responds. Binds 127.0.0.1 like the dev server."""
+    env = os.environ.copy()
+    proc = subprocess.Popen(
+        ["node", "node_modules/vite/bin/vite.js", "preview", "--port", str(port), "--strictPort"],
+        cwd=str(REPO_ROOT),
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        env=env,
+    )
+    import urllib.request
+
+    base = f"http://127.0.0.1:{port}{BASE_PATH}"
+    for _ in range(60):
+        if proc.poll() is not None:
+            raise RuntimeError("Preview server exited early")
+        try:
+            with urllib.request.urlopen(base, timeout=1):
+                return proc
+        except Exception:
+            time.sleep(0.25)
+    raise RuntimeError("Preview server did not become ready")
+
+
+# =============================================================================
 # Capture + verify helpers
 # =============================================================================
 
@@ -168,6 +244,23 @@ def assert_framework(page: Page, step: str, errors: list[str]) -> None:
     if page.locator(selector).count() == 0:
         errors.append(f"framework check failed: {step} missing {selector}")
         print(f"    FRAMEWORK-FAIL {step}: {selector}")
+
+
+def assert_dark_fantasy_skin(page: Page, errors: list[str]) -> None:
+    """Prove the dark-fantasy preset actually loaded from the build. dark-fantasy
+    .css overrides --gui-bg to #0c0a08 (tokens.css default is #020617), so the
+    computed token resolves to the dark-fantasy value only when the stylesheet
+    loaded. An empty or token-default value means the skin 404'd in the build."""
+    bg = page.evaluate(
+        "() => getComputedStyle(document.documentElement).getPropertyValue('--gui-bg').trim()"
+    )
+    if bg.lower() != DARK_FANTASY_BG:
+        errors.append(
+            f"dark-fantasy skin not applied: --gui-bg={bg!r} (expected {DARK_FANTASY_BG})"
+        )
+        print(f"    SKIN-FAIL     --gui-bg={bg!r}")
+    else:
+        print(f"    SKIN-OK       --gui-bg={bg}")
 
 
 def sha1_of(path: Path) -> str:
@@ -251,6 +344,43 @@ def walk(page: Page, captured: set[str], errors: list[str]) -> None:
         )
 
 
+def walk_build(page: Page, errors: list[str]) -> set[str]:
+    """Built-output walk: drive the real CampaignStepper through the same advance
+    buttons as `walk`, asserting the GameUI component renders on each stepper
+    screen, but capturing nothing (the visual baselines stay dev-only). The
+    terminal game-over and DEV-only card-gallery screens are unreachable from a
+    production build (their hooks are DEV-gated), so this covers WALK_SCREENS
+    only — which is enough to exercise every asset family (stylesheets, fonts,
+    theme webp, card icons) the skin depends on. Returns the captured set."""
+    captured: set[str] = set()
+    for _ in range(MAX_ADVANCES):
+        name = current_screen(page)
+        if name is not None and name in WALK_SCREENS and name not in captured:
+            page.wait_for_timeout(SETTLE_MS)
+            assert_framework(page, name, errors)
+            captured.add(name)
+            print(f"    screen ok    {name}")
+
+        if WALK_SCREENS.issubset(captured):
+            return captured
+
+        btn = page.query_selector("[data-advance]")
+        if btn is None or not btn.is_visible():
+            return captured
+
+        before = current_nonce(page)
+        btn.click()
+        page.wait_for_function(
+            "(prev) => {"
+            "  const el = document.querySelector('[data-render]');"
+            "  return el !== null && el.getAttribute('data-render') !== prev;"
+            "}",
+            arg=before,
+            timeout=8000,
+        )
+    return captured
+
+
 def capture_game_over(page: Page, captured: set[str], errors: list[str]) -> None:
     """Reach the terminal game-over screen via the dev hook, which drives a
     fresh stepper to defeat through the real CampaignStepper API."""
@@ -326,11 +456,137 @@ def is_off_origin(url: str, origin: str) -> bool:
 
 
 # =============================================================================
+# Built-output acceptance gate
+# =============================================================================
+
+
+def run_build_mode() -> int:
+    """Built-output acceptance gate: build, serve dist/ via vite preview, walk
+    the stepper screens, and assert (1) the dark-fantasy skin is applied, (2)
+    zero asset requests return 4xx/5xx, (3) zero non-origin requests, and (4)
+    zero console/page errors. The dev-mode capture stays separate; this mode
+    captures no screenshots — it is a pass/fail gate proving the build, not just
+    the dev server, serves the skin."""
+    errors: list[str] = []
+    failed_responses: list[tuple[int, str]] = []
+    off_origin: list[str] = []
+
+    try:
+        run_build()
+    except RuntimeError as exc:
+        print(f"\nFAIL: {exc}")
+        return 1
+
+    port = free_port()
+    base_url = f"http://127.0.0.1:{port}{BASE_PATH}"
+    origin = f"127.0.0.1:{port}"
+    server = start_preview_server(port)
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            context = browser.new_context(viewport=VIEWPORT)
+            page = context.new_page()
+
+            page.on(
+                "console",
+                lambda m: errors.append(f"console.{m.type}: {m.text}") if m.type == "error" else None,
+            )
+            page.on("pageerror", lambda e: errors.append(f"pageerror: {e}"))
+            # Asset gate (spec literal): fail on any 4xx/5xx response. Under
+            # vite preview a missing asset is masked as HTTP 200 text/html (SPA
+            # fallback), so presence is proven separately by the content-type
+            # probes below; this listener backstops real 4xx/5xx (e.g. under a
+            # strict static server in the later publish step).
+            page.on(
+                "response",
+                lambda r: failed_responses.append((r.status, r.url)) if r.status >= 400 else None,
+            )
+            page.on("requestfinished", lambda r: off_origin.append(r.url) if is_off_origin(r.url, origin) else None)
+            page.on("requestfailed", lambda r: off_origin.append(f"FAILED {r.url}"))
+
+            page.goto(base_url, wait_until="networkidle")
+            page.wait_for_selector("[data-screen='main-menu']", timeout=15000)
+            page.evaluate("document.fonts.ready")
+            page.wait_for_timeout(400)
+
+            assert_dark_fantasy_skin(page, errors)
+            captured = walk_build(page, errors)
+
+            # Explicitly fetch a representative of every asset family (skin CSS,
+            # font, theme webp, card icon) from the preview and assert each
+            # returns its expected media type — not text/html, which is what
+            # vite preview's SPA fallback serves for a missing file. These are
+            # not otherwise exercised by the walk (no production screen renders
+            # cards yet, and fonts load lazily), so this is the deterministic
+            # proof that the build serves the full asset set.
+            probe_results = page.evaluate(
+                """async (spec) => {
+                    const out = {};
+                    for (const p of Object.keys(spec.probes)) {
+                        const r = await fetch(spec.base + p);
+                        out[p] = [r.status, r.headers.get('content-type') || ''];
+                    }
+                    return out;
+                }""",
+                {"base": base_url, "probes": BUILD_ASSET_PROBES},
+            )
+            for asset_path, expected_prefix in BUILD_ASSET_PROBES.items():
+                status, ctype = probe_results[asset_path]
+                ok = status == 200 and expected_prefix in (ctype or "").lower() and "text/html" not in (ctype or "").lower()
+                if ok:
+                    print(f"    ASSET-OK      {asset_path} -> {status} {ctype}")
+                else:
+                    errors.append(f"asset probe failed: {asset_path} -> HTTP {status} {ctype} (expected {expected_prefix}*)")
+                    print(f"    ASSET-FAIL    {asset_path} -> {status} {ctype}")
+            browser.close()
+
+        missing = WALK_SCREENS - captured
+        if missing:
+            errors.append(f"build walk did not reach: {sorted(missing)}")
+            print(f"    MISSING      {sorted(missing)}")
+    finally:
+        server.terminate()
+        try:
+            server.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            server.kill()
+
+    # Asset acceptance check — the core of the gate.
+    if failed_responses:
+        print(f"\nASSETS: {len(failed_responses)} failed request(s) — FAIL:")
+        for status, url in failed_responses[:20]:
+            print(f"  {status}  {url}")
+        errors.append("failed asset requests (4xx/5xx)")
+    else:
+        print("\nASSETS: zero failed requests")
+
+    # Network self-containment check.
+    if off_origin:
+        print(f"\nNETWORK: {len(off_origin)} non-origin request(s) — FAIL:")
+        for url in off_origin[:20]:
+            print(f"  {url}")
+        errors.append("non-origin network requests")
+    else:
+        print("\nNETWORK: zero non-origin requests")
+
+    if errors:
+        print(f"\nFAIL: {len(errors)} failure(s)")
+        for e in errors[:30]:
+            print(f"  - {e}")
+        return 1
+
+    print("\nbuild gate green")
+    return 0
+
+
+# =============================================================================
 # Main
 # =============================================================================
 
 
 def main() -> int:
+    if BUILD_MODE:
+        return run_build_mode()
     BASELINE_DIR.mkdir(parents=True, exist_ok=True)
     port = free_port()
     base_url = f"http://127.0.0.1:{port}/"
