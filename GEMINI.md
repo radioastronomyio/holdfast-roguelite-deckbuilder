@@ -3,7 +3,7 @@
 ## Project Overview
 **Holdfast** is a browser-based roguelite deckbuilder characterized by a finite campaign and a universal modifier engine. The game is built using a dual-stack architecture:
 - **Simulation (Python):** A robust Monte Carlo simulation engine used for balance validation, procedural generation testing, and AI heuristic evaluation.
-- **Frontend (React/TypeScript):** A web-based interface for the playable game, designed to consume the same data and logic rules as the simulation.
+- **Frontend (TypeScript/GameUI):** A full-DOM web interface on the dark-fantasy GameUI preset, designed to consume the same data and logic rules as the simulation.
 
 The project emphasizes spec-driven development, utilizing OpenSpec and AI-assisted workflows. All game mechanics (combat, hazards, upgrades) resolve through a shared 5-stat model (HP, Power, Speed, Defense, Energy).
 
@@ -14,7 +14,7 @@ The project emphasizes spec-driven development, utilizing OpenSpec and AI-assist
     - **Engine:** Pure-function resolver for combat and encounters.
     - **Generation:** Seeded RNG-based procedural generation for characters and regions.
     - **Agents:** AI heuristics (Aggressive, Defensive, Balanced) for Monte Carlo analysis.
-- **Frontend (`game/`):** React with Vite and TypeScript. Porting logic from the Python simulation to TypeScript (`game/src/sim/`).
+- **Frontend (`game/`):** Full-DOM GameUI (dark-fantasy) with Vite and TypeScript. A vendored GameUI framework copy (`vendor/gameui/`) is the single styling source; a hand-rolled vanilla DOM screen router drives the browser-safe simulation ported to TypeScript (`game/src/sim/`).
 - **Development Tooling:** OpenSpec for specification management.
 
 ## Building and Running
@@ -34,7 +34,7 @@ The project emphasizes spec-driven development, utilizing OpenSpec and AI-assist
   python scripts/run_m3_analysis.py
   ```
 
-### Frontend (React)
+### Frontend (GameUI / TypeScript)
 - **Prerequisites:** Node.js (v18+ recommended)
 - **Installation:**
   ```bash

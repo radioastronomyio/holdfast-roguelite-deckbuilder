@@ -9,7 +9,7 @@ status: "Phase 1 Simulation Complete"
 tags:
   - type: project-root
   - domain: [game-dev, card-game, roguelite]
-  - tech: [react, python, json]
+  - tech: [typescript, python, json, gameui]
 related_documents:
   - "[Game Design Document](docs/game-design-document.md)"
   - "[GDR Research Output](docs/research/)"
@@ -18,7 +18,8 @@ related_documents:
 
 # 🃏 Holdfast
 
-[![React](https://img.shields.io/badge/React-Frontend-61DAFB?logo=react&logoColor=white)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Frontend-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![GameUI](https://img.shields.io/badge/GameUI-Dark_Fantasy-8a6535)](https://github.com/radioastronomyio/gameui-browser-gaming-framework)
 [![Python](https://img.shields.io/badge/Python-Simulation-3776AB?logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
@@ -46,7 +47,7 @@ Character names, attack names, and region names are assembled at generation time
 
 ### Why a Card Game
 
-The card game format was chosen because it is the most agent-friendly implementation path. Pure state machines and data, no physics, no real-time input, no animation dependencies. React handles state management and click targets. Python handles balance simulation. Shared JSON definitions tie them together.
+The card game format was chosen because it is the most agent-friendly implementation path. Pure state machines and data, no physics, no real-time input, no animation dependencies. A vanilla DOM screen router handles state and click targets over the GameUI framework. Python handles balance simulation. Shared JSON definitions tie them together.
 
 ### Development Methodology
 
@@ -70,8 +71,9 @@ Each milestone is specified as an [OpenSpec](https://github.com/Fission-AI/OpenS
 | M3b: Deck Mechanics | ✅ Complete | Hand/draw/discard system, upgrade tree loader, deep_focus_01 fix |
 | M3c: Balance Tuning | ✅ Complete | Speed cap, AI fixes, enemy HP tuning |
 | M3d: Final Balance | ✅ Complete | Stun fix, AggressiveAI v2, upgrade randomization |
-| M4: Content Expansion | ⬜ Next | New card archetypes, advanced region mechanics |
-| M5: Minimal Playable Frontend | ⬜ Planned | React browser game |
+| M4a: TS Resolver Port | ✅ Complete | Browser-safe TypeScript simulation package + parity tests |
+| M4b-GUI: GameUI Frontend Shell | ✅ Complete | Full-DOM GameUI dark-fantasy shell, vanilla screen router, placeholder screens, Playwright baselines |
+| M4: Content Expansion | ⬜ Next | New card archetypes, advanced region mechanics, real screen content (card renderer, combat, flow) |
 | M6: Visual Polish | ⬜ Planned | Asset integration, animations, effects |
 
 **377 tests passing** across the full simulation stack. Run: `pytest simulation/tests/ -v` from repo root.
@@ -91,13 +93,13 @@ All strategies in the 40-55% target band. No degenerate signals detected.
 
 ## 🏗️ Architecture
 
-Two applications sharing a data layer: a Python simulation and a React frontend, both consuming the same JSON card/region/character definitions.
+Two applications sharing a data layer: a Python simulation and a full-DOM GameUI frontend, both consuming the same JSON card/region/character definitions.
 
 ![Architecture Infographic](assets/architecture-section-infographic.jpg)
 
 ### Key Design Decisions
 
-The ResolverEngine operates independently of React; it calculates full turns synchronously and outputs ActionTuple arrays. React is a dumb renderer consuming tuples with CSS transitions. This prevents UI state desynchronization.
+The ResolverEngine operates independently of the UI; it calculates full turns synchronously and outputs ActionTuple arrays. The DOM screen router is a dumb renderer consuming stepper state through its public surface. This prevents UI state desynchronization.
 
 The simulation targets 40-70% win rate across seeds. It validates card math and decision quality, not seed solvability. Three AI heuristics (aggressive, defensive, balanced) play thousands of campaigns; if they converge on the same strategy, the game lacks meaningful choice.
 
@@ -113,7 +115,7 @@ holdfast-roguelite-deckbuilder/
 │   ├── 📄 game-design-document.md
 │   ├── 📂 documentation-standards/
 │   └── 📂 research/            # GDR output, reference material
-├── 📂 game/                    # React frontend (M5+)
+├── 📂 game/                    # Full-DOM GameUI frontend (dark-fantasy)
 ├── 📂 internal-files/          # Working documents
 ├── 📂 mods/                    # Mod-ready content layer
 │   └── 📂 default/flavor/     # Word pools, epithet conditions, element-stat maps

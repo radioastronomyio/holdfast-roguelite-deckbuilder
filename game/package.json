@@ -9,15 +9,14 @@
     "prebuild": "npm run check:public",
     "build": "tsc -p tsconfig.json && vite build",
     "dev": "vite --host 0.0.0.0",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:screens": "python3 tests/capture.py",
+    "test:screens:check": "python3 tests/capture.py --check"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",
     "typescript": "^5.8.3",
     "vite": "^6.3.4",
     "vitest": "^3.1.2"
-  },
-  "dependencies": {
-    "phaser": "4.0.0"
   }
 }

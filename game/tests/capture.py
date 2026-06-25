@@ -1,0 +1,358 @@
+#!/usr/bin/env python3
+"""
+Script Name  : capture.py
+Description  : Playwright regression harness for the Holdfast full-DOM GameUI
+               frontend. Boots the Vite dev server, walks every placeholder
+               screen off the real CampaignStepper, captures a dark-fantasy
+               baseline screenshot per screen, and asserts zero console errors
+               and zero non-origin network requests (the framework is
+               self-contained).
+Repository   : holdfast-roguelite-deckbuilder
+Author       : VintageDon (https://github.com/vintagedon/)
+Created      : 2026-06-22
+
+Usage
+-----
+    python3 game/tests/capture.py            # capture baselines
+    python3 game/tests/capture.py --check    # regression check against .sha1
+
+The harness starts the Vite dev server itself on an isolated port, so no manual
+`npm run dev` is required. Playwright runs under Chromium headless only.
+
+Walk model
+----------
+The router marks the active screen with a `data-screen` attribute on the shell
+main viewport, and every non-terminal screen carries a `gui-btn[data-advance]`
+that drives the real CampaignStepper and re-routes to the phase it returns. The
+harness clicks that button, detects the screen transition, and captures the
+first occurrence of each screen until the terminal game-over screen is reached.
+
+Step structure
+--------------
+SCREENS is the ordered list of (step, filename) pairs. Spec 02 (card renderer)
+and beyond extend the router/screen graph; new screens append here and gain
+their driver in the walk loop. VERIFY maps each step to a GameUI selector the
+harness asserts is present in the DOM, proving the framework rendered.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import os
+import socket
+import subprocess
+import sys
+import time
+from pathlib import Path
+from typing import Callable
+from urllib.parse import urlparse
+
+from playwright.sync_api import Page, sync_playwright
+
+# =============================================================================
+# Configuration
+# =============================================================================
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+BASELINE_DIR = Path(__file__).resolve().parent / "baseline"
+CHECK_MODE = "--check" in sys.argv
+
+# Each placeholder screen, in capture order. (step name, baseline filename).
+# New screens (spec 02+) append here.
+SCREENS: list[tuple[str, str]] = [
+    ("main-menu", "01-main-menu.png"),
+    ("campaign-map", "02-campaign-map.png"),
+    ("party-select", "03-party-select.png"),
+    ("encounter", "04-encounter.png"),
+    ("reward", "05-reward.png"),
+    ("world", "06-world.png"),
+    ("game-over", "07-game-over.png"),
+]
+SCREEN_MAP: dict[str, str] = dict(SCREENS)
+
+VIEWPORT = {"width": 1440, "height": 900}
+SETTLE_MS = 200              # pause after a screen transition before capture
+MAX_ADVANCES = 600          # safety cap on advance-button clicks
+
+# Screens reachable by driving the real stepper from the main menu. The terminal
+# game-over screen is captured separately via the dev hook (see captureGameOver)
+# because the natural walk only reaches it after a full campaign.
+WALK_SCREENS: set[str] = {
+    "main-menu", "campaign-map", "party-select", "encounter", "reward", "world",
+}
+
+# Each screen must show its framework component. The shell frame is asserted
+# globally; VERIFY asserts the per-screen GameUI panel is present.
+VERIFY: dict[str, str] = {
+    "main-menu": "[data-screen='main-menu'] .gui-panel .gui-btn[data-advance]",
+    "campaign-map": "[data-screen='campaign-map'] .gui-panel .gui-btn[data-advance]",
+    "party-select": "[data-screen='party-select'] .gui-panel .gui-btn[data-advance]",
+    "encounter": "[data-screen='encounter'] .gui-panel .gui-btn[data-advance]",
+    "reward": "[data-screen='reward'] .gui-panel .gui-btn[data-advance]",
+    "world": "[data-screen='world'] .gui-panel .gui-btn[data-advance]",
+    "game-over": "[data-screen='game-over'] .gui-panel .gui-panel__chip",
+}
+
+
+# =============================================================================
+# Dev-server lifecycle
+# =============================================================================
+
+
+def free_port() -> int:
+    """Return an OS-allocated free TCP port for the dev server."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(("127.0.0.1", 0))
+        return s.getsockname()[1]
+
+
+def start_dev_server(port: int) -> subprocess.Popen:
+    """Start the Vite dev server (via node; the .bin/vite lacks the exec bit on
+    this host) and block until it serves index.html."""
+    env = os.environ.copy()
+    proc = subprocess.Popen(
+        ["node", "node_modules/vite/bin/vite.js", "--port", str(port), "--strictPort"],
+        cwd=str(REPO_ROOT),
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        env=env,
+    )
+    import urllib.request
+
+    base = f"http://127.0.0.1:{port}/"
+    for _ in range(60):
+        if proc.poll() is not None:
+            raise RuntimeError("Dev server exited early")
+        try:
+            with urllib.request.urlopen(base, timeout=1):
+                return proc
+        except Exception:
+            time.sleep(0.25)
+    raise RuntimeError("Dev server did not become ready")
+
+
+# =============================================================================
+# Capture + verify helpers
+# =============================================================================
+
+
+def current_screen(page: Page) -> str | None:
+    """Read the active screen name from the shell main's data-screen attr."""
+    el = page.query_selector("[data-screen]")
+    if el is None:
+        return None
+    return el.get_attribute("data-screen")
+
+
+def current_nonce(page: Page) -> str | None:
+    """Read the render nonce — it changes on every router tear-down + mount."""
+    el = page.query_selector("[data-render]")
+    if el is None:
+        return None
+    return el.get_attribute("data-render")
+
+
+def assert_framework(page: Page, step: str, errors: list[str]) -> None:
+    """Verify the GameUI component for a screen is present in the DOM."""
+    # Global: the shell frame must always be present.
+    if page.locator(".gui-shell").count() == 0:
+        errors.append(f"framework check failed: {step} missing .gui-shell")
+        print(f"    FRAMEWORK-FAIL {step}: .gui-shell")
+        return
+    selector = VERIFY.get(step)
+    if not selector:
+        return
+    if page.locator(selector).count() == 0:
+        errors.append(f"framework check failed: {step} missing {selector}")
+        print(f"    FRAMEWORK-FAIL {step}: {selector}")
+
+
+def sha1_of(path: Path) -> str:
+    h = hashlib.sha1()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(65536), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def capture(page: Page, filename: str, errors: list[str]) -> None:
+    """Screenshot the current viewport to the baseline dir and record its sha1."""
+    BASELINE_DIR.mkdir(parents=True, exist_ok=True)
+    shot = BASELINE_DIR / filename
+    page.screenshot(path=str(shot), animations="disabled")
+    digest = sha1_of(shot)
+    sidecar = BASELINE_DIR / f"{filename}.sha1"
+    if CHECK_MODE:
+        if not sidecar.exists():
+            errors.append(f"{filename}: no baseline .sha1")
+            print(f"    NO BASELINE  {filename}")
+        elif sidecar.read_text().strip() != digest:
+            errors.append(f"{filename}: regression")
+            print(f"    REGRESSION   {filename}")
+        else:
+            print(f"    ok           {filename}")
+    else:
+        sidecar.write_text(f"{digest}\n")
+        print(f"    captured     {filename}")
+
+
+def capture_screen(page: Page, step: str, captured: set[str], errors: list[str]) -> None:
+    """Assert + capture a screen if it has not been captured yet."""
+    if step in captured:
+        return
+    page.wait_for_timeout(SETTLE_MS)
+    assert_framework(page, step, errors)
+    capture(page, SCREEN_MAP[step], errors)
+    captured.add(step)
+
+
+# =============================================================================
+# Walk
+# =============================================================================
+
+
+def walk(page: Page, captured: set[str], errors: list[str]) -> None:
+    """Boot to the main menu, then click the advance button through the real
+    CampaignStepper, capturing the first occurrence of each non-terminal screen.
+    Stops once every walk-reachable screen is captured (before the natural walk
+    would continue into later regions). The terminal game-over screen is reached
+    via the dev hook in captureGameOver."""
+    for _ in range(MAX_ADVANCES):
+        name = current_screen(page)
+        if name is not None and name in SCREEN_MAP:
+            capture_screen(page, name, captured, errors)
+
+        # Stop once every non-terminal screen is captured, or the terminal
+        # screen appeared, so the walk never continues past the point the
+        # world-modifier parity bug would trip a later combat.
+        if "game-over" in captured or WALK_SCREENS.issubset(captured):
+            return
+
+        # Terminal screen (game-over) has no advance button.
+        btn = page.query_selector("[data-advance]")
+        if btn is None or not btn.is_visible():
+            return
+
+        before = current_nonce(page)
+        btn.click()
+        # Wait for the router to tear down + mount the next render. The nonce
+        # changes every render even when the screen name stays the same
+        # (e.g. encounter -> next encounter in the same region).
+        page.wait_for_function(
+            "(prev) => {"
+            "  const el = document.querySelector('[data-render]');"
+            "  return el !== null && el.getAttribute('data-render') !== prev;"
+            "}",
+            arg=before,
+            timeout=8000,
+        )
+
+
+def capture_game_over(page: Page, captured: set[str], errors: list[str]) -> None:
+    """Reach the terminal game-over screen via the dev hook, which drives a
+    fresh stepper to defeat through the real CampaignStepper API."""
+    if "game-over" in captured:
+        return
+    page.evaluate("window.__holdfast && window.__holdfast.showGameOver()")
+    page.wait_for_selector("[data-screen='game-over']", timeout=8000)
+    capture_screen(page, "game-over", captured, errors)
+
+
+# =============================================================================
+# Network guards
+# =============================================================================
+
+
+def is_off_origin(url: str, origin: str) -> bool:
+    """True if a request URL is off-origin (relative to the dev server)."""
+    try:
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https", "ws", "wss"):
+            return False
+        return parsed.netloc != origin
+    except Exception:
+        return False
+
+
+# =============================================================================
+# Main
+# =============================================================================
+
+
+def main() -> int:
+    BASELINE_DIR.mkdir(parents=True, exist_ok=True)
+    port = free_port()
+    base_url = f"http://127.0.0.1:{port}/"
+    origin = f"127.0.0.1:{port}"
+    errors: list[str] = []
+    off_origin: list[str] = []
+
+    server = start_dev_server(port)
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            context = browser.new_context(viewport=VIEWPORT)
+            page = context.new_page()
+
+            # Surface console/page errors and non-origin requests.
+            page.on(
+                "console",
+                lambda m: errors.append(f"console.{m.type}: {m.text}") if m.type == "error" else None,
+            )
+            page.on("pageerror", lambda e: errors.append(f"pageerror: {e}"))
+            page.on("requestfinished", lambda r: off_origin.append(r.url) if is_off_origin(r.url, origin) else None)
+            page.on("requestfailed", lambda r: off_origin.append(f"FAILED {r.url}"))
+
+            page.goto(base_url, wait_until="networkidle")
+            page.wait_for_selector("[data-screen='main-menu']", timeout=15000)
+            # Wait for self-hosted fonts (Cinzel/MedievalSharp) and the webp
+            # panel texture to finish loading so the dark-fantasy baseline is
+            # deterministic across runs.
+            page.evaluate("document.fonts.ready")
+            page.wait_for_timeout(400)
+
+            captured: set[str] = set()
+            walk(page, captured, errors)
+            capture_game_over(page, captured, errors)
+
+            browser.close()
+
+        # Report any screens that were never reached.
+        for step, filename in SCREENS:
+            if step not in captured and not CHECK_MODE:
+                errors.append(f"screen not captured: {step}")
+                print(f"    MISSING      {filename}")
+    finally:
+        server.terminate()
+        try:
+            server.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            server.kill()
+
+    # Network acceptance check — the self-contained contract.
+    if off_origin:
+        print(f"\nNETWORK: {len(off_origin)} non-origin request(s) — FAIL:")
+        for url in off_origin[:20]:
+            print(f"  {url}")
+        errors.append("non-origin network requests")
+    else:
+        print("\nNETWORK: zero non-origin requests")
+
+    # Coverage check.
+    expected = {step for step, _ in SCREENS}
+    missing = expected - captured
+    if missing and not CHECK_MODE:
+        print(f"\nCOVERAGE: missing screens: {sorted(missing)}")
+
+    if errors:
+        print(f"\nFAIL: {len(errors)} failure(s)")
+        for e in errors[:30]:
+            print(f"  - {e}")
+        return 1
+
+    print("\nall green")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,3 +1,3 @@
 # Frontend Systems
 
-Browser-only support systems that sit outside Phaser scenes, including local save/load and run export helpers.
+Browser-only support systems for the full-DOM frontend, including local save/load and run export helpers.

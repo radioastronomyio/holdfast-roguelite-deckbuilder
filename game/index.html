@@ -1,9 +1,25 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark-fantasy">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Holdfast</title>
+
+    <!-- GameUI load order: token contract → dark-fantasy preset → component families -->
+    <link rel="stylesheet" href="/vendor/gameui/tokens/tokens.css" />
+    <link rel="stylesheet" href="/vendor/gameui/themes/dark-fantasy.css" />
+    <link rel="stylesheet" href="/vendor/gameui/components/panels/panels.css" />
+    <link rel="stylesheet" href="/vendor/gameui/components/buttons/buttons.css" />
+    <link rel="stylesheet" href="/vendor/gameui/components/stat-displays/stat-displays.css" />
+    <link rel="stylesheet" href="/vendor/gameui/components/layout/layout.css" />
+    <link rel="stylesheet" href="/vendor/gameui/components/modals/modals.css" />
+    <link rel="stylesheet" href="/vendor/gameui/components/toasts/toasts.css" />
+    <link rel="stylesheet" href="/vendor/gameui/components/cards/cards.css" />
+    <link rel="stylesheet" href="/vendor/gameui/components/settings/settings.css" />
+    <link rel="stylesheet" href="/vendor/gameui/components/tabs/tabs.css" />
+    <link rel="stylesheet" href="/vendor/gameui/components/loading/loading.css" />
+    <link rel="stylesheet" href="/vendor/gameui/components/metrics/metrics.css" />
+
     <style>
       html,
       body {
@@ -14,7 +30,9 @@
       body {
         margin: 0;
         overflow: hidden;
-        background: #000;
+        background: var(--gui-bg);
+        color: var(--gui-text);
+        font-family: var(--gui-font-body);
       }
 
       #game-root {
