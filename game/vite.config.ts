@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: "/holdfast/",
+  base: "/",
   publicDir: "public",
   build: {
     outDir: "dist",
