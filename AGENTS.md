@@ -5,7 +5,7 @@ Entry point for AI coding agents working on this repository.
 ## Project Identity
 
 **Domain:** Game Development / Card Game / Roguelite
-**Repository:** https://github.com/radioastronomyio/holdfast-roguelite-deckbuilder
+**Repository:** https://github.com/vintagedon/holdfast-roguelite-deckbuilder
 **Purpose:** A browser-based roguelite deckbuilder where every mechanic runs on a universal modifier engine. The player conquers 6 procedurally generated regions in a finite campaign. Two applications share a data layer: a Python simulation and a full-DOM GameUI frontend, both consuming shared JSON definitions.
 
 ## Key Files
@@ -14,7 +14,7 @@ Entry point for AI coding agents working on this repository.
 |------|---------|
 | [docs/game-design-document.md](docs/game-design-document.md) | Source of truth for all mechanics, systems, and architecture |
 | [data/](data/) | Shared JSON definitions: cards, characters, regions, world deck |
-| [spec/](spec/) | Standalone milestone specs: agent execution targets |
+| `/opt/agents/repos/spec/` | Shared active milestone-spec queue; completed specs archive under its `YYYY-MM/` directories |
 | [docs/research/](docs/research/) | Gemini Deep Research output: reference material, not spec |
 
 ## Architecture
@@ -29,14 +29,14 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 
 ## Current State
 
-- **Phase:** M4b first playable; full-DOM GameUI dark-fantasy frontend (shell + placeholder screens) on the M4a TypeScript resolver port
+- **Phase:** M4b first playable; spec 06 card-system rewrite complete on the full-DOM GameUI dark-fantasy frontend
 - **GDD:** v1.1 (flavor system, tags, fixed-point arithmetic)
-- **Tests:** 367 passing (`pytest simulation/tests/` from repo root); 53 passing (`cd game && npm test`); 8 dark-fantasy screen baselines (`cd game && npm run test:screens:check`); build-output acceptance gate (`cd game && npm run test:screens:build`)
+- **Tests:** 367 passing (`pytest simulation/tests/` from repo root); 77 passing (`cd game && npm test`); 8 dark-fantasy screen baselines (`cd game && npm run test:screens:check`); build-output acceptance gate (`cd game && npm run test:screens:build`)
 - **M3a Analysis (pre-deck):** `reports/m3-analysis-pre-deck-mechanics/` archived before deck mechanics
 - **M3b Analysis (pre-M3c):** `reports/m3-analysis-pre-m3c/` archived before M3c tuning
 - **M3c Analysis (pre-M3d):** `reports/m3-analysis-pre-m3d/` archived before M3d tuning
 - **M3d Analysis (current):** `reports/m3-analysis/` 5000-seed run post all M3d changes
-- **Next work:** M4b hardening: real screen content (combat spec 04, flow screens spec 05 — both consume the spec 02 card renderer), richer reward UX, full browser QA, and a sim-side fix for the world-modifier `tags` parity gap flagged by the screen harness. The production build now serves the dark-fantasy skin (spec 03), so publish (spec 06) is a thin deploy step.
+- **Next work:** Operator approval of the spec-06 card review, then combat spec 04 followed by flow-screens spec 05. Both consume the frozen `createHoldfastCard` contract delivered here.
 
 ### M3d Key Findings (5000 seeds x 3 strategies, post-stun-fix-and-AI-rework)
 
@@ -92,19 +92,20 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 | Milestone | Spec | Delivered |
 |-----------|------|-----------|
 | **M1** | `openspec/changes/archive/2026-03-17-m1-data-schemas/` | Pydantic models, JSON data files, 95 tests |
-| **M2a** | `spec/m2a-resolver-combat-spec.md` | Stat resolver, CT turn order, encounter resolution |
-| **M2b** | `spec/m2b-procedural-generation-spec.md` | Character/enemy/region/encounter generators |
-| **M2c** | `spec/m2c-campaign-loop-spec.md` | Data loader, campaign state, full macro loop |
-| **M2d** | `spec/m2d-ai-heuristics-spec.md` | 3 player AIs, enhanced enemy AI, Monte Carlo runner |
+| **M2a** | `/opt/agents/repos/spec/archived-manual/2026-03-17-holdfast-spec-01-m2a-resolver-combat-spec.md` | Stat resolver, CT turn order, encounter resolution |
+| **M2b** | `/opt/agents/repos/spec/archived-manual/2026-03-17-holdfast-spec-02-m2b-procedural-generation-spec.md` | Character/enemy/region/encounter generators |
+| **M2c** | `/opt/agents/repos/spec/archived-manual/2026-03-17-holdfast-spec-03-m2c-campaign-loop-spec.md` | Data loader, campaign state, full macro loop |
+| **M2d** | `/opt/agents/repos/spec/archived-manual/2026-03-17-holdfast-spec-04-m2d-ai-heuristics-spec.md` | 3 player AIs, enhanced enemy AI, Monte Carlo runner |
 | **M3a** | `staging/m3a-balance-analysis-spec.md` | Telemetry, analysis package, 5000-seed run, balance report |
 | **M3b** | `staging/m3b-deck-mechanics-spec.md` | Deck system, upgrade tree loader, deep_focus_01 fix |
 | **M3c** | `staging/m3c-balance-tuning-spec.md` | Speed cap, AI fixes, enemy HP tuning |
 | **M3d** | (inline fixes) | Stun fix, AggressiveAI v2, upgrade randomization |
 | **M4a** | (TypeScript resolver port) | Browser-safe sim package, parity fixtures, seeded RNG |
-| **M4b** | `spec/m4b-phaser-frontend-spec-v3.md` | Phaser 4 first playable, steppers, scenes, Pixel Quest public prep |
-| **M4b-GUI** | `spec/2026-06-22-holdfast-spec-01-gameui-vendor-dom-shell.md` | GameUI vendored (dark-fantasy), Phaser removed, vanilla DOM screen router + placeholder screens, Playwright baselines |
-| **M4b-GUI-02** | `spec/2026-06-22-holdfast-spec-02-card-renderer.md` | Data-driven `createHoldfastCard` over `createCard` (energy badge, effect icons, accent tint, upgrade pips, shine, inspect modal), RPG icon staging, DEV-gated card-gallery route + 8th dark-fantasy baseline |
-| **M4b-GUI-03** | `spec/2026-06-22-holdfast-spec-03-asset-foundation-build-correctness.md` | Stage vendored `game/vendor/gameui/` into gitignored `public/vendor/` so `vite build` serves the dark-fantasy skin; removed dead Pixel Quest staging; vendored card-icon subset in-repo (`game/assets/card-icons/`) for a hermetic build; `check-public` guards each staged family; `capture.py --build` build-output acceptance gate (build + `vite preview` + skin/asset/network assertions) |
+| **M4b** | `/opt/agents/repos/spec/archived-manual/2026-05-01-holdfast-spec-04-m4b-phaser-frontend-spec-v3.md` | Phaser 4 first playable, steppers, scenes, Pixel Quest public prep |
+| **M4b-GUI** | `/opt/agents/repos/spec/2026-06/2026-06-22-holdfast-spec-01-gameui-vendor-dom-shell.md` | GameUI vendored (dark-fantasy), Phaser removed, vanilla DOM screen router + placeholder screens, Playwright baselines |
+| **M4b-GUI-02** | `/opt/agents/repos/spec/2026-06/2026-06-22-holdfast-spec-02-card-renderer.md` | Data-driven `createHoldfastCard` over `createCard` (energy badge, effect icons, accent tint, upgrade pips, shine, inspect modal), RPG icon staging, DEV-gated card-gallery route + 8th dark-fantasy baseline |
+| **M4b-GUI-03** | `/opt/agents/repos/spec/2026-06/2026-06-22-holdfast-spec-03-asset-foundation-build-correctness.md` | Stage vendored `game/vendor/gameui/` into gitignored `public/vendor/` so `vite build` serves the dark-fantasy skin; removed dead Pixel Quest staging; vendored card-icon subset in-repo (`game/assets/card-icons/`) for a hermetic build; `check-public` guards each staged family; `capture.py --build` build-output acceptance gate (build + `vite preview` + skin/asset/network assertions) |
+| **M4b-GUI-06** | `/opt/agents/repos/spec/2026-08/2026-08-10-holdfast-spec-06-card-system-rewrite.md` | Frozen card contract, six-region deckbuilder frame, parametric SVG art, SVG cost badges and upgrade gems, full 21-card gallery assertions/baseline, root-path build gate, and scoped publisher |
 
 ## Critical: STAT_SCALE Awareness
 
@@ -158,8 +159,7 @@ holdfast-roguelite-deckbuilder/
 │   ├── generation/                 # Procedural generators
 │   ├── campaign/                   # Campaign loop
 │   ├── agents/                     # AI heuristics and Monte Carlo runner
-│   └── tests/                      # 377 tests
-├── spec/                           # Milestone specs (agent execution targets)
+│   └── tests/                      # 367 tests
 ├── staging/                        # Staged work (gitignored)
 ├── AGENTS.md                       # This file
 ├── CLAUDE.md                       # Pointer to AGENTS.md
@@ -178,7 +178,7 @@ holdfast-roguelite-deckbuilder/
 ## Session Pattern
 
 1. Read this file
-2. Read the spec for the milestone you're working on (in `spec/`)
+2. Read the spec for the milestone you're working on from `/opt/agents/repos/spec/`
 3. Read the GDD if working on mechanics or data schemas
 4. Check directory READMEs for the area you're working in
 5. Do work

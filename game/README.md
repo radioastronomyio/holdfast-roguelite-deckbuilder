@@ -19,7 +19,7 @@ related_documents:
 
 # Game Frontend
 
-Full-DOM GameUI dark-fantasy frontend for Holdfast. A pinned copy of the [GameUI](https://github.com/radioastronomyio/gameui-browser-gaming-framework) zero-build-step framework is vendored under `vendor/gameui/`; the dark-fantasy preset is the single styling source. A hand-rolled vanilla DOM screen router (`src/ui/router.ts`) exposes `showScreen(name, state)` over one mount node and transitions between placeholder screens, one per `CampaignStepperPhase`, each rendered inside GameUI chrome. There is no canvas, no game-engine runtime, and no UI-framework dependency; the frontend is a renderer and input shell over the browser-safe TypeScript simulation in `src/sim/`.
+Full-DOM GameUI dark-fantasy frontend for Holdfast. A pinned copy of the [GameUI](https://github.com/vintagedon/gameui-browser-gaming-framework) zero-build-step framework is vendored under `vendor/gameui/`; the dark-fantasy preset is the single styling source. A hand-rolled vanilla DOM screen router (`src/ui/router.ts`) exposes `showScreen(name, state)` over one mount node and transitions between placeholder screens, one per `CampaignStepperPhase`, each rendered inside GameUI chrome. There is no canvas, no game-engine runtime, and no UI-framework dependency; the frontend is a renderer and input shell over the browser-safe TypeScript simulation in `src/sim/`.
 
 ## Commands
 

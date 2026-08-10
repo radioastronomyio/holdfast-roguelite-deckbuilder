@@ -4,8 +4,8 @@ title: "Holdfast: Browser-Based Roguelite Deckbuilder"
 description: "A finite-campaign roguelite deckbuilder where everything runs on a universal modifier engine"
 author: "CrainBramp"
 date: "2026-03-29"
-version: "0.3.0"
-status: "Phase 1 Simulation Complete"
+version: "0.4.0"
+status: "M4b First Playable — Card System Complete"
 tags:
   - type: project-root
   - domain: [game-dev, card-game, roguelite]
@@ -19,7 +19,7 @@ related_documents:
 # 🃏 Holdfast
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-Frontend-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![GameUI](https://img.shields.io/badge/GameUI-Dark_Fantasy-8a6535)](https://github.com/radioastronomyio/gameui-browser-gaming-framework)
+[![GameUI](https://img.shields.io/badge/GameUI-Dark_Fantasy-8a6535)](https://github.com/vintagedon/gameui-browser-gaming-framework)
 [![Python](https://img.shields.io/badge/Python-Simulation-3776AB?logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
@@ -73,10 +73,12 @@ Each milestone is specified as an [OpenSpec](https://github.com/Fission-AI/OpenS
 | M3d: Final Balance | ✅ Complete | Stun fix, AggressiveAI v2, upgrade randomization |
 | M4a: TS Resolver Port | ✅ Complete | Browser-safe TypeScript simulation package + parity tests |
 | M4b-GUI: GameUI Frontend Shell | ✅ Complete | Full-DOM GameUI dark-fantasy shell, vanilla screen router, placeholder screens, Playwright baselines |
-| M4: Content Expansion | ⬜ Next | New card archetypes, advanced region mechanics, real screen content (card renderer, combat, flow) |
+| M4b-GUI-06: Card System Rewrite | ✅ Complete | Frozen adapter contract, data-driven SVG frame/art/badges/gems, 21-card gallery, build/publish hardening |
+| M4b-GUI-04: Combat Screen | ⬜ Next | Compose the finished card system into the stepper-driven combat surface after operator approval |
+| M4b-GUI-05: Flow Screens | ⬜ Queued | Complete the remaining campaign-flow screens after combat |
 | M6: Visual Polish | ⬜ Planned | Asset integration, animations, effects |
 
-**377 tests passing** across the full simulation stack. Run: `pytest simulation/tests/ -v` from repo root.
+**367 simulation tests and 77 frontend tests passing**, plus 8 Playwright dark-fantasy baselines and the production build-output gate. Run `pytest simulation/tests/ -v` from repo root and `npm test` from `game/`.
 
 ### M3d Balance Results (5000 seeds x 3 strategies)
 
@@ -129,14 +131,15 @@ holdfast-roguelite-deckbuilder/
 │   ├── 📂 generation/         # Procedural generators (M2b)
 │   ├── 📂 campaign/           # Campaign loop (M2c)
 │   ├── 📂 agents/             # AI heuristics and Monte Carlo runner (M2d)
-│   └── 📂 tests/              # 377 tests
-├── 📂 spec/                    # Standalone milestone specs (agent execution targets)
+│   └── 📂 tests/              # 367 tests
 ├── 📂 staging/                 # Staged work
 ├── 📄 AGENTS.md                # Agent context and session pattern
 ├── 📄 CLAUDE.md                # Pointer to AGENTS.md
 ├── 📄 README.md                # This file
 └── 📄 pyproject.toml
 ```
+
+Active implementation specs live in the shared queue at `/opt/agents/repos/spec/`, outside this repository.
 
 ---
 

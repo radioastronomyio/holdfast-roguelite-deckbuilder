@@ -11,20 +11,20 @@ tags:
   - domain: [design-system, vendoring, dependencies]
   - tech: [css, javascript]
 related_documents:
-  - "[Framework Source Layer](https://github.com/radioastronomyio/gameui-browser-gaming-framework)"
-  - "[Holdfast Spec 01: GameUI Vendor + Full-DOM Shell](../../spec/2026-06-22-holdfast-spec-01-gameui-vendor-dom-shell.md)"
+  - "[Framework Source Layer](https://github.com/vintagedon/gameui-browser-gaming-framework)"
+  - "[Holdfast Spec 01: GameUI Vendor + Full-DOM Shell](/opt/agents/repos/spec/2026-06/2026-06-22-holdfast-spec-01-gameui-vendor-dom-shell.md)"
 ---
 -->
 
 # Vendored GameUI Framework
 
-Holdfast is a full-DOM consumer of the [GameUI](https://github.com/radioastronomyio/gameui-browser-gaming-framework) zero-build-step UI framework on the dark-fantasy preset. This directory is a pinned, verbatim copy of the framework's consumable `ui/` tree. It is the **only** runtime dependency Holdfast has on the framework; the game never references the framework repository by path at runtime. To retheme Holdfast, swap the preset `<link>` in `index.html` (see `themes/`).
+Holdfast is a full-DOM consumer of the [GameUI](https://github.com/vintagedon/gameui-browser-gaming-framework) zero-build-step UI framework on the dark-fantasy preset. This directory is a pinned, verbatim copy of the framework's consumable `ui/` tree. It is the **only** runtime dependency Holdfast has on the framework; the game never references the framework repository by path at runtime. To retheme Holdfast, swap the preset `<link>` in `index.html` (see `themes/`).
 
 ## Provenance
 
 | Field | Value |
 |-------|-------|
-| Source repository | `https://github.com/radioastronomyio/gameui-browser-gaming-framework` |
+| Source repository | `https://github.com/vintagedon/gameui-browser-gaming-framework` |
 | Source path (at copy time) | `/opt/agents/repos/gameui-browser-gaming-framework/ui/` |
 | Framework version | 1.0 (from `ui/README.md` frontmatter, dated 2026-06-21) |
 | Copy date | 2026-06-22 |
