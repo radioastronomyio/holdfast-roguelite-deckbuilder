@@ -73,7 +73,7 @@ DARK_FANTASY_BG = "#0c0a08"
 
 # One representative of each asset family the dark-fantasy skin and card
 # renderer depend on, probed explicitly from the preview (see run_build_mode).
-# Fonts and card icons are not requested by any production screen during the
+# Fonts and card SVG symbols are not requested by any production screen during the
 # walk (the card gallery is DEV-only; combat lands in spec 04) and @font-face
 # files load lazily, so the walk's response stream alone cannot prove they are
 # served. Each maps asset path -> acceptable content-type prefix; a masked 404
@@ -352,7 +352,7 @@ def walk_build(page: Page, errors: list[str]) -> set[str]:
     terminal game-over and DEV-only card-gallery screens are unreachable from a
     production build (their hooks are DEV-gated), so this covers WALK_SCREENS
     only — which is enough to exercise every asset family (stylesheets, fonts,
-    theme webp, card icons) the skin depends on. Returns the captured set."""
+    theme webp, card SVG symbols) the skin depends on. Returns the captured set."""
     captured: set[str] = set()
     for _ in range(MAX_ADVANCES):
         name = current_screen(page)

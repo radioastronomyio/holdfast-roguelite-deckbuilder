@@ -2,7 +2,7 @@
  * DOM tests for the Holdfast card renderer factory.
  *
  * Covers the Deliverable 2 contract (energy badge, per-modifier effect rows,
- * operation-aware value formatting, accent precedence, tier pips, shine, and
+ * operation-aware value formatting, accent precedence, upgrade gem, shine, and
  * selectable/disabled/onSelect pass-through) and the Deliverable 3 contract
  * (inspect opens a detail modal without toggling selection).
  *
