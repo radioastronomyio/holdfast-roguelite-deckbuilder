@@ -1,0 +1,131 @@
+/* Holdfast's six-region deckbuilder composition over the vendored gui-card. */
+
+.hf-card {
+  inline-size: var(--hf-card-width, 15rem);
+  aspect-ratio: 744 / 1038;
+  min-block-size: 0;
+  overflow: hidden;
+  gap: var(--gui-space-sm);
+  padding: var(--gui-space-md);
+  border-color: var(--card-accent);
+  background: var(--gui-surface);
+  border-radius: var(--gui-radius-md);
+  box-shadow: var(--gui-shadow-md);
+}
+
+.hf-card .gui-card__header {
+  min-block-size: calc(var(--gui-space-xl) + var(--gui-space-md));
+  align-items: flex-start;
+}
+
+.hf-card .gui-card__title {
+  padding-inline-end: var(--gui-space-sm);
+  color: var(--gui-text);
+  font-size: var(--gui-font-size-md);
+  line-height: 1.15;
+}
+
+.hf-card .gui-card__tag.hf-card__cost {
+  flex: 0 0 auto;
+  inline-size: calc(var(--gui-space-xl) + var(--gui-space-sm));
+  block-size: calc(var(--gui-space-xl) + var(--gui-space-sm));
+  padding: 0;
+  justify-content: center;
+  border-radius: var(--gui-radius-pill);
+  border-color: var(--card-accent);
+  background: var(--gui-surface-strong);
+  color: var(--card-accent);
+  box-shadow: var(--gui-shadow-sm);
+}
+
+.hf-card .gui-card__body {
+  flex: 1 1 auto;
+  min-block-size: 0;
+}
+
+.hf-card__content {
+  display: grid;
+  grid-template-rows: minmax(0, 1.75fr) auto minmax(0, 1fr);
+  gap: var(--gui-space-sm);
+  block-size: 100%;
+}
+
+.hf-card__art {
+  display: grid;
+  place-items: center;
+  min-block-size: 7rem;
+  overflow: hidden;
+  border: var(--gui-border-width) solid var(--card-accent);
+  border-radius: var(--gui-radius-sm);
+  background: var(--gui-surface-strong);
+  color: var(--card-accent);
+  font-family: var(--gui-font-display);
+  font-size: var(--gui-font-size-xl);
+  box-shadow: inset var(--gui-shadow-sm);
+}
+
+.hf-card__type {
+  padding-block: var(--gui-space-xs);
+  border-block: var(--gui-border-width) solid var(--gui-border);
+  color: var(--card-accent);
+  font-family: var(--gui-font-display);
+  font-size: var(--gui-font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.hf-card__rules {
+  align-self: stretch;
+  min-block-size: 0;
+  padding: var(--gui-space-xs);
+  overflow: hidden;
+  border-radius: var(--gui-radius-sm);
+  background: var(--gui-surface);
+}
+
+.hf-card .gui-card__footer {
+  margin-block-start: 0;
+  padding-block-start: var(--gui-space-xs);
+}
+
+.hf-card__footer {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: var(--gui-space-xs);
+  inline-size: 100%;
+}
+
+.hf-card__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--gui-space-xs);
+  border: var(--gui-border-width) solid var(--card-accent);
+  border-radius: var(--gui-radius-sm);
+  background: var(--gui-surface-strong);
+  color: var(--gui-text);
+}
+
+.hf-card__stat-label {
+  color: var(--gui-text-muted);
+  font-family: var(--gui-font-display);
+  font-size: var(--gui-font-size-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.hf-card__stat-value {
+  color: var(--card-accent);
+  font-family: var(--gui-font-display);
+  font-size: var(--gui-font-size-lg);
+}
+
+.hf-card__tools {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gui-space-xs);
+}

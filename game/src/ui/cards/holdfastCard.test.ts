@@ -59,6 +59,17 @@ describe("createHoldfastCard rendering", () => {
     expect(control.el.querySelectorAll(".hf-card__effect")).toHaveLength(1);
   });
 
+  it("populates the six-region deckbuilder frame from card data", () => {
+    const control = render(byId("arcane_strike_01"));
+
+    expect(control.el.querySelector(".hf-card__cost")?.textContent).toBe("2");
+    expect(control.el.querySelector(".hf-card__art")).not.toBeNull();
+    expect(control.el.querySelector(".hf-card__type")?.textContent).toBe("Attack · Magic");
+    expect(control.el.querySelector(".hf-card__rules")?.textContent).toContain("-15 HP");
+    expect(control.el.querySelector(".hf-card__attack")?.textContent).toContain("15");
+    expect(control.el.querySelector(".hf-card__guard")?.textContent).toContain("0");
+  });
+
   it("shows FLAT_SUB HP as the display-scale damage value (15, not 15000)", () => {
     const control = render(byId("arcane_strike_01"));
     const value = control.el.querySelector(".hf-card__effect-value")?.textContent ?? "";

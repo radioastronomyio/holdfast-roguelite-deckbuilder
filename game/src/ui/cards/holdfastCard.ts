@@ -19,41 +19,16 @@
  * @module ui/cards/holdfastCard
  */
 
-import { Operation, Target } from "../../sim/types";
+import { Operation, Stat, Target } from "../../sim/types";
 import type { Card, Modifier, UpgradeTree } from "../../sim/types";
 import { createCard, createModal } from "../gameui";
-import type { CardAccent, CardControl, ModalAccent, ModalControl } from "../gameui";
+import type { CardAccent, ModalAccent, ModalControl } from "../gameui";
+import type { CreateHoldfastCard } from "./contract";
 import { accentForCard, iconUrl, resolveEffectIcon } from "./iconMap";
+import "./card.css";
 import "./cards.css";
 
-export interface HoldfastCardOptions {
-  /** Mark the card rare (rainbow shine overlay). Default false. */
-  rare?: boolean;
-  /** Pass-through: make the card focusable + toggle .is-selected. */
-  selectable?: boolean;
-  /** Pass-through: initial selected state. */
-  selected?: boolean;
-  /** Pass-through: initial disabled state (e.g. unaffordable energy). */
-  disabled?: boolean;
-  /** Pass-through: click handler fired on click. */
-  onClick?: (event: MouseEvent, ctx: { el: HTMLElement }) => void;
-  /** Pass-through: fired when the selection state changes. */
-  onSelect?: (selected: boolean) => void;
-  /**
-   * Upgrade tree for this card (from upgrade-trees.json), shown in the inspect
-   * detail view. Optional; when absent the inspect view lists no paths.
-   */
-  upgradeTree?: UpgradeTree;
-}
-
-export type HoldfastCardControl = CardControl & {
-  /** Toggle the shine overlay (rare flag). */
-  setRare: (rare: boolean) => void;
-  /** Map an energy-affordability decision to the underlying disabled state. */
-  setEnergyAffordable: (affordable: boolean) => void;
-  /** Open the inspect detail modal programmatically. */
-  openInspect: () => void;
-};
+export type { HoldfastCardControl, HoldfastCardOptions } from "./contract";
 
 /** Maximum upgrade tier rendered as pips. */
 const MAX_PIPS = 3;
@@ -100,23 +75,31 @@ function formatDuration(duration: number): string {
 /**
  * Create a Holdfast deckbuilder card from a `Card` definition.
  */
-export function createHoldfastCard(card: Card, opts: HoldfastCardOptions = {}): HoldfastCardControl {
+export const createHoldfastCard: CreateHoldfastCard = (card, opts = {}) => {
   const accent = accentForCard(card.tags);
   const rare = !!opts.rare;
   const upgraded = card.upgrade_tier > 0;
 
-  const body = document.createElement("div");
-  body.className = "hf-card__effects";
+  const rules = document.createElement("div");
+  rules.className = "hf-card__rules hf-card__effects";
   for (const effect of card.effects) {
-    body.appendChild(buildEffectRow(effect));
+    rules.appendChild(buildEffectRow(effect));
   }
 
+  const body = buildFrameBody(card, rules);
+  const stats = deriveFooterStats(card);
   const footer = document.createElement("div");
   footer.className = "hf-card__footer";
+  footer.appendChild(buildStatSlot("Attack", stats.attack, "hf-card__attack"));
+
+  const tools = document.createElement("div");
+  tools.className = "hf-card__tools";
   const pips = buildPipRow(card.upgrade_tier);
-  footer.appendChild(pips);
+  tools.appendChild(pips);
   const inspectBtn = buildInspectButton();
-  footer.appendChild(inspectBtn);
+  tools.appendChild(inspectBtn);
+  footer.appendChild(tools);
+  footer.appendChild(buildStatSlot("Guard", stats.guard, "hf-card__guard"));
 
   const control = createCard({
     title: card.name,
@@ -135,6 +118,7 @@ export function createHoldfastCard(card: Card, opts: HoldfastCardOptions = {}): 
   el.classList.add("hf-card");
   el.classList.add(`hf-card--${accent}`);
   el.setAttribute("data-card-id", card.id);
+  el.querySelector(".gui-card__tag")?.classList.add("hf-card__cost");
   if (upgraded) el.classList.add("hf-card--upgraded");
   if (rare) el.classList.add("hf-card--rare");
   if (upgraded || rare) el.classList.add("hf-card--shine");
@@ -172,6 +156,67 @@ export function createHoldfastCard(card: Card, opts: HoldfastCardOptions = {}): 
     },
     openInspect,
   };
+};
+
+/** Build the art, type, and rules regions that occupy the primitive body slot. */
+function buildFrameBody(card: Card, rules: HTMLElement): HTMLElement {
+  const body = document.createElement("div");
+  body.className = "hf-card__content";
+
+  const art = document.createElement("div");
+  art.className = "hf-card__art";
+  art.setAttribute("aria-hidden", "true");
+  art.textContent = "✦";
+
+  const type = document.createElement("div");
+  type.className = "hf-card__type";
+  type.textContent = card.tags.map(titleCase).join(" · ");
+
+  body.append(art, type, rules);
+  return body;
+}
+
+/** Derive compact attack/guard footer values from the universal modifiers. */
+function deriveFooterStats(card: Card): { attack: number; guard: number } {
+  const attack = Math.max(
+    0,
+    ...card.effects
+      .filter((effect) => effect.stat === Stat.HP && effect.operation === Operation.FLAT_SUB)
+      .map((effect) => Math.abs(effect.value)),
+  );
+  const guard = Math.max(
+    0,
+    ...card.effects
+      .filter(
+        (effect) =>
+          (effect.stat === Stat.Defense || effect.stat === Stat.HP) &&
+          effect.operation === Operation.FLAT_ADD,
+      )
+      .map((effect) => effect.value),
+  );
+  return { attack, guard };
+}
+
+function buildStatSlot(label: string, value: number, className: string): HTMLElement {
+  const slot = document.createElement("div");
+  slot.className = `hf-card__stat ${className}`;
+
+  const caption = document.createElement("span");
+  caption.className = "hf-card__stat-label";
+  caption.textContent = label;
+
+  const amount = document.createElement("strong");
+  amount.className = "hf-card__stat-value";
+  amount.textContent = String(value);
+
+  slot.append(caption, amount);
+  return slot;
+}
+
+function titleCase(value: string): string {
+  return value.replace(/(^|[_-])([a-z])/g, (_match, _separator: string, letter: string) =>
+    letter.toUpperCase(),
+  );
 }
 
 /** Build one effect row: icon + signed value/stat + target/duration meta. */
