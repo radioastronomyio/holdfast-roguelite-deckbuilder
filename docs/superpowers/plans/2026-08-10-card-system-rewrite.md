@@ -62,7 +62,7 @@
 **Files:**
 - Create: `publish.sh`
 - Modify: `game/package.json`
-- Test: `game/tests/publish.test.ts`
+- Test: `game/src/systems/publish.test.ts`
 
 **Interfaces:**
 - Consumes: `game/dist/` produced by `npm run build` and fixed destination `/opt/agents/www/holdfast`.
@@ -74,7 +74,7 @@
 
 - [ ] **Step 2: Run the focused test and confirm it fails because `publish.sh` does not exist.**
 
-  Run: `cd game && npm test -- tests/publish.test.ts`
+  Run: `cd game && npm test -- src/systems/publish.test.ts`
 
 - [ ] **Step 3: Implement the scoped publisher.**
 
@@ -82,7 +82,7 @@
 
 - [ ] **Step 4: Add `"publish": "../publish.sh"` and run the behavior test twice.**
 
-  Run: `cd game && npm test -- tests/publish.test.ts`
+  Run: `cd game && npm test -- src/systems/publish.test.ts`
 
   Expected: pass with source/destination equivalence and idempotence proven.
 
