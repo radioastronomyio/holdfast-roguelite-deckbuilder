@@ -38,6 +38,28 @@
   box-shadow: var(--gui-shadow-sm);
 }
 
+.hf-card-badge {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  color: var(--card-accent);
+}
+
+.hf-card-badge__rim {
+  stroke-width: var(--gui-border-width-strong);
+}
+
+.hf-card-badge__core {
+  opacity: var(--gui-glow-alpha);
+}
+
+.hf-card-badge__label {
+  fill: var(--gui-text);
+  font-family: var(--gui-font-display);
+  font-size: var(--gui-font-size-xl);
+  font-weight: 700;
+}
+
 .hf-card .gui-card__body {
   flex: 1 1 auto;
   min-block-size: 0;
@@ -170,4 +192,39 @@
   flex-direction: column;
   align-items: center;
   gap: var(--gui-space-xs);
+}
+
+.hf-card-gem {
+  inline-size: calc(var(--gui-space-xl) + var(--gui-space-xs));
+  block-size: calc(var(--gui-space-xl) + var(--gui-space-xs));
+  color: var(--card-accent);
+}
+
+.hf-card-gem__stone,
+.hf-card-gem__facet {
+  stroke-width: var(--gui-border-width-strong);
+  stroke-linejoin: round;
+}
+
+.hf-card-gem__facet {
+  opacity: var(--gui-glow-alpha);
+}
+
+.hf-card-gem__label {
+  fill: var(--gui-text);
+  font-family: var(--gui-font-display);
+  font-size: var(--gui-font-size-lg);
+  font-weight: 700;
+}
+
+.hf-card-gem--tier-0 {
+  color: var(--gui-border-strong);
+}
+
+.hf-card-gem--tier-0 .hf-card-gem__stone {
+  fill: var(--gui-surface-strong);
+}
+
+.hf-card--upgraded {
+  box-shadow: var(--gui-shadow-lg), 0 0 var(--gui-glow-blur) var(--card-accent);
 }

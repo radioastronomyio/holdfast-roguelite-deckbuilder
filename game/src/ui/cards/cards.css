@@ -3,8 +3,8 @@
    -----------------------------------------------------------------------------
    Composition over the GameUI card primitive (`.gui-card`). These rules add
    the deckbuilder-specific layer the generic primitive deliberately leaves out:
-   an energy-cost badge, per-modifier effect rows with icons, upgrade-tier pips,
-   a rare/upgraded shine overlay, and the inspect affordance. The primitive's
+   an energy-cost badge, per-modifier effect rows with icons, an upgrade gem,
+   an upgraded shine overlay, and the inspect affordance. The primitive's
    frame, selection ring, and disabled state are untouched.
 
    Token discipline: every colour, radius, space, font, and motion value flows
@@ -83,7 +83,7 @@
 }
 
 /* -----------------------------------------------------------------------------
-   §3. Footer: tier pips + inspect button
+   §3. Footer: upgrade gem + inspect button
    -------------------------------------------------------------------------- */
 
 .hf-card__footer {
@@ -92,25 +92,6 @@
   justify-content: space-between;
   gap: var(--gui-space-sm);
   width: 100%;
-}
-
-.hf-card__pips {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.hf-card__pip {
-  width: 9px;
-  height: 9px;
-  border-radius: var(--gui-radius-pill);
-  background: rgba(var(--card-accent-rgb), 0.18);
-  border: var(--gui-border-width) solid var(--card-accent);
-}
-
-.hf-card__pip--on {
-  background: var(--card-accent);
-  box-shadow: 0 0 var(--gui-glow-blur) rgba(var(--card-accent-rgb), var(--gui-glow-alpha));
 }
 
 .hf-card__inspect {
@@ -140,9 +121,9 @@
 }
 
 /* -----------------------------------------------------------------------------
-   §4. Rare / upgraded shine overlay
+   §4. Upgraded shine overlay
    --------------------------------------------------------------------------
-   A class toggle, not new art. The overlay is a fixed diagonal rainbow sheen
+   A class toggle, not new art. The overlay is a fixed diagonal accent sheen
    drawn in a pseudo-element above the frame. It is intentionally static: the
    screen harness requires pixel-deterministic baselines, and an infinite sweep
    animation would be frozen at a timing-dependent phase by the capture step.
@@ -160,14 +141,13 @@
   pointer-events: none;
   background: linear-gradient(
     115deg,
-    transparent 0%,
-    transparent 38%,
-    rgba(255, 215, 0, 0.10) 46%,
-    rgba(231, 76, 60, 0.10) 52%,
-    rgba(155, 89, 182, 0.12) 58%,
-    rgba(52, 152, 219, 0.10) 64%,
-    transparent 72%
+    transparent,
+    transparent,
+    var(--card-accent),
+    transparent,
+    transparent
   );
+  opacity: var(--gui-glow-alpha);
   mix-blend-mode: screen;
 }
 

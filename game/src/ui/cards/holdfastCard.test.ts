@@ -112,21 +112,22 @@ describe("createHoldfastCard rendering", () => {
     }
   });
 
-  it("shows tier pips + shine for an upgraded card and neither for a base card", () => {
+  it("shows an upgrade gem + shine for an upgraded card and neither for a base card", () => {
     const base = render(byId("arcane_strike_01"));
-    expect(base.el.querySelectorAll(".hf-card__pip--on")).toHaveLength(0);
+    expect(base.el.querySelector(".hf-card-gem")?.getAttribute("data-upgrade-tier")).toBe("0");
     expect(base.el.classList.contains("hf-card--shine")).toBe(false);
 
     const upgradedCard: Card = { ...byId("arcane_strike_01"), upgrade_tier: 2 };
     const upgraded = render(upgradedCard);
-    expect(upgraded.el.querySelectorAll(".hf-card__pip--on")).toHaveLength(2);
+    expect(upgraded.el.querySelector(".hf-card-gem")?.getAttribute("data-upgrade-tier")).toBe("2");
+    expect(upgraded.el.classList.contains("hf-card--upgraded")).toBe(true);
     expect(upgraded.el.classList.contains("hf-card--shine")).toBe(true);
   });
 
-  it("applies the shine overlay for a rare base card", () => {
+  it("keeps the legacy rare option but reserves shine for upgraded cards", () => {
     const control = render(byId("arcane_strike_01"), { rare: true });
     expect(control.el.classList.contains("hf-card--rare")).toBe(true);
-    expect(control.el.classList.contains("hf-card--shine")).toBe(true);
+    expect(control.el.classList.contains("hf-card--shine")).toBe(false);
   });
 });
 

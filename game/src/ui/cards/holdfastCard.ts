@@ -4,8 +4,8 @@
  * `createHoldfastCard(card, opts)` turns a `Card` into a finished deckbuilder
  * card: the card name as the title, an energy-cost badge in the header (via the
  * createCard tag slot), one effect row per modifier (icon + operation-aware
- * signed value + target), upgrade-tier pips, a shine overlay for upgraded or
- * rare cards, and an inspect affordance that opens a detail modal.
+ * signed value + target), an upgrade-tier gem, a shine overlay for upgraded
+ * cards, and an inspect affordance that opens a detail modal.
  *
  * Composition, not forking: the factory calls `createCard` for the frame and
  * selection/disabled state, then adds Holdfast-specific children to the slots
@@ -24,6 +24,7 @@ import type { Card, Modifier, UpgradeTree } from "../../sim/types";
 import { createCard, createModal } from "../gameui";
 import type { CardAccent, ModalAccent, ModalControl } from "../gameui";
 import { createCardArt, createCardSymbol } from "./cardArt";
+import { createCostBadge, createUpgradeGem } from "./cardBadges";
 import { resolveCardVisual, resolveEffectSymbol } from "./cardMap";
 import type { CreateHoldfastCard } from "./contract";
 import { accentForCard } from "./iconMap";
@@ -31,9 +32,6 @@ import "./card.css";
 import "./cards.css";
 
 export type { HoldfastCardControl, HoldfastCardOptions } from "./contract";
-
-/** Maximum upgrade tier rendered as pips. */
-const MAX_PIPS = 3;
 
 /** Target enum → short label for effect rows. */
 const TARGET_LABEL: Record<Target, string> = {
@@ -96,8 +94,7 @@ export const createHoldfastCard: CreateHoldfastCard = (card, opts = {}) => {
 
   const tools = document.createElement("div");
   tools.className = "hf-card__tools";
-  const pips = buildPipRow(card.upgrade_tier);
-  tools.appendChild(pips);
+  tools.appendChild(createUpgradeGem(card.upgrade_tier));
   const inspectBtn = buildInspectButton();
   tools.appendChild(inspectBtn);
   footer.appendChild(tools);
@@ -120,10 +117,13 @@ export const createHoldfastCard: CreateHoldfastCard = (card, opts = {}) => {
   el.classList.add("hf-card");
   el.classList.add(`hf-card--${accent}`);
   el.setAttribute("data-card-id", card.id);
-  el.querySelector(".gui-card__tag")?.classList.add("hf-card__cost");
+  el.setAttribute("data-upgrade-tier", String(card.upgrade_tier));
+  const costSlot = el.querySelector<HTMLElement>(".gui-card__tag");
+  costSlot?.classList.add("hf-card__cost");
+  costSlot?.replaceChildren(createCostBadge(card.energy_cost));
   if (upgraded) el.classList.add("hf-card--upgraded");
   if (rare) el.classList.add("hf-card--rare");
-  if (upgraded || rare) el.classList.add("hf-card--shine");
+  if (upgraded) el.classList.add("hf-card--shine");
 
   // Inspect must never toggle selection: it is a stop-propagation action that
   // opens the detail modal independent of the card's selected state.
@@ -151,7 +151,6 @@ export const createHoldfastCard: CreateHoldfastCard = (card, opts = {}) => {
     ...control,
     setRare(next: boolean) {
       el.classList.toggle("hf-card--rare", next);
-      el.classList.toggle("hf-card--shine", next || upgraded);
     },
     setEnergyAffordable(affordable: boolean) {
       control.setDisabled(!affordable);
@@ -246,20 +245,6 @@ function buildEffectRow(modifier: Modifier): HTMLElement {
   text.appendChild(meta);
 
   row.appendChild(text);
-  return row;
-}
-
-/** Build the upgrade-tier pip row. Tier 0 renders nothing (empty placeholder). */
-function buildPipRow(tier: number): HTMLElement {
-  const row = document.createElement("div");
-  row.className = "hf-card__pips";
-  const count = Math.min(Math.max(tier, 0), MAX_PIPS);
-  for (let i = 0; i < MAX_PIPS; i++) {
-    const pip = document.createElement("span");
-    pip.className = "hf-card__pip";
-    if (i < count) pip.classList.add("hf-card__pip--on");
-    row.appendChild(pip);
-  }
   return row;
 }
 
