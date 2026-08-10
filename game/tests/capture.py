@@ -62,9 +62,10 @@ BASELINE_DIR = Path(__file__).resolve().parent / "baseline"
 CHECK_MODE = "--check" in sys.argv
 BUILD_MODE = "--build" in sys.argv
 
-# Vite serves the app under this base (see game/vite.config.ts `base`). The
-# built-output mode navigates here because `vite preview` serves dist/ under it.
-BASE_PATH = "/holdfast/"
+# Vite and the production subdomain both serve the app from their origin root
+# (see game/vite.config.ts `base`). Keeping the acceptance harness on the same
+# path makes its asset probes exercise the real deployment shape.
+BASE_PATH = "/"
 
 # The dark-fantasy preset overrides the --gui-bg token to this value (the token
 # default in tokens.css is #020617). Seeing it proves dark-fantasy.css loaded.
