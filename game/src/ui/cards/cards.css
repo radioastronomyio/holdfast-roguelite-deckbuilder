@@ -255,6 +255,12 @@
   height: 100%;
 }
 
+.hf-gallery__catalog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gui-space-lg);
+}
+
 .hf-gallery__section {
   display: flex;
   flex-direction: column;

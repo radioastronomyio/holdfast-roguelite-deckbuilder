@@ -404,9 +404,9 @@ def capture_card_gallery(context, base_url: str, origin: str, captured: set[str]
     exists in a DEV build, which is what the harness serves.
 
     The gallery renders asynchronously (it fetches the shared card JSON), so
-    after triggering the hook we wait for the Holdfast cards to mount and for
-    every effect-icon image to finish decoding before the dark-fantasy baseline
-    is captured."""
+    after triggering the hook we wait for the Holdfast cards to mount, assert
+    the complete JSON-backed SVG composition, then capture the dark-fantasy
+    baseline."""
     if "card-gallery" in captured:
         return
     page = context.new_page()
@@ -428,16 +428,68 @@ def capture_card_gallery(context, base_url: str, origin: str, captured: set[str]
             "&& window.__holdfast.showCardGallery()"
         )
         page.wait_for_selector("[data-screen='card-gallery'] .hf-card", timeout=10000)
-        # Wait for the effect-icon images to decode so the baseline is deterministic.
-        page.evaluate(
-            "async () => {"
-            "  const imgs = Array.from(document.querySelectorAll('.hf-card__effect-icon'));"
-            "  await Promise.all(imgs.map((img) => img.complete ? Promise.resolve() : img.decode().catch(() => {})));"
-            "}"
-        )
+        assert_card_gallery(page, errors)
         capture_screen(page, "card-gallery", captured, errors)
     finally:
         page.close()
+
+
+def assert_card_gallery(page: Page, errors: list[str]) -> None:
+    """Assert the complete SVG card catalog and upgraded exemplar contract."""
+    state = page.evaluate(
+        """() => {
+            const catalog = document.querySelector('.hf-gallery__catalog');
+            const cards = Array.from(catalog?.querySelectorAll('.hf-card[data-card-id]') || []);
+            const ids = cards.map((card) => card.getAttribute('data-card-id'));
+            const artUses = cards.map((card) => card.querySelector('.hf-card-art use')?.getAttribute('href') || '');
+            const effects = Array.from(catalog?.querySelectorAll('.hf-card__effect') || []);
+            const effectUses = effects.map((row) => row.querySelector('use')?.getAttribute('href') || '');
+            const firstCard = cards[0];
+            const firstSymbol = firstCard?.querySelector('.hf-card-art__symbol');
+            return {
+                declaredCount: catalog?.getAttribute('data-gallery-card-count') || '',
+                cardCount: cards.length,
+                uniqueCount: new Set(ids).size,
+                missingArtSymbols: artUses.filter((href) => !href.endsWith('.svg#icon')).length,
+                effectCount: effects.length,
+                missingEffectSymbols: effectUses.filter((href) => !href.endsWith('.svg#icon')).length,
+                rasterCount: catalog?.querySelectorAll('img, image').length || 0,
+                costThree: catalog?.querySelector("[data-card-id='sweeping_blade_01'] .hf-card-badge--cost text")?.textContent || '',
+                catalogShine: catalog?.querySelectorAll('.hf-card--shine').length || 0,
+                exemplarShine: document.querySelectorAll('.hf-gallery__pair .hf-card--shine').length,
+                exemplarTier: document.querySelector('.hf-gallery__pair .hf-card--shine')?.getAttribute('data-upgrade-tier') || '',
+                symbolColor: firstSymbol ? getComputedStyle(firstSymbol).color : '',
+                borderColor: firstCard ? getComputedStyle(firstCard).borderTopColor : '',
+            };
+        }"""
+    )
+    expected = {
+        "declaredCount": "21",
+        "cardCount": 21,
+        "uniqueCount": 21,
+        "missingArtSymbols": 0,
+        "missingEffectSymbols": 0,
+        "rasterCount": 0,
+        "costThree": "3",
+        "catalogShine": 0,
+        "exemplarShine": 1,
+        "exemplarTier": "2",
+    }
+    for key, value in expected.items():
+        if state[key] != value:
+            errors.append(f"card-gallery check failed: {key}={state[key]!r} (expected {value!r})")
+            print(f"    GALLERY-FAIL  {key}={state[key]!r}")
+    if state["effectCount"] <= 0:
+        errors.append("card-gallery check failed: no effect rows")
+        print("    GALLERY-FAIL  no effect rows")
+    if state["symbolColor"] != state["borderColor"]:
+        errors.append(
+            "card-gallery check failed: SVG symbol does not inherit card accent "
+            f"({state['symbolColor']!r} != {state['borderColor']!r})"
+        )
+        print("    GALLERY-FAIL  SVG symbol/card accent mismatch")
+    if not any(error.startswith("card-gallery check failed") for error in errors):
+        print("    GALLERY-OK    21 unique JSON cards; SVG symbols, cost, accent, and shine verified")
 
 
 # =============================================================================

@@ -18,6 +18,6 @@ In-repo source assets that `prepare-public.mjs` stages into the generated `publi
 
 | Path | Purpose |
 |------|---------|
-| `card-icons/` | Curated `neor-rpg-icon-pack` subset the card renderer resolves via `iconMap.ts`; staged to `public/assets/icons/`. See its README. |
+| `card-art-icons/` | Curated, attributed Game-icons SVG vocabulary used by the zero-raster card art and effect layers; staged to `public/assets/card-art-icons/`. See its README and NOTICE. |
 
 The `public/` tree (`public/assets/`, `public/vendor/`) is generated and gitignored; this directory holds the committed sources.
