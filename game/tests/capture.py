@@ -83,7 +83,7 @@ BUILD_ASSET_PROBES: dict[str, str] = {
     "vendor/gameui/themes/dark-fantasy.css": "text/css",
     "vendor/gameui/themes/fonts/Cinzel.ttf": "font/",
     "vendor/gameui/themes/dark-fantasy-assets/panel-bg.webp": "image/",
-    "assets/icons/icon-attack.png": "image/",
+    "assets/card-art-icons/crossed-swords.svg": "image/svg+xml",
 }
 
 # Each placeholder screen, in capture order. (step name, baseline filename).

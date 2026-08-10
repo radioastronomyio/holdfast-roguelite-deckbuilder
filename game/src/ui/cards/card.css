@@ -59,9 +59,51 @@
   border-radius: var(--gui-radius-sm);
   background: var(--gui-surface-strong);
   color: var(--card-accent);
-  font-family: var(--gui-font-display);
-  font-size: var(--gui-font-size-xl);
   box-shadow: inset var(--gui-shadow-sm);
+}
+
+.hf-card-art {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  color: var(--card-accent);
+}
+
+.hf-card-art__sky-stop--base {
+  stop-color: var(--gui-bg);
+}
+
+.hf-card-art--primary .hf-card-art__sky-stop--accent { stop-color: var(--gui-accent-primary); }
+.hf-card-art--success .hf-card-art__sky-stop--accent { stop-color: var(--gui-accent-success); }
+.hf-card-art--warning .hf-card-art__sky-stop--accent { stop-color: var(--gui-accent-warning); }
+.hf-card-art--danger .hf-card-art__sky-stop--accent { stop-color: var(--gui-accent-danger); }
+.hf-card-art--info .hf-card-art__sky-stop--accent { stop-color: var(--gui-accent-info); }
+.hf-card-art--magic .hf-card-art__sky-stop--accent { stop-color: var(--gui-accent-magic); }
+.hf-card-art--pink .hf-card-art__sky-stop--accent { stop-color: var(--gui-accent-pink); }
+
+.hf-card-art__ground {
+  fill: var(--gui-surface);
+  stroke: var(--gui-border-strong);
+  stroke-width: var(--gui-border-width-strong);
+}
+
+.hf-card-art__symbol {
+  color: var(--card-accent);
+  fill: currentColor;
+}
+
+.hf-card-art__vignette-stop--clear {
+  stop-color: var(--gui-bg);
+  stop-opacity: 0;
+}
+
+.hf-card-art__vignette-stop--dark {
+  stop-color: var(--gui-bg);
+  stop-opacity: 0.88;
+}
+
+.hf-card-art__vignette {
+  pointer-events: none;
 }
 
 .hf-card__type {

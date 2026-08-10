@@ -1,0 +1,32 @@
+Game-icons SVG attribution
+==========================
+
+The SVG glyphs in this directory are adapted from the Game-icons project:
+https://game-icons.net/ and https://github.com/game-icons/icons
+
+Author: Lorc (https://lorcblog.blogspot.com/)
+License: Creative Commons Attribution 3.0 Unported (CC BY 3.0)
+License URL: https://creativecommons.org/licenses/by/3.0/
+Source revision: 82d948812bfe3f269ef8f731dcdb07b08160edc4
+
+Shipped glyphs by Lorc:
+
+- acid-blob.svg
+- bleeding-eye.svg
+- bordered-shield.svg
+- crossed-swords.svg
+- crystal-ball.svg
+- dread-skull.svg
+- fast-arrow.svg
+- fireball.svg
+- focused-lightning.svg
+- heart-bottle.svg
+- ice-bolt.svg
+- magic-swirl.svg
+- mantrap.svg
+- pentarrows-tornado.svg
+
+Changes made by Holdfast: the original black background path was removed; the
+foreground path was changed from a literal white fill to `currentColor`; and
+the foreground was wrapped in `<symbol id="icon">` for external SVG `<use>`.
+No raster derivatives ship in this directory.

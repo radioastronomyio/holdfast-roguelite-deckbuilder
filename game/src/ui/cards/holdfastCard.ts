@@ -23,8 +23,10 @@ import { Operation, Stat, Target } from "../../sim/types";
 import type { Card, Modifier, UpgradeTree } from "../../sim/types";
 import { createCard, createModal } from "../gameui";
 import type { CardAccent, ModalAccent, ModalControl } from "../gameui";
+import { createCardArt, createCardSymbol } from "./cardArt";
+import { resolveCardVisual, resolveEffectSymbol } from "./cardMap";
 import type { CreateHoldfastCard } from "./contract";
-import { accentForCard, iconUrl, resolveEffectIcon } from "./iconMap";
+import { accentForCard } from "./iconMap";
 import "./card.css";
 import "./cards.css";
 
@@ -165,8 +167,8 @@ function buildFrameBody(card: Card, rules: HTMLElement): HTMLElement {
 
   const art = document.createElement("div");
   art.className = "hf-card__art";
-  art.setAttribute("aria-hidden", "true");
-  art.textContent = "✦";
+  const visual = resolveCardVisual(card.tags);
+  art.appendChild(createCardArt(visual));
 
   const type = document.createElement("div");
   type.className = "hf-card__type";
@@ -224,11 +226,7 @@ function buildEffectRow(modifier: Modifier): HTMLElement {
   const row = document.createElement("div");
   row.className = "hf-card__effect";
 
-  const icon = document.createElement("img");
-  icon.className = "hf-card__effect-icon";
-  icon.src = iconUrl(resolveEffectIcon(modifier));
-  icon.alt = "";
-  icon.draggable = false;
+  const icon = createCardSymbol(resolveEffectSymbol(modifier), "hf-card__effect-icon");
   row.appendChild(icon);
 
   const text = document.createElement("div");

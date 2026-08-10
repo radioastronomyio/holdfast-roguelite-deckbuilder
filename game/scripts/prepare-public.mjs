@@ -42,8 +42,9 @@ copyDir(join(gameRoot, "vendor/gameui"), join(publicRoot, "vendor/gameui"));
 // --- Card icons (in-repo source) ---
 rmSync(join(publicRoot, "assets"), { recursive: true, force: true });
 stageCardIcons();
+stageCardArtIcons();
 
-console.log("Prepared browser data, GameUI vendor skin, and card icons in game/public/.");
+console.log("Prepared browser data, GameUI vendor skin, and card SVG assets in game/public/.");
 
 /**
  * Stage the curated RPG icon subset used by the Holdfast card renderer into
@@ -77,4 +78,12 @@ function stageCardIcons() {
     if (!existsSync(source)) throw new Error(`Missing in-repo icon source: ${source}`);
     cpSync(source, join(destRoot, name));
   }
+}
+
+/** Stage the attributed zero-raster symbol vocabulary used by card art. */
+function stageCardArtIcons() {
+  copyDir(
+    join(gameRoot, "assets/card-art-icons"),
+    join(publicRoot, "assets/card-art-icons"),
+  );
 }

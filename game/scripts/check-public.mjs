@@ -16,8 +16,11 @@ const required = [
   // Shared game data.
   "public/data/cards/base-cards.json",
   "public/data/flavor/given_names.json",
-  // Card-icon subset (representative).
+  // Legacy card-icon subset (retired after the SVG renderer is fully bound).
   "public/assets/icons/icon-attack.png",
+  // Zero-raster card-art vocabulary and its attribution.
+  "public/assets/card-art-icons/crossed-swords.svg",
+  "public/assets/card-art-icons/NOTICE",
 ];
 
 const missing = required.filter((file) => !existsSync(join(root, file)));

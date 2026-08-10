@@ -99,12 +99,16 @@ describe("createHoldfastCard rendering", () => {
     expect(values.join(" ")).not.toContain("50000");
   });
 
-  it("resolves an icon image for every effect row", () => {
+  it("resolves an inline currentColor SVG symbol for every effect row", () => {
     const control = render(byId("shield_bash_01"));
-    const icons = Array.from(control.el.querySelectorAll<HTMLImageElement>(".hf-card__effect-icon"));
+    const icons = Array.from(control.el.querySelectorAll<SVGSVGElement>(".hf-card__effect-icon"));
     expect(icons).toHaveLength(2);
-    for (const img of icons) {
-      expect(img.getAttribute("src")).toMatch(/\/assets\/icons\/icon-.+\.png$/);
+    for (const icon of icons) {
+      const symbol = icon.querySelector("use");
+      expect(symbol?.getAttribute("href")).toMatch(
+        /\/assets\/card-art-icons\/.+\.svg#icon$/,
+      );
+      expect(symbol?.getAttribute("fill")).toBe("currentColor");
     }
   });
 

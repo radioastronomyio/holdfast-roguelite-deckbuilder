@@ -1,11 +1,9 @@
 /**
- * Coverage test for the icon + accent resolution maps.
+ * Coverage test for the frozen card-tag accent map.
  *
- * Asserts that every modifier across the base and hazard card sets resolves to
- * a real icon (never the fallback, never undefined) and every card resolves to
- * a defined accent. This is the Deliverable 1 "no effect or card resolves to
- * undefined" contract: adding a card or tag to the data without a mapping
- * fails this test.
+ * Effect and motif coverage moved to cardMap.test.ts with the zero-raster SVG
+ * rewrite. These checks retain the frame-accent precedence that downstream
+ * card consumers already depend on.
  *
  * @module ui/cards/iconMap.test
  */
@@ -13,9 +11,9 @@
 import { describe, expect, it } from "vitest";
 import baseCards from "../../../../data/cards/base-cards.json";
 import hazardCards from "../../../../data/cards/hazard-cards.json";
-import type { Card, Modifier } from "../../sim/types";
+import type { Card } from "../../sim/types";
 import type { CardAccent } from "../gameui";
-import { accentForCard, DEFAULT_ACCENT, FALLBACK_ICON, resolveEffectIcon } from "./iconMap";
+import { accentForCard, DEFAULT_ACCENT } from "./iconMap";
 
 const VALID_ACCENTS: CardAccent[] = [
   "primary", "success", "warning", "danger", "info", "magic", "pink",
@@ -23,17 +21,7 @@ const VALID_ACCENTS: CardAccent[] = [
 
 const cards: Card[] = [...baseCards, ...hazardCards] as unknown as Card[];
 
-describe("iconMap resolution coverage", () => {
-  it("resolves a non-fallback icon for every effect in the card data", () => {
-    const effects: Modifier[] = cards.flatMap((card) => card.effects);
-    expect(effects.length).toBeGreaterThan(0);
-    for (const effect of effects) {
-      const icon = resolveEffectIcon(effect);
-      expect(icon, `${effect.stat} ${effect.operation} tags=${effect.tags.join(",")}`).toBeTruthy();
-      expect(icon).not.toBe(FALLBACK_ICON);
-    }
-  });
-
+describe("card accent resolution coverage", () => {
   it("resolves a defined accent for every card in the card data", () => {
     expect(cards.length).toBeGreaterThan(0);
     for (const card of cards) {
