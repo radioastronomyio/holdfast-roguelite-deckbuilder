@@ -287,7 +287,26 @@ describe("card visual mappings", () => {
     }
 
     const manifest = JSON.parse(readFileSync(resolve(assetRoot, "manifest.json"), "utf8")) as {
-      assets: Array<{ id: string; mode: string; source: string; file: string }>;
+      licenseNotice: string;
+      assets: Array<{
+        id: string;
+        mode: string;
+        source: string;
+        file: string;
+        sourceSha256: string;
+        derivedSha256: string;
+      }>;
+      imageAssets: Array<{
+        id: string;
+        sourceId: string;
+        mode: string;
+        source: string;
+        file: string;
+        transformation: string;
+        sourceSha256: string;
+        derivedSha256: string;
+        licenseCoverage: string;
+      }>;
     };
     expect(manifest.assets.map(({ id }) => id).sort()).toEqual([...expectedRunicIcons].sort());
     expect(Object.fromEntries(manifest.assets.map(({ id, mode }) => [id, mode]))).toEqual(
@@ -297,6 +316,23 @@ describe("card visual mappings", () => {
     expect(manifest.assets.every(({ source, file }) => (
       source.startsWith("assets/svg/") && file.endsWith(".svg")
     ))).toBe(true);
+    expect(manifest.assets.every(({ sourceSha256, derivedSha256 }) => (
+      /^[a-f0-9]{64}$/.test(sourceSha256) && /^[a-f0-9]{64}$/.test(derivedSha256)
+    ))).toBe(true);
+    expect(manifest.licenseNotice).toBe("NOTICE");
+    expect(manifest.imageAssets).toEqual([
+      expect.objectContaining({
+        id: "immolate-fireball",
+        sourceId: "fireball",
+        mode: "flame",
+        source: "assets/png/512/spells/fireball.png",
+        file: "immolate-fireball.png",
+        transformation: expect.stringContaining("chroma-key"),
+        sourceSha256: "3660f30fed01ac9181e72f8379e34d7db6b59947038c32f76bcc5b624a1005d2",
+        derivedSha256: "d281d861c645d6020de98db02d8b661341aa69482099b05cf1975f97983a837c",
+        licenseCoverage: expect.stringContaining("NOTICE"),
+      }),
+    ]);
 
     const notice = readFileSync(resolve(assetRoot, "NOTICE"), "utf8");
     expect(notice).toContain("Template Foundry");

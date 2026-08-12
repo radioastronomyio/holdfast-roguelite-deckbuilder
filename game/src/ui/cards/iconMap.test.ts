@@ -1,8 +1,8 @@
 /**
  * Coverage test for the frozen card-tag accent map.
  *
- * Effect and motif coverage moved to cardMap.test.ts with the zero-raster SVG
- * rewrite. These checks retain the frame-accent precedence that downstream
+ * Effect, mixed-source motif, and provenance coverage lives in cardMap.test.ts.
+ * These checks retain the frame-accent precedence that downstream
  * card consumers already depend on.
  *
  * @module ui/cards/iconMap.test

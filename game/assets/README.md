@@ -18,6 +18,6 @@ In-repo source assets that `prepare-public.mjs` stages into the generated `publi
 
 | Path | Purpose |
 |------|---------|
-| `card-icons/` | Curated, attributed Runic Relic-derived SVG vocabulary plus the presentation-owned Immolate PNG exemplar used only in the pluggable art slot; staged to `public/assets/card-icons/`. See its README, manifest, and NOTICE. |
+| `card-icons/` | Curated, attributed Runic Relic-derived SVG vocabulary plus the presentation-owned Immolate PNG exemplar used only in the pluggable art slot; staged to `public/assets/card-icons/`. Its manifest records source/output hashes and the PNG transformation/license chain. See its README, manifest, and NOTICE. |
 
 The `public/` tree (`public/assets/`, `public/vendor/`) is generated and gitignored; this directory holds the committed sources.

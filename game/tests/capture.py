@@ -272,11 +272,11 @@ def sha1_of(path: Path) -> str:
     return h.hexdigest()
 
 
-def capture(page: Page, filename: str, errors: list[str]) -> None:
-    """Screenshot the current viewport to the baseline dir and record its sha1."""
+def capture(page: Page, filename: str, errors: list[str], *, full_page: bool = False) -> None:
+    """Screenshot the current viewport (or explicit full page) and record its sha1."""
     BASELINE_DIR.mkdir(parents=True, exist_ok=True)
     shot = BASELINE_DIR / filename
-    page.screenshot(path=str(shot), animations="disabled")
+    page.screenshot(path=str(shot), animations="disabled", full_page=full_page)
     digest = sha1_of(shot)
     sidecar = BASELINE_DIR / f"{filename}.sha1"
     if CHECK_MODE:
@@ -433,9 +433,21 @@ def capture_card_gallery(context, base_url: str, origin: str, captured: set[str]
             ".every((image) => image.complete && image.naturalWidth > 0)",
             timeout=10000,
         )
+        page.wait_for_function(
+            "() => {"
+            " const image = document.querySelector('.hf-card-back__emblem image');"
+            " const href = image && image.getAttribute('href');"
+            " return Boolean(href) && performance.getEntriesByName(new URL(href, document.baseURI).href).length > 0;"
+            "}",
+            timeout=10000,
+        )
         assert_card_gallery(page, errors)
         assert_gallery_interaction(page, errors)
-        capture_screen(page, "card-gallery", captured, errors)
+        prepare_gallery_contact_sheet(page, errors)
+        page.wait_for_timeout(SETTLE_MS)
+        assert_framework(page, "card-gallery", errors)
+        capture(page, SCREEN_MAP["card-gallery"], errors, full_page=True)
+        captured.add("card-gallery")
     finally:
         page.close()
 
@@ -513,7 +525,7 @@ def assert_card_gallery(page: Page, errors: list[str]) -> None:
             }).map((card) => card.getAttribute('data-card-id'));
             const layerFailures = art.filter((scene) => {
                 const painted = Array.from(scene?.children || [])
-                    .filter((node) => paintLayerClasses.some((name) => node.classList.contains(name)));
+                    .filter((node) => node.tagName.toLowerCase() !== 'defs');
                 return painted.length !== paintLayerClasses.length
                     || painted.some((node, index) => !node.classList.contains(paintLayerClasses[index]));
             }).length;
@@ -526,6 +538,13 @@ def assert_card_gallery(page: Page, errors: list[str]) -> None:
             const attackA = axes('arcane_strike_01');
             const attackB = axes('immolate_01');
             const cardBack = document.querySelector('.hf-gallery__card-back .hf-card-back');
+            const backEmblem = cardBack?.querySelector('.hf-card-back__emblem image');
+            const frontAccent = cards[0] ? resolveColorToken(cards[0], '--card-accent') : '';
+            const backBorder = cardBack ? getComputedStyle(cardBack).borderColor : '';
+            const backField = cardBack?.querySelector('.hf-card-back__pattern')
+                ? getComputedStyle(cardBack.querySelector('.hf-card-back__pattern')).color : '';
+            const backEmblemColor = cardBack?.querySelector('.hf-card-back__emblem')
+                ? getComputedStyle(cardBack.querySelector('.hf-card-back__emblem')).color : '';
             return {
                 declaredCount: catalog?.getAttribute('data-gallery-card-count') || '',
                 cardCount: cards.length,
@@ -550,9 +569,16 @@ def assert_card_gallery(page: Page, errors: list[str]) -> None:
                 exemplarShine: document.querySelectorAll('.hf-gallery__pair .hf-card--shine').length,
                 exemplarTier: document.querySelector('.hf-gallery__pair .hf-card--shine')?.getAttribute('data-upgrade-tier') || '',
                 cardBackCount: document.querySelectorAll('.hf-gallery__card-back .hf-card-back').length,
-                cardBackRasterCount: cardBack?.querySelectorAll('img, image').length ?? -1,
+                cardBackRasterCount: cardBack?.querySelectorAll("img[src$='.png'], image[href$='.png']").length ?? -1,
                 cardBackPattern: cardBack?.querySelectorAll('.hf-card-back__pattern').length ?? 0,
                 cardBackEmblem: cardBack?.querySelectorAll('.hf-card-back__emblem').length ?? 0,
+                cardBackEmblemUrl: backEmblem?.getAttribute('href') || '',
+                cardBackEmblemMode: backEmblem?.getAttribute('data-runic-mode') || '',
+                cardBackPaletteDistinct: [
+                    frontAccent, backBorder, backField, backEmblemColor,
+                ].every(Boolean) && new Set([
+                    frontAccent, backBorder, backField, backEmblemColor,
+                ]).size === 4,
             };
         }"""
     )
@@ -579,6 +605,9 @@ def assert_card_gallery(page: Page, errors: list[str]) -> None:
         "cardBackRasterCount": 0,
         "cardBackPattern": 1,
         "cardBackEmblem": 1,
+        "cardBackEmblemUrl": "/assets/card-icons/arcane_burst.svg",
+        "cardBackEmblemMode": "rune",
+        "cardBackPaletteDistinct": True,
     }
     for key, value in expected.items():
         if state[key] != value:
@@ -591,6 +620,69 @@ def assert_card_gallery(page: Page, errors: list[str]) -> None:
         print("    GALLERY-OK    catalog, five layers, mixed art, geometry, text, back, cost, and shine verified")
 
 
+def prepare_gallery_contact_sheet(page: Page, errors: list[str]) -> None:
+    """Expand only the gallery capture into one deterministic 1440-wide sheet."""
+    state = page.evaluate(
+        r"""() => {
+            const gallery = document.querySelector('.hf-gallery');
+            const shell = gallery?.closest('.gui-shell');
+            const main = gallery?.closest('.gui-shell__main');
+            if (!gallery || !shell || !main) return null;
+
+            document.documentElement.style.height = 'auto';
+            document.documentElement.style.overflow = 'visible';
+            document.body.style.height = 'auto';
+            document.body.style.overflow = 'visible';
+            shell.style.minHeight = '0';
+            shell.style.height = 'auto';
+            main.style.overflow = 'visible';
+            main.style.height = 'auto';
+            gallery.setAttribute('data-capture-full', 'true');
+            gallery.style.setProperty('height', 'auto', 'important');
+            gallery.style.setProperty('overflow', 'visible', 'important');
+
+            const bottom = Math.ceil(gallery.getBoundingClientRect().bottom + 24);
+            return { width: document.documentElement.clientWidth, height: Math.max(900, bottom) };
+        }"""
+    )
+    if not state:
+        errors.append("card-gallery contact sheet failed: gallery shell not found")
+        return
+    page.set_viewport_size({"width": 1440, "height": state["height"]})
+    coverage = page.evaluate(
+        r"""() => {
+            const gallery = document.querySelector('.hf-gallery');
+            const catalogCards = Array.from(document.querySelectorAll('.hf-gallery__catalog .hf-card'));
+            const upgraded = document.querySelector('.hf-gallery__pair .hf-card--shine');
+            const back = document.querySelector('.hf-gallery__card-back .hf-card-back');
+            const required = [...catalogCards, upgraded, back].filter(Boolean);
+            const pageBottom = Math.ceil(document.documentElement.scrollHeight);
+            return {
+                width: document.documentElement.clientWidth,
+                pageHeight: pageBottom,
+                catalogCards: catalogCards.length,
+                covered: required.every((node) => node.getBoundingClientRect().bottom <= pageBottom + 1),
+                upgraded: Boolean(upgraded),
+                back: Boolean(back),
+            };
+        }"""
+    )
+    expected = {"width": 1440, "catalogCards": 21, "covered": True, "upgraded": True, "back": True}
+    for key, value in expected.items():
+        if coverage[key] != value:
+            errors.append(
+                f"card-gallery contact sheet failed: {key}={coverage[key]!r} (expected {value!r})"
+            )
+    if coverage["pageHeight"] <= 900:
+        errors.append(
+            f"card-gallery contact sheet failed: pageHeight={coverage['pageHeight']!r} is not full-height"
+        )
+    if not any(error.startswith("card-gallery contact sheet failed") for error in errors):
+        print(
+            "    CONTACT-OK    1440-wide full-height sheet covers 21 cards, upgraded exemplar, and back"
+        )
+
+
 def assert_gallery_interaction(page: Page, errors: list[str]) -> None:
     """Exercise a real selectable card and restore it before the baseline capture."""
     card = page.locator(".hf-gallery__catalog .hf-card[role='button']").first
@@ -599,6 +691,10 @@ def assert_gallery_interaction(page: Page, errors: list[str]) -> None:
     selected = card.get_attribute("aria-pressed")
     card.click()
     restored = card.get_attribute("aria-pressed")
+    # Clicking leaves Chromium's pointer over the first card. Clear that real
+    # hover state and let the card transition settle before hashing pixels.
+    page.mouse.move(0, 0)
+    page.wait_for_timeout(SETTLE_MS)
     if (before, selected, restored) != ("false", "true", "false"):
         errors.append(
             "card-gallery interaction failed: "

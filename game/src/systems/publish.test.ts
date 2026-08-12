@@ -48,6 +48,22 @@ function runPublisher(targetPath = target) {
   );
 }
 
+function runPublisherFromPackage() {
+  return spawnSync(
+    "npm",
+    ["run", "publish", "--", "--deploy-only", "--source", source, "--target", target],
+    {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        HOLDFAST_PUBLISH_TEST: "1",
+        HOLDFAST_PUBLISH_TEST_ROOT: fixtureRoot,
+      },
+    },
+  );
+}
+
 describe("publish.sh", () => {
   beforeEach(() => {
     fixtureRoot = mkdtempSync(join(tmpdir(), "holdfast-publish-"));
@@ -93,5 +109,13 @@ describe("publish.sh", () => {
 
     expect(result.status).not.toBe(0);
     expect(result.stderr).toContain("outside HOLDFAST_PUBLISH_TEST_ROOT");
+  });
+
+  it("runs through the documented executable package entry point", () => {
+    const result = runPublisherFromPackage();
+
+    expect(result.error, result.error?.message).toBeUndefined();
+    expect(result.status, result.stderr).toBe(0);
+    expect(filesUnder(target)).toEqual(filesUnder(source));
   });
 });

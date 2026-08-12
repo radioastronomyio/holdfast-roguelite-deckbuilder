@@ -31,7 +31,7 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 
 - **Phase:** M4b first playable; spec 06 Amendment 1 card-presentation v2 complete on the full-DOM GameUI dark-fantasy frontend
 - **GDD:** v1.1 (flavor system, tags, fixed-point arithmetic)
-- **Tests:** 367 passing (`pytest simulation/tests/` from repo root); 100 passing (`cd game && npm test`); 8 dark-fantasy screen baselines (`cd game && npm run test:screens:check`); build-output acceptance gate (`cd game && npm run test:screens:build`)
+- **Tests:** 367 passing (`pytest simulation/tests/` from repo root); 101 passing (`cd game && npm test`); 8 dark-fantasy screen baselines (`cd game && npm run test:screens:check`); build-output acceptance gate (`cd game && npm run test:screens:build`)
 - **M3a Analysis (pre-deck):** `reports/m3-analysis-pre-deck-mechanics/` archived before deck mechanics
 - **M3b Analysis (pre-M3c):** `reports/m3-analysis-pre-m3c/` archived before M3c tuning
 - **M3c Analysis (pre-M3d):** `reports/m3-analysis-pre-m3d/` archived before M3d tuning

@@ -53,7 +53,7 @@ describe("renderCardGallery", () => {
     expect(cards.every((card) => card.querySelector(".hf-card-badge--cost"))).toBe(true);
     expect(
       cards.every((card) =>
-        Array.from(card.querySelectorAll(".hf-card-art > [class^='hf-card-art__']"))
+        Array.from(card.querySelectorAll(".hf-card-art > :not(defs)"))
           .map((layer) => layer.getAttribute("class")?.split(" ")[0])
           .join("|") ===
         "hf-card-art__sky|hf-card-art__glow|hf-card-art__motif|hf-card-art__ground|hf-card-art__vignette",
@@ -72,14 +72,15 @@ describe("renderCardGallery", () => {
     ).toBe("2");
   });
 
-  it("includes an accessible zero-raster card-back specimen", async () => {
+  it("includes an accessible vector-only card back using the active Runic vocabulary", async () => {
     installCatalogFetch();
     const gallery = await renderCardGallery();
     const cardBack = gallery.querySelector<HTMLElement>(".hf-gallery__card-back .hf-card-back");
 
     expect(cardBack?.getAttribute("aria-label")).toBe("Holdfast card back");
     expect(cardBack?.querySelector(".hf-card-back__pattern")).not.toBeNull();
-    expect(cardBack?.querySelector(".hf-card-back__emblem")).not.toBeNull();
-    expect(cardBack?.querySelectorAll("img, image")).toHaveLength(0);
+    expect(cardBack?.querySelector(".hf-card-back__emblem image")?.getAttribute("href"))
+      .toBe("/assets/card-icons/arcane_burst.svg");
+    expect(cardBack?.querySelectorAll("img, image[href$='.png']")).toHaveLength(0);
   });
 });

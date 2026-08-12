@@ -28,7 +28,7 @@ Browser plugin classification: **Browser plugin not available**. The approved fa
 | Geometry | Pass — width:height 0.60–0.64; art ratio 0.88–1.12; no semantic or horizontal clipping |
 | Attack variety axes | Pass — Arcane Strike and Immolate differ in palette, ground, and motif |
 | Effect glyphs | Pass — all mapped SVG glyphs loaded (`naturalWidth > 0`) |
-| Upgraded exemplar / card back | Pass — one tier-2 shine; patterned/emblem back with no image nodes |
+| Upgraded exemplar / card back | Pass — one tier-2 shine; patterned back with a loaded manifest-backed vector emblem and no PNG nodes |
 | Interaction | Pass — `aria-pressed`: false -> true -> false |
 | Mobile sanity (390x844) | Pass — no horizontal overflow, no card outside gallery, no console/page errors |
 
@@ -67,4 +67,35 @@ Reference: `/opt/agents/repos/spec/reviews/2026-08-10-holdfast-card-v2-target.ht
 ## Unresolved issues
 
 - Operator approval remains outstanding by design; task 04 stays gated.
-- The inherited `publish.sh` file lacks its executable bit. The production publish succeeded twice through `bash publish.sh`; changing that v1-deliverable mode was not necessary to A1.6 behavior and is reported for controller triage.
+- The A1.6 gate inherited `publish.sh` without its executable bit and published twice through `bash publish.sh`; the whole-branch correction below resolves the executable package entry point.
+
+## Whole-branch review correction
+
+The consolidated review round resolved the inherited and integration findings:
+
+- `publish.sh` now ships as executable mode `100755`; a bounded fixture reaches
+  it through the documented `npm run publish -- ...` package entry point.
+- The derivation command now accepts and preserves the intentional Immolate PNG,
+  rejects other unexpected files, and records source/output hashes plus the
+  PNG source, transformation, and license chain in the manifest and notices.
+- The card-back emblem now loads manifest-backed `arcane_burst.svg` (`rune`
+  mode); browser evidence proves the vector loads and its computed palette is
+  distinct from a front.
+- Five-layer gates exclude only `<defs>` and reject every other extra direct
+  child.
+- `08-card-gallery.png` is now a 1440×3555 full-height contact sheet containing
+  all 21 catalog cards, the base/upgraded pair, and the card back in one
+  committed artifact. The other seven baselines remain viewport-sized.
+- The first full-height hash check exposed timing drift isolated by pixel diff
+  to Arcane Strike, the card used by the interaction proof. Chromium retained
+  pointer hover while the screenshot froze its transition. The harness now
+  moves the pointer off-card and waits one settle interval; a capture followed
+  by two independent `test:screens:check` runs produced the same sidecar hash.
+- Frontend verification now reports 101/101 Vitest cases. The final consolidated
+  matrix also passed `npx tsc --noEmit`, public preparation/checks,
+  `test:screens:check`, `test:screens:build`, and 367/367 Python tests (the one
+  pre-existing Pydantic serialization warning remains).
+- `npm run publish` exercised the restored executable entry point twice;
+  `diff -qr game/dist/ /opt/agents/www/holdfast/` was empty. Final probes at
+  `https://holdfast.donfather.site/` returned `200 text/html`; its generated
+  bundle returned `200 application/javascript`.

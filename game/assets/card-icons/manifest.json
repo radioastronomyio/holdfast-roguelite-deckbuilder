@@ -3,138 +3,196 @@
   "sourcePack": "Runic Relic RPG Icons 144",
   "sourceVersion": "1.0.0",
   "transformation": "Holdfast dark-fantasy palette recolour plus provenance metadata",
+  "licenseNotice": "NOTICE",
   "assets": [
     {
       "id": "arcane_burst",
       "mode": "rune",
       "source": "assets/svg/spells/arcane_burst.svg",
-      "file": "arcane_burst.svg"
+      "file": "arcane_burst.svg",
+      "sourceSha256": "9260bc0334b66a0fb672e1d28d8e9d59648a6408906710931bfb5478f285880d",
+      "derivedSha256": "26b127e2d79a7617048610e01ab455190a73255d8c8e5d02f893b7440ba8df95"
     },
     {
       "id": "barrier_spell",
       "mode": "barrier",
       "source": "assets/svg/spells/barrier_spell.svg",
-      "file": "barrier_spell.svg"
+      "file": "barrier_spell.svg",
+      "sourceSha256": "4462b9da9a678043f65a44a660a81278fa507f3e6305b28bcf7542baf56948ac",
+      "derivedSha256": "56ce7b96ea9cbbfbbad86d62b9cadbea7d1a019d82169eb960212c3b1c505872"
     },
     {
       "id": "black_bomb",
       "mode": "bomb",
       "source": "assets/svg/items/black_bomb.svg",
-      "file": "black_bomb.svg"
+      "file": "black_bomb.svg",
+      "sourceSha256": "e00b5e9084891dfadedbc5551f6bde756b8ba595697c009052121da8990a7ff2",
+      "derivedSha256": "5a5ec1a1a1c579dd6b641ebb68a177ae5a3b83c96fa62f8c06ece0150705eb6b"
     },
     {
       "id": "crescent_blade",
       "mode": "sword",
       "source": "assets/svg/weapons/crescent_blade.svg",
-      "file": "crescent_blade.svg"
+      "file": "crescent_blade.svg",
+      "sourceSha256": "0fb2625effb634af33ec62d4e658ab6d0b67279a6d68fcebbef12d6c23304a73",
+      "derivedSha256": "28411936f020b37cba910d6053fd92688281e1d69573dfd9fd649b2b4835f60e"
     },
     {
       "id": "fireball",
       "mode": "flame",
       "source": "assets/svg/spells/fireball.svg",
-      "file": "fireball.svg"
+      "file": "fireball.svg",
+      "sourceSha256": "633688eb0200d0e53c37a59def85b0dcf788c575e436081f788e52d2a0ea17cc",
+      "derivedSha256": "a5b00693dc826d9044fd2e7df99822b5da70b17b962361afb898b3411702f0ed"
     },
     {
       "id": "frostbite",
       "mode": "frost",
       "source": "assets/svg/spells/frostbite.svg",
-      "file": "frostbite.svg"
+      "file": "frostbite.svg",
+      "sourceSha256": "0a996220c618e0c449087615e94de45c05038cb9a5f03828803e82be1846f2df",
+      "derivedSha256": "0dc68d441fda76ab6228b367fbd9a85507b8ce35287e2723db3163bc030f47b9"
     },
     {
       "id": "healing_light",
       "mode": "heart",
       "source": "assets/svg/spells/healing_light.svg",
-      "file": "healing_light.svg"
+      "file": "healing_light.svg",
+      "sourceSha256": "a5d0f2c8e63b9be46cddd55c4b0b274bb6b952019141bef05ca615d6419ba5ba",
+      "derivedSha256": "9776ddeba794477878f0e53ef592d31eecf5487cc4d78f12d8402a0b5c402796"
     },
     {
       "id": "health_potion",
       "mode": "potion",
       "source": "assets/svg/items/health_potion.svg",
-      "file": "health_potion.svg"
+      "file": "health_potion.svg",
+      "sourceSha256": "5860c4d6d05107802b43bc75c5416e5e95e38271859ad6f6b618bfba1a61b575",
+      "derivedSha256": "181d925bafac9d9753c136f01b8eb64b72634bca9c170ee1be8f7b232566737e"
     },
     {
       "id": "holy_ray",
       "mode": "sun",
       "source": "assets/svg/spells/holy_ray.svg",
-      "file": "holy_ray.svg"
+      "file": "holy_ray.svg",
+      "sourceSha256": "b1982888ec2c56565e19f9f29a8e17259d8d84231bedbb5da4e93921cc812f92",
+      "derivedSha256": "b46d2bea4f46bba391a1fd8d963af75023d9a5c1021761087985680b19f7be18"
     },
     {
       "id": "life_drain",
       "mode": "skull",
       "source": "assets/svg/spells/life_drain.svg",
-      "file": "life_drain.svg"
+      "file": "life_drain.svg",
+      "sourceSha256": "f09c46f921419656324f04f93854a29cb64b80edd577590494fbb2808cddabf1",
+      "derivedSha256": "bb746bf7bc5216429df4169c6b7e0ae5313f11540b72a3400bf0e6c2dd0b300d"
     },
     {
       "id": "mana_orb",
       "mode": "gem",
       "source": "assets/svg/magics/mana_orb.svg",
-      "file": "mana_orb.svg"
+      "file": "mana_orb.svg",
+      "sourceSha256": "0503dc815b245f90fa94f75b1a065a0c9db5f750046f8bad936f535488014d2f",
+      "derivedSha256": "f500037320170c7e8afccf8cdc4052ca6b8fa2c5513f497aaf597f263711e077"
     },
     {
       "id": "poison_cloud",
       "mode": "poison",
       "source": "assets/svg/spells/poison_cloud.svg",
-      "file": "poison_cloud.svg"
+      "file": "poison_cloud.svg",
+      "sourceSha256": "2fed06b5527aa4ca3dc9d1c6c5037b1ded0db4e3db286e9ff3a728d01d6e3f0d",
+      "derivedSha256": "a803074184bb6e3ed03a9143ffbc8a7d82dc7473b366b3957b8e50c97615db61"
     },
     {
       "id": "rage_surge",
       "mode": "claw",
       "source": "assets/svg/spells/rage_surge.svg",
-      "file": "rage_surge.svg"
+      "file": "rage_surge.svg",
+      "sourceSha256": "e07e7a32c38c099275e5beaa45514dafd00239343ac60f17b753657fcd7695c8",
+      "derivedSha256": "b1a110e7fe8a3798645516c223d87c50dc1d75eebd84991d2271570b1297c222"
     },
     {
       "id": "root_snare",
       "mode": "root",
       "source": "assets/svg/spells/root_snare.svg",
-      "file": "root_snare.svg"
+      "file": "root_snare.svg",
+      "sourceSha256": "d6289b0727ec3b1034baa109a873369c5571af95c5e1d7982d2b00886d2972e0",
+      "derivedSha256": "ea10668fd60fcff5508d60bc0f7d01126c3985c02a540184666460a78f6dc34b"
     },
     {
       "id": "rune_hammer",
       "mode": "hammer",
       "source": "assets/svg/weapons/rune_hammer.svg",
-      "file": "rune_hammer.svg"
+      "file": "rune_hammer.svg",
+      "sourceSha256": "202831072f3534bd0aebf553f153724450ac6d5409f9b3e352f08a01dcba099c",
+      "derivedSha256": "90ef9d052a8223d5fd550c419047792845355c8864084c9a6027cc351007af35"
     },
     {
       "id": "stone_spike",
       "mode": "earth",
       "source": "assets/svg/spells/stone_spike.svg",
-      "file": "stone_spike.svg"
+      "file": "stone_spike.svg",
+      "sourceSha256": "5fc45bf74c52e243630ba0fd059c4e2dd498603539e34eb8894d370ccbfef014",
+      "derivedSha256": "fc670e48d012344a34912596e5df5fc1e90822b233c5a1d0f30df625f4d2bdd7"
     },
     {
       "id": "swift_boots",
       "mode": "boots",
       "source": "assets/svg/armors/swift_boots.svg",
-      "file": "swift_boots.svg"
+      "file": "swift_boots.svg",
+      "sourceSha256": "a0945a3061750dd201947d66ea1f4455cb7e7d2d6c5698c2117095111ebe701c",
+      "derivedSha256": "12c5f1668cf6478241cdba5c1c1481035b66984e3848d351bf22c129217bb553"
     },
     {
       "id": "thunder_arc",
       "mode": "bolt",
       "source": "assets/svg/spells/thunder_arc.svg",
-      "file": "thunder_arc.svg"
+      "file": "thunder_arc.svg",
+      "sourceSha256": "31746a0ede6ae4e99d24b436afe31c1d6453805be984f69b344194d8cd6050c0",
+      "derivedSha256": "712f863470d5e7fae64f881931f4613d1811bddbf098d41675c61aef90313aed"
     },
     {
       "id": "tidal_surge",
       "mode": "wave",
       "source": "assets/svg/spells/tidal_surge.svg",
-      "file": "tidal_surge.svg"
+      "file": "tidal_surge.svg",
+      "sourceSha256": "327bbc165cace131231138b129a4df10eade1465d7b3cb61c7b7f0d3b101f561",
+      "derivedSha256": "1e0ad90185638a6eb344476baf15ed576cb758c55ef659cce932417174789eeb"
     },
     {
       "id": "tower_shield",
       "mode": "shield",
       "source": "assets/svg/armors/tower_shield.svg",
-      "file": "tower_shield.svg"
+      "file": "tower_shield.svg",
+      "sourceSha256": "02965f90dfbb8ee3f67e3c018672e792519d8bedbee65ee33ba98d8a029344b2",
+      "derivedSha256": "ac6175483f5af51a47985f9147eca4312adcfceb87d5dd7af1bcc887a95f6f19"
     },
     {
       "id": "warning",
       "mode": "warning",
       "source": "assets/svg/ui/warning.svg",
-      "file": "warning.svg"
+      "file": "warning.svg",
+      "sourceSha256": "3f432d549932624dc41a4ded990ae89a5a4f7dd7c6e913a333ab9cf6a0cd8dd3",
+      "derivedSha256": "6819ac796c016ecb1650e9059a7cc2aa8aaf44bb66dc858be49bd1f074752def"
     },
     {
       "id": "wind_cut",
       "mode": "wind",
       "source": "assets/svg/spells/wind_cut.svg",
-      "file": "wind_cut.svg"
+      "file": "wind_cut.svg",
+      "sourceSha256": "c8583862d56ad1b70b62bda6015336ddb190d641f2415ec542525352d43180b7",
+      "derivedSha256": "40de91bd985f923d713d2e0522720418ea3533d1af475da3b992fa0c00e80537"
+    }
+  ],
+  "imageAssets": [
+    {
+      "id": "immolate-fireball",
+      "sourceId": "fireball",
+      "file": "immolate-fireball.png",
+      "transformation": "AI-assisted dark-fantasy restyle, flat-key background replacement, chroma-key transparency removal, and 512px normalization",
+      "licenseCoverage": "Covered by the Runic Relic royalty-free source license documented in NOTICE",
+      "mode": "flame",
+      "source": "assets/png/512/spells/fireball.png",
+      "sourceSha256": "3660f30fed01ac9181e72f8379e34d7db6b59947038c32f76bcc5b624a1005d2",
+      "derivedSha256": "d281d861c645d6020de98db02d8b661341aa69482099b05cf1975f97983a837c"
     }
   ]
 }

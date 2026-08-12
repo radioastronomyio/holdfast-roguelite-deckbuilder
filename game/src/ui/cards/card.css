@@ -70,6 +70,10 @@
   stroke-linejoin: round;
 }
 
+.hf-card-back__emblem image {
+  pointer-events: none;
+}
+
 .hf-card .gui-card__header {
   display: grid;
   grid-template-columns: calc(var(--gui-space-sm) * 4) 1fr calc(var(--gui-space-sm) * 4);

@@ -19,13 +19,13 @@ related_documents:
 
 # Card Renderer
 
-The Holdfast card is a composition over the GameUI `createCard` primitive (`game/vendor/gameui/components/cards/`). It is data-driven: `createHoldfastCard(card, opts)` renders any `Card` from the shared JSON with no per-card hardcoding. Adding a card to the JSON is the only step required to render a new card.
+The Holdfast card is a composition over the GameUI `createCard` primitive (`game/vendor/gameui/components/cards/`). It is data-driven: `createHoldfastCard(card, opts)` renders mapped `Card` records from the shared JSON without gameplay-specific branches. Adding a card requires a matching presentation row in `CARD_VISUAL_ROWS` (motif, palette, and optional art source); the exact JSON-to-presentation coverage test fails loudly when either side is missing.
 
 | Path | Purpose |
 |------|---------|
 | `contract.ts` | Frozen `createHoldfastCard` options and returned-control types consumed by the combat and flow-screen specs. |
 | `holdfastCard.ts` | Factory that composes the six-region frame over `createCard` and binds all real card fields without changing the public contract. |
-| `cardBack.ts` | Separate `createHoldfastCardBack()` factory for face-down cards: a front-sized, token-driven, SVG-only Runic field and central emblem with no card-data or front-contract dependency. |
+| `cardBack.ts` | Separate `createHoldfastCardBack()` factory for face-down cards: a front-sized, token-driven, vector-only Runic field with a loaded `arcane_burst.svg` emblem from the active manifest vocabulary and no card-data or front-contract dependency. |
 | `cardArt.ts` / `cardMap.ts` | Parametric inline-SVG scene composition and loud tag/effect mapping over the attributed Runic Relic-derived vocabulary. Presentation rows default to SVG motifs; Immolate alone selects its Holdfast-owned PNG inside the same SVG scene. |
 | `cardBadges.ts` | Inline-SVG energy badge and `upgrade_tier` gem factories. Shine is reserved for upgraded cards. |
 | `iconMap.ts` | Card-tag-to-accent precedence only; legacy PNG mappings are retired in `recycle/2026-08-10-card-icons/`. |
@@ -35,6 +35,6 @@ Composition, not forking: the factory calls `createCard` for the frame and adds 
 
 Specs 04 (combat) and 05 (flow screens) consume this component without modification: combat maps energy affordability to `setEnergyAffordable` (→ `setDisabled`) and hand selection to `onSelect`.
 
-`createHoldfastCardBack()` is intentionally not an option on `createHoldfastCard`. It returns an accessible, face-down `article` with the distinct `.hf-card-back__pattern` and `.hf-card-back__emblem` anatomy, making hidden deck, draw-pile, and opponent-card states possible without mutating the frozen front-card API. Its Runic geometry is inline SVG only: it does not load an `<img>`, `<image>`, or raster asset.
+`createHoldfastCardBack()` is intentionally not an option on `createHoldfastCard`. It returns an accessible, face-down `article` with the distinct `.hf-card-back__pattern` and `.hf-card-back__emblem` anatomy, making hidden deck, draw-pile, and opponent-card states possible without mutating the frozen front-card API. Its chrome and patterned field are inline SVG; the central vector `<image>` loads the manifest-backed `arcane_burst.svg` rune-mode derivative. It never loads raster chrome.
 
-The DEV gallery is the approval surface for the full contract. It renders all 21 JSON cards exactly once, a base/upgraded pair, the SVG and PNG motif paths, and a face-down card. Its Playwright gate checks the locked five-layer art order, foreground text, tall card and near-square art geometry, semantic clipping, attack-card variety axes, loaded effect glyphs, and real selection behavior before capturing `tests/baseline/08-card-gallery.png`.
+The DEV gallery is the approval surface for the full contract. It renders all 21 JSON cards exactly once, a base/upgraded pair, the SVG and PNG motif paths, and a face-down card. Its Playwright gate checks the locked five-layer art order, foreground text, tall card and near-square art geometry, semantic clipping, attack-card variety axes, loaded effect/back glyphs, computed complementary back palette, and real selection behavior before capturing the 1440-wide full-height `tests/baseline/08-card-gallery.png` contact sheet.

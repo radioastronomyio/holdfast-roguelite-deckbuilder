@@ -73,12 +73,12 @@ Each milestone is specified as an [OpenSpec](https://github.com/Fission-AI/OpenS
 | M3d: Final Balance | ✅ Complete | Stun fix, AggressiveAI v2, upgrade randomization |
 | M4a: TS Resolver Port | ✅ Complete | Browser-safe TypeScript simulation package + parity tests |
 | M4b-GUI: GameUI Frontend Shell | ✅ Complete | Full-DOM GameUI dark-fantasy shell, vanilla screen router, placeholder screens, Playwright baselines |
-| M4b-GUI-06: Card System Rewrite | ✅ Complete | Frozen adapter contract, data-driven SVG frame/art/badges/gems, 21-card gallery, build/publish hardening |
+| M4b-GUI-06: Card System Rewrite | ✅ Complete | Frozen adapter contract, tall five-layer mixed SVG/PNG art, Runic card backs, full 21-card contact sheet, build/publish hardening |
 | M4b-GUI-04: Combat Screen | ⬜ Next | Compose the finished card system into the stepper-driven combat surface after operator approval |
 | M4b-GUI-05: Flow Screens | ⬜ Queued | Complete the remaining campaign-flow screens after combat |
 | M6: Visual Polish | ⬜ Planned | Asset integration, animations, effects |
 
-**367 simulation tests and 77 frontend tests passing**, plus 8 Playwright dark-fantasy baselines and the production build-output gate. Run `pytest simulation/tests/ -v` from repo root and `npm test` from `game/`.
+**367 simulation tests and 101 frontend tests passing**, plus 8 Playwright dark-fantasy baselines and the production build-output gate. Run `pytest simulation/tests/ -v` from repo root and `npm test` from `game/`.
 
 ### M3d Balance Results (5000 seeds x 3 strategies)
 

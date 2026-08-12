@@ -1,9 +1,11 @@
-/** Parametric SVG-only card back, visually paired with the Holdfast front. */
+/** Parametric vector-only card back, visually paired with the Holdfast front. */
 
 import "./card.css";
+import { cardIconUrl, RUNIC_ICON_MODES } from "./cardMap";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 let patternId = 0;
+const BACK_EMBLEM = "arcane_burst" as const;
 
 function svgElement<K extends keyof SVGElementTagNameMap>(
   tag: K,
@@ -16,7 +18,7 @@ function svgElement<K extends keyof SVGElementTagNameMap>(
   return element;
 }
 
-/** Render a face-down Holdfast card with a Runic Relic-derived geometric emblem. */
+/** Render a face-down Holdfast card with an active-vocabulary Runic emblem. */
 export function createHoldfastCardBack(): HTMLElement {
   const back = document.createElement("article");
   back.className = "hf-card-back hf-card-back--magic";
@@ -83,7 +85,8 @@ function createRunicEmblem(): SVGSVGElement {
   const emblem = svgElement("svg", {
     class: "hf-card-back__emblem",
     viewBox: "0 0 240 240",
-    "data-derived-from": "runic-relic",
+    "data-runic-symbol": BACK_EMBLEM,
+    "data-runic-mode": RUNIC_ICON_MODES[BACK_EMBLEM],
     "aria-hidden": "true",
     focusable: "false",
   });
@@ -92,17 +95,15 @@ function createRunicEmblem(): SVGSVGElement {
     fill: "none",
     stroke: "currentColor",
   });
-  const rune = svgElement("path", {
-    d: "M120 42 166 88 120 134 74 88ZM120 134v64M74 88v64L120 198l46-46V88M52 120h136",
-    fill: "none",
-    stroke: "currentColor",
+  const rune = svgElement("image", {
+    href: cardIconUrl(BACK_EMBLEM, "svg"),
+    x: "24",
+    y: "24",
+    width: "192",
+    height: "192",
+    preserveAspectRatio: "xMidYMid meet",
+    "data-runic-mode": RUNIC_ICON_MODES[BACK_EMBLEM],
   });
-  const core = svgElement("circle", {
-    cx: "120",
-    cy: "120",
-    r: "16",
-    fill: "currentColor",
-  });
-  emblem.append(outer, rune, core);
+  emblem.append(outer, rune);
   return emblem;
 }

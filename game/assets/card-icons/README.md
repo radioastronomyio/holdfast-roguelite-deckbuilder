@@ -22,7 +22,8 @@ related_documents:
 This directory contains the self-coloured SVG vocabulary used by Holdfast card
 art and modifier rows. Each file is a palette-derived adaptation of one Runic
 Relic RPG Icons 144 source file, not a byte-identical copy. The exact source ID,
-mode, path, and output filename are recorded in `manifest.json`.
+mode, path, output filename, and source/output SHA-256 hashes are recorded in
+`manifest.json`.
 
 Regenerate the derivatives from an authorized local copy of the reference pack:
 
@@ -33,5 +34,10 @@ node game/scripts/derive-runic-card-icons.mjs /path/to/runic-relic-rpg-icons-144
 The SVGs render as external image assets because the source artwork contains
 its own multicolour gradients. A1.4 adds one Holdfast-owned PNG motif,
 `immolate-fireball.png`, selected only by the Immolate presentation row inside
-the otherwise inline-SVG art scene. It is not used for card chrome, badges,
-upgrade gems, pips, or effect glyphs.
+the otherwise inline-SVG art scene. Its Runic source is `fireball` at
+`assets/png/512/spells/fireball.png`; the AI-assisted restyle, flat-key
+replacement, chroma-key transparency removal, 512px normalization, exact
+source/derived hashes, and license coverage are recorded in `manifest.json`
+and `NOTICE`. The derive command validates and preserves this edited PNG rather
+than overwriting it. It is not used for card chrome, badges, upgrade gems,
+pips, effect glyphs, or card-back chrome.

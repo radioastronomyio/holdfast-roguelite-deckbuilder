@@ -1,4 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -9,6 +10,27 @@ const sourceRoot = resolve(
     ?? "/opt/agents/repos/html5-game-ui-framework/reference-files-ui/runic-relic-rpg-icons-144",
 );
 const outputRoot = resolve(process.argv[3] ?? join(gameRoot, "assets/card-icons"));
+const imageDerivative = Object.freeze({
+  id: "immolate-fireball",
+  sourceId: "fireball",
+  file: "immolate-fireball.png",
+  transformation:
+    "AI-assisted dark-fantasy restyle, flat-key background replacement, chroma-key transparency removal, and 512px normalization",
+  licenseCoverage: "Covered by the Runic Relic royalty-free source license documented in NOTICE",
+});
+
+function sha256(path) {
+  return createHash("sha256").update(readFileSync(path)).digest("hex");
+}
+
+function assertPng(path, label) {
+  const bytes = readFileSync(path);
+  const signature = bytes.subarray(0, 8).toString("hex");
+  const firstChunk = bytes.subarray(12, 16).toString("ascii");
+  if (bytes.length < 24 || signature !== "89504e470d0a1a0a" || firstChunk !== "IHDR") {
+    throw new Error(`${label} is not a valid PNG: ${path}`);
+  }
+}
 
 const selectedIds = new Set([
   "arcane_burst",
@@ -60,11 +82,22 @@ if (selected.length !== selectedIds.size) {
   throw new Error(`Runic Relic manifest is missing required icons: ${missing.join(", ")}`);
 }
 
+const imageSourceAsset = selected.find(({ id }) => id === imageDerivative.sourceId);
+const imageSourceRelative = imageSourceAsset?.png?.["512"];
+if (!imageSourceRelative) {
+  throw new Error(
+    `Runic Relic manifest is missing the 512px PNG for ${imageDerivative.sourceId}`,
+  );
+}
+const imageSourcePath = join(sourceRoot, imageSourceRelative);
+const imageDerivedPath = join(outputRoot, imageDerivative.file);
+
 const expectedOutputFiles = new Set([
   ...selected.map(({ id }) => `${id}.svg`),
   "README.md",
   "NOTICE",
   "manifest.json",
+  imageDerivative.file,
 ]);
 if (existsSync(outputRoot)) {
   const unexpected = readdirSync(outputRoot)
@@ -76,6 +109,18 @@ if (existsSync(outputRoot)) {
 }
 
 mkdirSync(outputRoot, { recursive: true });
+if (!existsSync(imageDerivedPath)) {
+  throw new Error(
+    `Required edited PNG derivative is missing (the derivation command preserves it): ${imageDerivedPath}`,
+  );
+}
+assertPng(imageSourcePath, "Runic Relic source");
+assertPng(imageDerivedPath, "Holdfast image derivative");
+if (sha256(imageSourcePath) === sha256(imageDerivedPath)) {
+  throw new Error("Holdfast image derivative must not be a byte-identical raw pack export");
+}
+
+const derivedAssets = [];
 for (const asset of selected) {
   const sourcePath = join(sourceRoot, asset.svgPath);
   let derived = readFileSync(sourcePath, "utf8");
@@ -90,7 +135,16 @@ for (const asset of selected) {
     /(<svg[^>]*>)/,
     `$1\n  <metadata>Holdfast recolour derived from Runic Relic RPG Icons 144 (${asset.id}, ${asset.mode} mode).</metadata>`,
   );
-  writeFileSync(join(outputRoot, `${asset.id}.svg`), derived);
+  const derivedPath = join(outputRoot, `${asset.id}.svg`);
+  writeFileSync(derivedPath, derived);
+  derivedAssets.push({
+    id: asset.id,
+    mode: asset.mode,
+    source: asset.svgPath,
+    file: `${asset.id}.svg`,
+    sourceSha256: sha256(sourcePath),
+    derivedSha256: sha256(derivedPath),
+  });
 }
 
 const derivedManifest = {
@@ -98,16 +152,21 @@ const derivedManifest = {
   sourcePack: sourceManifest.name,
   sourceVersion: sourceManifest.version,
   transformation: "Holdfast dark-fantasy palette recolour plus provenance metadata",
-  assets: selected.map((asset) => ({
-    id: asset.id,
-    mode: asset.mode,
-    source: asset.svgPath,
-    file: `${asset.id}.svg`,
-  })),
+  licenseNotice: "NOTICE",
+  assets: derivedAssets,
+  imageAssets: [{
+    ...imageDerivative,
+    mode: imageSourceAsset.mode,
+    source: imageSourceRelative,
+    sourceSha256: sha256(imageSourcePath),
+    derivedSha256: sha256(imageDerivedPath),
+  }],
 };
 writeFileSync(
   join(outputRoot, "manifest.json"),
   `${JSON.stringify(derivedManifest, null, 2)}\n`,
 );
 
-console.log(`Derived ${selected.length} Runic Relic SVGs into ${outputRoot}.`);
+console.log(
+  `Derived ${selected.length} Runic Relic SVGs and verified ${imageDerivative.file} in ${outputRoot}.`,
+);

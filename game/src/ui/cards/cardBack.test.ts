@@ -13,8 +13,10 @@ describe("createHoldfastCardBack", () => {
     expect(back.getAttribute("role")).toBe("img");
     expect(back.getAttribute("aria-label")).toBe("Holdfast card back");
     expect(back.querySelector(".hf-card-back__pattern pattern")).not.toBeNull();
-    expect(back.querySelector(".hf-card-back__emblem[data-derived-from='runic-relic']")).not.toBeNull();
-    expect(back.querySelectorAll("img, image")).toHaveLength(0);
+    const emblem = back.querySelector(".hf-card-back__emblem image");
+    expect(emblem?.getAttribute("href")).toBe("/assets/card-icons/arcane_burst.svg");
+    expect(emblem?.getAttribute("data-runic-mode")).toBe("rune");
+    expect(back.querySelectorAll("img, image[href$='.png']")).toHaveLength(0);
   });
 
   it("gives each repeated SVG field an isolated pattern reference", () => {
