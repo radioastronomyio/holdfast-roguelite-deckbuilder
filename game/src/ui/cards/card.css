@@ -15,7 +15,7 @@
 
 .hf-card .gui-card__header {
   display: grid;
-  grid-template-columns: calc(var(--gui-space-xl) + var(--gui-space-sm)) 1fr var(--gui-space-xl);
+  grid-template-columns: calc(var(--gui-space-xl) + var(--gui-space-sm)) 1fr calc(var(--gui-space-xl) + var(--gui-space-sm));
   align-items: center;
   min-block-size: calc(var(--gui-space-xl) + var(--gui-space-xs));
 }
@@ -38,6 +38,7 @@
 
 .hf-card__header-glyph {
   display: grid;
+  justify-self: end;
   place-items: center;
   inline-size: var(--gui-space-xl);
   block-size: var(--gui-space-xl);
@@ -198,6 +199,16 @@
   align-items: center;
   padding: 0;
   color: var(--gui-text);
+}
+
+.hf-card__attack {
+  justify-self: start;
+  align-self: end;
+}
+
+.hf-card__guard {
+  justify-self: end;
+  align-self: end;
 }
 
 .hf-card__stat-label {

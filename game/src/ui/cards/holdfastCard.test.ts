@@ -11,6 +11,8 @@
  * @module ui/cards/holdfastCard.test
  */
 
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import baseCardsJson from "../../../../data/cards/base-cards.json";
 import upgradeTreesJson from "../../../../data/cards/upgrade-trees.json";
@@ -19,6 +21,7 @@ import { createHoldfastCard, formatEffectValue } from "./holdfastCard";
 
 const baseCards = baseCardsJson as unknown as Card[];
 const upgradeTrees = upgradeTreesJson as unknown as Record<string, UpgradeTree>;
+const cardCss = readFileSync(resolve(process.cwd(), "src/ui/cards/card.css"), "utf8");
 const byId = (id: string): Card => {
   const card = baseCards.find((c) => c.id === id);
   if (!card) throw new Error(`missing test card ${id}`);
@@ -85,6 +88,21 @@ describe("createHoldfastCard rendering", () => {
     expect(header?.querySelector(".hf-card__header-glyph use")).not.toBeNull();
     expect(header?.querySelector(".hf-card__header-emblem")).toBeNull();
     expect(control.el.querySelector(".hf-card__art-overlay")).toBeNull();
+  });
+
+  it("uses symmetric header tracks and lower-corner footer stat anchors", () => {
+    expect(cardCss).toMatch(
+      /\.hf-card \.gui-card__header\s*\{[^}]*grid-template-columns:\s*calc\(var\(--gui-space-xl\) \+ var\(--gui-space-sm\)\) 1fr calc\(var\(--gui-space-xl\) \+ var\(--gui-space-sm\)\);[^}]*\}/s,
+    );
+    expect(cardCss).toMatch(
+      /\.hf-card__header-glyph\s*\{[^}]*justify-self:\s*end;[^}]*\}/s,
+    );
+    expect(cardCss).toMatch(
+      /\.hf-card__attack\s*\{[^}]*justify-self:\s*start;[^}]*align-self:\s*end;[^}]*\}/s,
+    );
+    expect(cardCss).toMatch(
+      /\.hf-card__guard\s*\{[^}]*justify-self:\s*end;[^}]*align-self:\s*end;[^}]*\}/s,
+    );
   });
 
   it("uses foreground text roles and a gem-plus-three-pip footer", () => {
