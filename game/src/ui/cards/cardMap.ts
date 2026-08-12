@@ -34,33 +34,6 @@ export interface CardVisual {
 
 type CardMotifPalette = Pick<CardVisual, "motif" | "palette">;
 
-const CARD_TAG_VISUAL: ReadonlyArray<readonly [string, CardMotifPalette]> = [
-  ["fire", { motif: "fireball", palette: "danger" }],
-  ["lightning", { motif: "focused-lightning", palette: "warning" }],
-  ["ice", { motif: "ice-bolt", palette: "info" }],
-  ["cold", { motif: "ice-bolt", palette: "info" }],
-  ["dark", { motif: "dread-skull", palette: "magic" }],
-  ["lifesteal", { motif: "dread-skull", palette: "magic" }],
-  ["poison", { motif: "acid-blob", palette: "success" }],
-  ["shred", { motif: "acid-blob", palette: "success" }],
-  ["blind", { motif: "bleeding-eye", palette: "warning" }],
-  ["trap", { motif: "mantrap", palette: "warning" }],
-  ["pressure", { motif: "mantrap", palette: "warning" }],
-  ["hazard", { motif: "mantrap", palette: "warning" }],
-  ["defense", { motif: "bordered-shield", palette: "info" }],
-  ["heal", { motif: "heart-bottle", palette: "success" }],
-  ["speed", { motif: "fast-arrow", palette: "warning" }],
-  ["energy", { motif: "crystal-ball", palette: "magic" }],
-  ["magic", { motif: "crystal-ball", palette: "magic" }],
-  ["aoe", { motif: "pentarrows-tornado", palette: "danger" }],
-  ["control", { motif: "magic-swirl", palette: "warning" }],
-  ["debuff", { motif: "magic-swirl", palette: "warning" }],
-  ["attack", { motif: "crossed-swords", palette: "danger" }],
-  ["physical", { motif: "crossed-swords", palette: "danger" }],
-  ["buff", { motif: "magic-swirl", palette: "success" }],
-  ["utility", { motif: "crystal-ball", palette: "primary" }],
-];
-
 /**
  * The scene's lead motif and palette are deliberately card-specific rather
  * than a tag-only lookup. This keeps mechanically adjacent cards readable as
@@ -89,6 +62,9 @@ const CARD_VISUAL_ROWS: Readonly<Record<string, CardMotifPalette>> = {
   crushing_weight_hazard_01: { motif: "mantrap", palette: "warning" },
   blinding_light_hazard_01: { motif: "bleeding-eye", palette: "warning" },
 };
+
+/** Stable public inventory used to ensure the explicit visual rows cover JSON exactly. */
+export const CARD_VISUAL_IDS = Object.freeze(Object.keys(CARD_VISUAL_ROWS));
 
 /** Ground silhouettes are category-level scenery derived only from card tags. */
 const CARD_TAG_GROUND: ReadonlyArray<readonly [string, CardArtGround]> = [
@@ -147,15 +123,11 @@ const STAT_SYMBOL: Partial<Record<Stat, CardArtSymbol>> = {
 };
 
 export function resolveCardVisual(card: Pick<Card, "id" | "tags">): CardVisual {
-  const motifPalette = CARD_VISUAL_ROWS[card.id] ?? resolveTagVisual(card.tags);
-  return { ...motifPalette, ground: resolveGround(card.tags) };
-}
-
-function resolveTagVisual(tags: readonly string[]): CardMotifPalette {
-  for (const [tag, visual] of CARD_TAG_VISUAL) {
-    if (tags.includes(tag)) return visual;
+  const motifPalette = CARD_VISUAL_ROWS[card.id];
+  if (!motifPalette) {
+    throw new Error(`Unmapped card visual: id=${card.id}`);
   }
-  return { motif: "crystal-ball", palette: "primary" };
+  return { ...motifPalette, ground: resolveGround(card.tags) };
 }
 
 function resolveGround(tags: readonly string[]): CardArtGround {

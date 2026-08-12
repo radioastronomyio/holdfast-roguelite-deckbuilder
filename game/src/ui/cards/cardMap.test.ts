@@ -3,6 +3,7 @@ import baseCardsJson from "../../../../data/cards/base-cards.json";
 import hazardCardsJson from "../../../../data/cards/hazard-cards.json";
 import type { Card, Modifier } from "../../sim/types";
 import {
+  CARD_VISUAL_IDS,
   CARD_ART_SYMBOLS,
   resolveCardVisual,
   resolveEffectSymbol,
@@ -22,6 +23,16 @@ describe("card visual mappings", () => {
       expect(visual.palette, card.id).toMatch(/^(primary|success|warning|danger|info|magic|pink)$/);
       expect(visual.ground, card.id).toMatch(/^(arcane|ash|ice|marsh|ruin|stone|thicket)$/);
     }
+  });
+
+  it("locks the visual rows to exactly the current JSON card IDs", () => {
+    expect([...CARD_VISUAL_IDS].sort()).toEqual(cards.map((card) => card.id).sort());
+  });
+
+  it("fails loudly when a card ID has no explicit visual row", () => {
+    expect(() => resolveCardVisual({ id: "unknown_card_01", tags: ["attack"] } as Card)).toThrow(
+      /Unmapped card visual: id=unknown_card_01/,
+    );
   });
 
   it("gives Arcane Strike, Immolate, and Shield Bash distinct scene axes", () => {

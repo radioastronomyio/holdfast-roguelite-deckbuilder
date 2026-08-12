@@ -13,7 +13,7 @@ describe("createCardArt", () => {
     expect(art.querySelector("linearGradient")).not.toBeNull();
     expect(
       Array.from(art.children)
-        .filter((child) => child.classList.length > 0)
+        .filter((child) => child.tagName.toLowerCase() !== "defs")
         .map((child) => child.getAttribute("class")),
     ).toEqual([
       "hf-card-art__sky",
