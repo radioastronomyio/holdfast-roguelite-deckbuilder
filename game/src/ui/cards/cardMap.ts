@@ -6,23 +6,32 @@ import type { CardAccent } from "../gameui";
 import type { Card } from "../../sim/types";
 
 export const CARD_ART_SYMBOLS = [
-  "acid-blob",
-  "bleeding-eye",
-  "bordered-shield",
-  "crossed-swords",
-  "crystal-ball",
-  "dread-skull",
-  "fast-arrow",
+  "arcane_burst",
+  "barrier_spell",
+  "black_bomb",
+  "crescent_blade",
   "fireball",
-  "focused-lightning",
-  "heart-bottle",
-  "ice-bolt",
-  "magic-swirl",
-  "mantrap",
-  "pentarrows-tornado",
+  "frostbite",
+  "healing_light",
+  "health_potion",
+  "holy_ray",
+  "life_drain",
+  "mana_orb",
+  "poison_cloud",
+  "rage_surge",
+  "root_snare",
+  "rune_hammer",
+  "stone_spike",
+  "swift_boots",
+  "thunder_arc",
+  "tidal_surge",
+  "tower_shield",
+  "warning",
+  "wind_cut",
 ] as const;
 
 export type CardArtSymbol = (typeof CARD_ART_SYMBOLS)[number];
+export type CardIconFormat = "svg" | "png";
 export const CARD_ART_GROUNDS = ["arcane", "ash", "ice", "marsh", "ruin", "stone", "thicket"] as const;
 export type CardArtGround = (typeof CARD_ART_GROUNDS)[number];
 
@@ -40,27 +49,27 @@ type CardMotifPalette = Pick<CardVisual, "motif" | "palette">;
  * distinct objects while leaving gameplay definitions in data/ untouched.
  */
 const CARD_VISUAL_ROWS: Readonly<Record<string, CardMotifPalette>> = {
-  arcane_strike_01: { motif: "magic-swirl", palette: "magic" },
+  arcane_strike_01: { motif: "arcane_burst", palette: "magic" },
   immolate_01: { motif: "fireball", palette: "danger" },
-  shield_bash_01: { motif: "bordered-shield", palette: "info" },
-  sweeping_blade_01: { motif: "crossed-swords", palette: "danger" },
-  phalanx_01: { motif: "bordered-shield", palette: "info" },
-  adrenaline_01: { motif: "fast-arrow", palette: "warning" },
-  cleanse_01: { motif: "heart-bottle", palette: "success" },
-  deep_focus_01: { motif: "crystal-ball", palette: "magic" },
-  acid_flask_01: { motif: "acid-blob", palette: "success" },
-  frost_bolt_01: { motif: "ice-bolt", palette: "info" },
-  power_surge_01: { motif: "focused-lightning", palette: "warning" },
-  stone_wall_01: { motif: "bordered-shield", palette: "info" },
-  lightning_chain_01: { motif: "focused-lightning", palette: "warning" },
-  heal_potion_01: { motif: "heart-bottle", palette: "success" },
-  drain_life_01: { motif: "dread-skull", palette: "magic" },
-  tripwire_hazard_01: { motif: "mantrap", palette: "warning" },
-  miasma_hazard_01: { motif: "acid-blob", palette: "success" },
-  toxic_fumes_hazard_01: { motif: "acid-blob", palette: "success" },
-  freezing_wind_hazard_01: { motif: "ice-bolt", palette: "info" },
-  crushing_weight_hazard_01: { motif: "mantrap", palette: "warning" },
-  blinding_light_hazard_01: { motif: "bleeding-eye", palette: "warning" },
+  shield_bash_01: { motif: "tower_shield", palette: "info" },
+  sweeping_blade_01: { motif: "crescent_blade", palette: "danger" },
+  phalanx_01: { motif: "barrier_spell", palette: "info" },
+  adrenaline_01: { motif: "swift_boots", palette: "warning" },
+  cleanse_01: { motif: "holy_ray", palette: "success" },
+  deep_focus_01: { motif: "mana_orb", palette: "magic" },
+  acid_flask_01: { motif: "black_bomb", palette: "success" },
+  frost_bolt_01: { motif: "frostbite", palette: "info" },
+  power_surge_01: { motif: "rage_surge", palette: "warning" },
+  stone_wall_01: { motif: "stone_spike", palette: "info" },
+  lightning_chain_01: { motif: "thunder_arc", palette: "warning" },
+  heal_potion_01: { motif: "health_potion", palette: "success" },
+  drain_life_01: { motif: "life_drain", palette: "magic" },
+  tripwire_hazard_01: { motif: "root_snare", palette: "warning" },
+  miasma_hazard_01: { motif: "tidal_surge", palette: "success" },
+  toxic_fumes_hazard_01: { motif: "poison_cloud", palette: "success" },
+  freezing_wind_hazard_01: { motif: "wind_cut", palette: "info" },
+  crushing_weight_hazard_01: { motif: "rune_hammer", palette: "warning" },
+  blinding_light_hazard_01: { motif: "warning", palette: "warning" },
 };
 
 /** Stable public inventory used to ensure the explicit visual rows cover JSON exactly. */
@@ -88,38 +97,40 @@ const CARD_TAG_GROUND: ReadonlyArray<readonly [string, CardArtGround]> = [
 
 const EFFECT_TAG_SYMBOL: ReadonlyArray<readonly [string, CardArtSymbol]> = [
   ["fire", "fireball"],
-  ["lightning", "focused-lightning"],
-  ["ice", "ice-bolt"],
-  ["cold", "ice-bolt"],
-  ["poison", "acid-blob"],
-  ["shred", "acid-blob"],
-  ["blind", "bleeding-eye"],
-  ["dark", "dread-skull"],
-  ["lifesteal", "dread-skull"],
-  ["slow", "fast-arrow"],
-  ["speed", "fast-arrow"],
-  ["heal", "heart-bottle"],
-  ["defense", "bordered-shield"],
-  ["energy", "crystal-ball"],
-  ["power", "focused-lightning"],
-  ["aoe", "pentarrows-tornado"],
-  ["trap", "mantrap"],
-  ["pressure", "mantrap"],
-  ["hazard", "mantrap"],
-  ["control", "magic-swirl"],
-  ["debuff", "magic-swirl"],
-  ["attack", "crossed-swords"],
-  ["physical", "crossed-swords"],
-  ["buff", "magic-swirl"],
-  ["utility", "crystal-ball"],
+  ["dot", "fireball"],
+  ["lightning", "thunder_arc"],
+  ["ice", "frostbite"],
+  ["cold", "frostbite"],
+  ["poison", "poison_cloud"],
+  ["shred", "poison_cloud"],
+  ["blind", "holy_ray"],
+  ["dark", "life_drain"],
+  ["lifesteal", "life_drain"],
+  ["slow", "swift_boots"],
+  ["speed", "swift_boots"],
+  ["heal", "healing_light"],
+  ["defense", "barrier_spell"],
+  ["energy", "mana_orb"],
+  ["power", "rage_surge"],
+  ["aoe", "tidal_surge"],
+  ["trap", "root_snare"],
+  ["pressure", "rune_hammer"],
+  ["magic", "arcane_burst"],
+  ["control", "root_snare"],
+  ["attack", "crescent_blade"],
+  ["physical", "crescent_blade"],
+  ["hazard", "warning"],
+  ["debuff", "warning"],
+  ["buff", "arcane_burst"],
+  ["utility", "mana_orb"],
 ];
 
 const STAT_SYMBOL: Partial<Record<Stat, CardArtSymbol>> = {
-  [Stat.HP]: "heart-bottle",
-  [Stat.Power]: "focused-lightning",
-  [Stat.Speed]: "fast-arrow",
-  [Stat.Defense]: "bordered-shield",
-  [Stat.Energy]: "crystal-ball",
+  [Stat.HP]: "healing_light",
+  [Stat.Power]: "rage_surge",
+  [Stat.Speed]: "swift_boots",
+  [Stat.Defense]: "barrier_spell",
+  [Stat.Energy]: "mana_orb",
 };
 
 export function resolveCardVisual(card: Pick<Card, "id" | "tags">): CardVisual {
@@ -141,13 +152,15 @@ export function resolveEffectSymbol(modifier: Modifier): CardArtSymbol {
   for (const [tag, symbol] of EFFECT_TAG_SYMBOL) {
     if (modifier.tags.includes(tag)) return symbol;
   }
-  const symbol = STAT_SYMBOL[modifier.stat];
-  if (symbol) return symbol;
+  if (modifier.tags.length === 0) {
+    const symbol = STAT_SYMBOL[modifier.stat];
+    if (symbol) return symbol;
+  }
   throw new Error(
     `Unmapped card effect: stat=${String(modifier.stat)} tags=${modifier.tags.join(",")}`,
   );
 }
 
-export function cardArtIconUrl(symbol: CardArtSymbol): string {
-  return `${import.meta.env.BASE_URL}assets/card-art-icons/${symbol}.svg#icon`;
+export function cardIconUrl(symbol: CardArtSymbol, format: CardIconFormat): string {
+  return `${import.meta.env.BASE_URL}assets/card-icons/${symbol}.${format}`;
 }

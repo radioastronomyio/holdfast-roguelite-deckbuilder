@@ -41,14 +41,14 @@ copyDir(join(gameRoot, "vendor/gameui"), join(publicRoot, "vendor/gameui"));
 
 // --- Zero-raster card art (in-repo source) ---
 rmSync(join(publicRoot, "assets"), { recursive: true, force: true });
-stageCardArtIcons();
+stageCardIcons();
 
 console.log("Prepared browser data, GameUI vendor skin, and card SVG assets in game/public/.");
 
-/** Stage the attributed zero-raster symbol vocabulary used by card art. */
-function stageCardArtIcons() {
+/** Stage the licensed Runic Relic-derived SVG vocabulary used by card art. */
+function stageCardIcons() {
   copyDir(
-    join(gameRoot, "assets/card-art-icons"),
-    join(publicRoot, "assets/card-art-icons"),
+    join(gameRoot, "assets/card-icons"),
+    join(publicRoot, "assets/card-icons"),
   );
 }

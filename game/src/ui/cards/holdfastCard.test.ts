@@ -85,7 +85,9 @@ describe("createHoldfastCard rendering", () => {
       "hf-card__header-glyph",
     ]);
     expect(header?.querySelector(".hf-card__header-name")?.textContent).toBe("Arcane Strike");
-    expect(header?.querySelector(".hf-card__header-glyph use")).not.toBeNull();
+    expect(header?.querySelector(".hf-card__header-glyph img")?.getAttribute("src")).toMatch(
+      /\/assets\/card-icons\/.+\.svg$/,
+    );
     expect(header?.querySelector(".hf-card__header-emblem")).toBeNull();
     expect(control.el.querySelector(".hf-card__art-overlay")).toBeNull();
   });
@@ -146,16 +148,12 @@ describe("createHoldfastCard rendering", () => {
     expect(values.join(" ")).not.toContain("50000");
   });
 
-  it("resolves an inline currentColor SVG symbol for every effect row", () => {
+  it("resolves a self-coloured Runic SVG image for every effect row", () => {
     const control = render(byId("shield_bash_01"));
-    const icons = Array.from(control.el.querySelectorAll<SVGSVGElement>(".hf-card__effect-icon"));
+    const icons = Array.from(control.el.querySelectorAll<HTMLImageElement>(".hf-card__effect-icon"));
     expect(icons).toHaveLength(2);
     for (const icon of icons) {
-      const symbol = icon.querySelector("use");
-      expect(symbol?.getAttribute("href")).toMatch(
-        /\/assets\/card-art-icons\/.+\.svg#icon$/,
-      );
-      expect(symbol?.getAttribute("fill")).toBe("currentColor");
+      expect(icon.getAttribute("src")).toMatch(/\/assets\/card-icons\/.+\.svg$/);
     }
   });
 

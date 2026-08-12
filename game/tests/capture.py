@@ -83,7 +83,7 @@ BUILD_ASSET_PROBES: dict[str, str] = {
     "vendor/gameui/themes/dark-fantasy.css": "text/css",
     "vendor/gameui/themes/fonts/Cinzel.ttf": "font/",
     "vendor/gameui/themes/dark-fantasy-assets/panel-bg.webp": "image/",
-    "assets/card-art-icons/crossed-swords.svg": "image/svg+xml",
+    "assets/card-icons/crescent_blade.svg": "image/svg+xml",
 }
 
 # Each placeholder screen, in capture order. (step name, baseline filename).
@@ -435,31 +435,28 @@ def capture_card_gallery(context, base_url: str, origin: str, captured: set[str]
 
 
 def assert_card_gallery(page: Page, errors: list[str]) -> None:
-    """Assert the complete SVG card catalog and upgraded exemplar contract."""
+    """Assert the complete derived-SVG card catalog and upgraded exemplar contract."""
     state = page.evaluate(
-        """() => {
+        r"""() => {
             const catalog = document.querySelector('.hf-gallery__catalog');
             const cards = Array.from(catalog?.querySelectorAll('.hf-card[data-card-id]') || []);
             const ids = cards.map((card) => card.getAttribute('data-card-id'));
-            const artUses = cards.map((card) => card.querySelector('.hf-card-art use')?.getAttribute('href') || '');
+            const artImages = cards.map((card) => card.querySelector('.hf-card-art image')?.getAttribute('href') || '');
             const effects = Array.from(catalog?.querySelectorAll('.hf-card__effect') || []);
-            const effectUses = effects.map((row) => row.querySelector('use')?.getAttribute('href') || '');
-            const firstCard = cards[0];
-            const firstSymbol = firstCard?.querySelector('.hf-card-art__symbol');
+            const effectImages = effects.map((row) => row.querySelector('img')?.getAttribute('src') || '');
             return {
                 declaredCount: catalog?.getAttribute('data-gallery-card-count') || '',
                 cardCount: cards.length,
                 uniqueCount: new Set(ids).size,
-                missingArtSymbols: artUses.filter((href) => !href.endsWith('.svg#icon')).length,
+                missingArtSymbols: artImages.filter((href) => !href.match(/\/assets\/card-icons\/.+\.svg$/)).length,
                 effectCount: effects.length,
-                missingEffectSymbols: effectUses.filter((href) => !href.endsWith('.svg#icon')).length,
-                rasterCount: catalog?.querySelectorAll('img, image').length || 0,
+                missingEffectSymbols: effectImages.filter((href) => !href.match(/\/assets\/card-icons\/.+\.svg$/)).length,
+                pngCount: Array.from(catalog?.querySelectorAll('img, image') || [])
+                    .filter((image) => (image.getAttribute('src') || image.getAttribute('href') || '').endsWith('.png')).length,
                 costThree: catalog?.querySelector("[data-card-id='sweeping_blade_01'] .hf-card-badge--cost text")?.textContent || '',
                 catalogShine: catalog?.querySelectorAll('.hf-card--shine').length || 0,
                 exemplarShine: document.querySelectorAll('.hf-gallery__pair .hf-card--shine').length,
                 exemplarTier: document.querySelector('.hf-gallery__pair .hf-card--shine')?.getAttribute('data-upgrade-tier') || '',
-                symbolColor: firstSymbol ? getComputedStyle(firstSymbol).color : '',
-                borderColor: firstCard ? getComputedStyle(firstCard).borderTopColor : '',
             };
         }"""
     )
@@ -469,7 +466,7 @@ def assert_card_gallery(page: Page, errors: list[str]) -> None:
         "uniqueCount": 21,
         "missingArtSymbols": 0,
         "missingEffectSymbols": 0,
-        "rasterCount": 0,
+        "pngCount": 0,
         "costThree": "3",
         "catalogShine": 0,
         "exemplarShine": 1,
@@ -482,14 +479,8 @@ def assert_card_gallery(page: Page, errors: list[str]) -> None:
     if state["effectCount"] <= 0:
         errors.append("card-gallery check failed: no effect rows")
         print("    GALLERY-FAIL  no effect rows")
-    if state["symbolColor"] != state["borderColor"]:
-        errors.append(
-            "card-gallery check failed: SVG symbol does not inherit card accent "
-            f"({state['symbolColor']!r} != {state['borderColor']!r})"
-        )
-        print("    GALLERY-FAIL  SVG symbol/card accent mismatch")
     if not any(error.startswith("card-gallery check failed") for error in errors):
-        print("    GALLERY-OK    21 unique JSON cards; SVG symbols, cost, accent, and shine verified")
+        print("    GALLERY-OK    21 unique JSON cards; derived SVGs, cost, and shine verified")
 
 
 # =============================================================================

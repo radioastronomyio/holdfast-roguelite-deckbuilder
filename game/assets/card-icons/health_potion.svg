@@ -1,0 +1,35 @@
+<svg data-holdfast-derived-from="health_potion" xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <metadata>Holdfast recolour derived from Runic Relic RPG Icons 144 (health_potion, potion mode).</metadata>
+  <defs>
+    <filter id="drop" x="-35%" y="-30%" width="170%" height="170%">
+      <feDropShadow dx="0" dy="8" stdDeviation="7" flood-color="#050308" flood-opacity="0.45"/>
+    </filter>
+    <filter id="glow" x="-35%" y="-35%" width="170%" height="170%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#f3e2b3" flood-opacity="0.38"/>
+    </filter>
+    <linearGradient id="health_potion_rim" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#f3e2b3"/>
+    <stop offset="0.55" stop-color="#c49a43"/>
+    <stop offset="1" stop-color="#e68e3e"/>
+  </linearGradient>
+    <linearGradient id="health_potion_fill" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#34313a"/>
+    <stop offset="0.55" stop-color="#211e27"/>
+    <stop offset="1" stop-color="#141118"/>
+  </linearGradient>
+    <radialGradient id="health_potion_light" cx="46%" cy="33%" r="72%">
+      <stop offset="0" stop-color="#e68e3e" stop-opacity="0.3"/>
+      <stop offset="0.5" stop-color="#211e27" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#141118" stop-opacity="0.98"/>
+    </radialGradient>
+  </defs>
+  <rect width="256" height="256" fill="none"/>
+    <g filter="url(#drop)">
+      <rect x="18" y="18" width="220" height="220" rx="48" fill="#09070c"/>
+      <rect x="26" y="26" width="204" height="204" rx="42" fill="url(#health_potion_fill)" stroke="url(#health_potion_rim)" stroke-width="7"/>
+      <circle cx="128" cy="128" r="78" fill="url(#health_potion_light)" stroke="#c49a43" stroke-width="4" opacity="0.95"/>
+      <circle cx="128" cy="128" r="96" fill="none" stroke="#f3e2b3" stroke-width="2" opacity="0.24"/>
+      <path d="M42 210 L58 226 M198 30 L214 46" stroke="#e68e3e" stroke-width="7" stroke-linecap="round" opacity="0.8"/>
+      <g filter="url(#glow)"><path d="M100 46 H156 V86 L184 168 C196 204 168 220 128 220 C88 220 60 204 72 168 L100 86 Z" fill="#c49a43" stroke="#141118" stroke-width="9"/><path d="M82 166 C106 146 148 184 176 154" stroke="#f3e2b3" stroke-width="8" fill="none"/><rect x="94" y="36" width="68" height="32" rx="8" fill="#e68e3e" stroke="#141118" stroke-width="7"/></g>
+    </g>
+</svg>

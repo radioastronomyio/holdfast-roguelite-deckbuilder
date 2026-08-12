@@ -56,11 +56,11 @@
 }
 
 .hf-card__effect-icon {
+  display: block;
   width: 28px;
   height: 28px;
   flex: 0 0 auto;
-  color: var(--card-accent);
-  fill: currentColor;
+  object-fit: contain;
 }
 
 .hf-card__effect-text {

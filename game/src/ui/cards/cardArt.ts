@@ -1,7 +1,7 @@
 /** Parametric, zero-raster SVG scene used by every Holdfast card. */
 
 import type { CardAccent } from "../gameui";
-import { cardArtIconUrl } from "./cardMap";
+import { cardIconUrl } from "./cardMap";
 import type { CardArtGround, CardArtSymbol } from "./cardMap";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
@@ -31,18 +31,14 @@ function svgNode<K extends keyof SVGElementTagNameMap>(tag: K): SVGElementTagNam
 export function createCardSymbol(
   motif: CardArtSymbol,
   className: string,
-): SVGSVGElement {
-  const svg = svgNode("svg");
-  svg.classList.add(className);
-  svg.setAttribute("viewBox", "0 0 512 512");
-  svg.setAttribute("aria-hidden", "true");
-  svg.setAttribute("focusable", "false");
-
-  const symbol = svgNode("use");
-  symbol.setAttribute("href", cardArtIconUrl(motif));
-  symbol.setAttribute("fill", "currentColor");
-  svg.appendChild(symbol);
-  return svg;
+): HTMLImageElement {
+  const image = document.createElement("img");
+  image.classList.add(className);
+  image.src = cardIconUrl(motif, "svg");
+  image.alt = "";
+  image.setAttribute("aria-hidden", "true");
+  image.draggable = false;
+  return image;
 }
 
 export function createCardArt({ motif, palette, ground: groundType }: CardArtOptions): SVGSVGElement {
@@ -109,14 +105,14 @@ export function createCardArt({ motif, palette, ground: groundType }: CardArtOpt
   glow.setAttribute("ry", "175");
   glow.setAttribute("fill", `url(#${glowId})`);
 
-  const motifLayer = svgNode("use");
+  const motifLayer = svgNode("image");
   motifLayer.classList.add("hf-card-art__motif");
-  motifLayer.setAttribute("href", cardArtIconUrl(motif));
+  motifLayer.setAttribute("href", cardIconUrl(motif, "svg"));
   motifLayer.setAttribute("x", "172");
   motifLayer.setAttribute("y", "74");
   motifLayer.setAttribute("width", "256");
   motifLayer.setAttribute("height", "256");
-  motifLayer.setAttribute("fill", "currentColor");
+  motifLayer.setAttribute("preserveAspectRatio", "xMidYMid meet");
 
   const ground = svgNode("path");
   ground.classList.add("hf-card-art__ground", `hf-card-art__ground--${groundType}`);

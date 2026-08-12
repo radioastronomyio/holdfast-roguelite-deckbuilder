@@ -46,8 +46,10 @@
 }
 
 .hf-card__header-glyph-icon {
+  display: block;
   inline-size: 100%;
   block-size: 100%;
+  object-fit: contain;
 }
 
 .hf-card .gui-card__tag.hf-card__cost {
@@ -148,8 +150,7 @@
 }
 
 .hf-card-art__motif {
-  color: var(--hf-card-art-color);
-  fill: currentColor;
+  pointer-events: none;
 }
 
 .hf-card-art__vignette-stop--clear {

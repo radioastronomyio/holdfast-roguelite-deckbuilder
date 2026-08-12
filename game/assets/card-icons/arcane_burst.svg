@@ -1,0 +1,35 @@
+<svg data-holdfast-derived-from="arcane_burst" xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <metadata>Holdfast recolour derived from Runic Relic RPG Icons 144 (arcane_burst, rune mode).</metadata>
+  <defs>
+    <filter id="drop" x="-35%" y="-30%" width="170%" height="170%">
+      <feDropShadow dx="0" dy="8" stdDeviation="7" flood-color="#050308" flood-opacity="0.45"/>
+    </filter>
+    <filter id="glow" x="-35%" y="-35%" width="170%" height="170%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#f3e2b3" flood-opacity="0.38"/>
+    </filter>
+    <linearGradient id="arcane_burst_rim" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#f3e2b3"/>
+    <stop offset="0.55" stop-color="#a8e8ff"/>
+    <stop offset="1" stop-color="#69c7ef"/>
+  </linearGradient>
+    <linearGradient id="arcane_burst_fill" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#34313a"/>
+    <stop offset="0.55" stop-color="#211e27"/>
+    <stop offset="1" stop-color="#141118"/>
+  </linearGradient>
+    <radialGradient id="arcane_burst_light" cx="46%" cy="33%" r="72%">
+      <stop offset="0" stop-color="#69c7ef" stop-opacity="0.3"/>
+      <stop offset="0.5" stop-color="#211e27" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#141118" stop-opacity="0.98"/>
+    </radialGradient>
+  </defs>
+  <rect width="256" height="256" fill="none"/>
+    <g filter="url(#drop)">
+      <rect x="18" y="18" width="220" height="220" rx="48" fill="#09070c"/>
+      <rect x="26" y="26" width="204" height="204" rx="42" fill="url(#arcane_burst_fill)" stroke="url(#arcane_burst_rim)" stroke-width="7"/>
+      <circle cx="128" cy="128" r="78" fill="url(#arcane_burst_light)" stroke="#a8e8ff" stroke-width="4" opacity="0.95"/>
+      <circle cx="128" cy="128" r="96" fill="none" stroke="#f3e2b3" stroke-width="2" opacity="0.24"/>
+      <path d="M36 128 H54 M202 128 H220" stroke="#69c7ef" stroke-width="7" stroke-linecap="round" opacity="0.8"/>
+      <g filter="url(#glow)"><polygon points="128.0,52.0 149.0,91.6 193.8,90.0 170.0,128.0 193.8,166.0 149.0,164.4 128.0,204.0 107.0,164.4 62.2,166.0 86.0,128.0 62.2,90.0 107.0,91.6" fill="#a8e8ff" stroke="#141118" stroke-width="9"/><path d="M128 66 V190 M90 112 L128 66 L166 112 M98 164 H158" stroke="#f3e2b3" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></g>
+    </g>
+</svg>

@@ -16,9 +16,10 @@ const required = [
   // Shared game data.
   "public/data/cards/base-cards.json",
   "public/data/flavor/given_names.json",
-  // Zero-raster card-art vocabulary and its attribution.
-  "public/assets/card-art-icons/crossed-swords.svg",
-  "public/assets/card-art-icons/NOTICE",
+  // Runic Relic-derived card vocabulary and its provenance.
+  "public/assets/card-icons/crescent_blade.svg",
+  "public/assets/card-icons/NOTICE",
+  "public/assets/card-icons/manifest.json",
 ];
 
 const missing = required.filter((file) => !existsSync(join(root, file)));

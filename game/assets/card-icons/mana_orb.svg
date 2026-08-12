@@ -1,0 +1,35 @@
+<svg data-holdfast-derived-from="mana_orb" xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <metadata>Holdfast recolour derived from Runic Relic RPG Icons 144 (mana_orb, gem mode).</metadata>
+  <defs>
+    <filter id="drop" x="-35%" y="-30%" width="170%" height="170%">
+      <feDropShadow dx="0" dy="8" stdDeviation="7" flood-color="#050308" flood-opacity="0.45"/>
+    </filter>
+    <filter id="glow" x="-35%" y="-35%" width="170%" height="170%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#f3e2b3" flood-opacity="0.38"/>
+    </filter>
+    <linearGradient id="mana_orb_rim" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#f3e2b3"/>
+    <stop offset="0.55" stop-color="#c49a43"/>
+    <stop offset="1" stop-color="#f3e2b3"/>
+  </linearGradient>
+    <linearGradient id="mana_orb_fill" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#34313a"/>
+    <stop offset="0.55" stop-color="#211e27"/>
+    <stop offset="1" stop-color="#141118"/>
+  </linearGradient>
+    <radialGradient id="mana_orb_light" cx="46%" cy="33%" r="72%">
+      <stop offset="0" stop-color="#f3e2b3" stop-opacity="0.3"/>
+      <stop offset="0.5" stop-color="#211e27" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#141118" stop-opacity="0.98"/>
+    </radialGradient>
+  </defs>
+  <rect width="256" height="256" fill="none"/>
+    <g filter="url(#drop)">
+      <rect x="18" y="18" width="220" height="220" rx="48" fill="#09070c"/>
+      <rect x="26" y="26" width="204" height="204" rx="42" fill="url(#mana_orb_fill)" stroke="url(#mana_orb_rim)" stroke-width="7"/>
+      <circle cx="128" cy="128" r="78" fill="url(#mana_orb_light)" stroke="#c49a43" stroke-width="4" opacity="0.95"/>
+      <circle cx="128" cy="128" r="96" fill="none" stroke="#f3e2b3" stroke-width="2" opacity="0.24"/>
+      <path d="M54 54 L70 70 M186 186 L202 202" stroke="#f3e2b3" stroke-width="7" stroke-linecap="round" opacity="0.8"/>
+      <g filter="url(#glow)"><polygon points="128,54 188.68,111.72 167.96,185.72 128,202 88.03999999999999,185.72 67.32,111.72" fill="#c49a43" stroke="#141118" stroke-width="9"/><path d="M82 104 H174 L150 190 H106 Z M128 54 V190" fill="none" stroke="#f3e2b3" stroke-width="6" opacity="0.6"/></g>
+    </g>
+</svg>

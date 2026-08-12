@@ -6,7 +6,7 @@ import { CARD_ART_SYMBOLS } from "./cardMap";
 
 describe("createCardArt", () => {
   it("builds the complete five-layer inline SVG scene in its locked paint order", () => {
-    const art = createCardArt({ motif: "crossed-swords", palette: "danger", ground: "stone" });
+    const art = createCardArt({ motif: "crescent_blade", palette: "danger", ground: "stone" });
 
     expect(art.tagName.toLowerCase()).toBe("svg");
     expect(art.getAttribute("viewBox")).toBe("0 0 600 400");
@@ -23,22 +23,22 @@ describe("createCardArt", () => {
       "hf-card-art__vignette",
     ]);
     expect(art.querySelector(".hf-card-art__ground")?.tagName.toLowerCase()).toBe("path");
-    expect(art.querySelector(".hf-card-art__motif")?.tagName.toLowerCase()).toBe("use");
+    expect(art.querySelector(".hf-card-art__motif")?.tagName.toLowerCase()).toBe("image");
   });
 
-  it("binds every curated motif through a currentColor symbol slot", () => {
+  it("binds every curated motif as a self-coloured derived SVG image", () => {
     for (const motif of CARD_ART_SYMBOLS) {
       const art = createCardArt({ motif, palette: "primary", ground: "arcane" });
       const symbol = art.querySelector(".hf-card-art__motif");
       expect(symbol?.getAttribute("href"), motif).toBe(
-        `/assets/card-art-icons/${motif}.svg#icon`,
+        `/assets/card-icons/${motif}.svg`,
       );
-      expect(symbol?.getAttribute("fill"), motif).toBe("currentColor");
+      expect(symbol?.getAttribute("fill"), motif).toBeNull();
     }
   });
 
   it("records the selected palette as a semantic class", () => {
-    const art = createCardArt({ motif: "ice-bolt", palette: "info", ground: "ice" });
+    const art = createCardArt({ motif: "frostbite", palette: "info", ground: "ice" });
     expect(art.classList.contains("hf-card-art--info")).toBe(true);
   });
 });

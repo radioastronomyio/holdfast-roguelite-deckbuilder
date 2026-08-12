@@ -41,7 +41,9 @@ describe("renderCardGallery", () => {
     expect(catalog?.dataset.galleryCardCount).toBe("21");
     expect(cards).toHaveLength(21);
     expect(new Set(cards.map(({ dataset }) => dataset.cardId)).size).toBe(21);
-    expect(cards.every((card) => card.querySelector(".hf-card-art use"))).toBe(true);
+    expect(cards.every((card) => /\/assets\/card-icons\/.+\.svg$/.test(
+      card.querySelector(".hf-card-art image")?.getAttribute("href") ?? "",
+    ))).toBe(true);
     expect(cards.every((card) => card.querySelector(".hf-card-badge--cost"))).toBe(true);
   });
 

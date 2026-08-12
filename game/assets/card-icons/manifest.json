@@ -1,0 +1,140 @@
+{
+  "name": "Holdfast Runic card icon vocabulary",
+  "sourcePack": "Runic Relic RPG Icons 144",
+  "sourceVersion": "1.0.0",
+  "transformation": "Holdfast dark-fantasy palette recolour plus provenance metadata",
+  "assets": [
+    {
+      "id": "arcane_burst",
+      "mode": "rune",
+      "source": "assets/svg/spells/arcane_burst.svg",
+      "file": "arcane_burst.svg"
+    },
+    {
+      "id": "barrier_spell",
+      "mode": "barrier",
+      "source": "assets/svg/spells/barrier_spell.svg",
+      "file": "barrier_spell.svg"
+    },
+    {
+      "id": "black_bomb",
+      "mode": "bomb",
+      "source": "assets/svg/items/black_bomb.svg",
+      "file": "black_bomb.svg"
+    },
+    {
+      "id": "crescent_blade",
+      "mode": "sword",
+      "source": "assets/svg/weapons/crescent_blade.svg",
+      "file": "crescent_blade.svg"
+    },
+    {
+      "id": "fireball",
+      "mode": "flame",
+      "source": "assets/svg/spells/fireball.svg",
+      "file": "fireball.svg"
+    },
+    {
+      "id": "frostbite",
+      "mode": "frost",
+      "source": "assets/svg/spells/frostbite.svg",
+      "file": "frostbite.svg"
+    },
+    {
+      "id": "healing_light",
+      "mode": "heart",
+      "source": "assets/svg/spells/healing_light.svg",
+      "file": "healing_light.svg"
+    },
+    {
+      "id": "health_potion",
+      "mode": "potion",
+      "source": "assets/svg/items/health_potion.svg",
+      "file": "health_potion.svg"
+    },
+    {
+      "id": "holy_ray",
+      "mode": "sun",
+      "source": "assets/svg/spells/holy_ray.svg",
+      "file": "holy_ray.svg"
+    },
+    {
+      "id": "life_drain",
+      "mode": "skull",
+      "source": "assets/svg/spells/life_drain.svg",
+      "file": "life_drain.svg"
+    },
+    {
+      "id": "mana_orb",
+      "mode": "gem",
+      "source": "assets/svg/magics/mana_orb.svg",
+      "file": "mana_orb.svg"
+    },
+    {
+      "id": "poison_cloud",
+      "mode": "poison",
+      "source": "assets/svg/spells/poison_cloud.svg",
+      "file": "poison_cloud.svg"
+    },
+    {
+      "id": "rage_surge",
+      "mode": "claw",
+      "source": "assets/svg/spells/rage_surge.svg",
+      "file": "rage_surge.svg"
+    },
+    {
+      "id": "root_snare",
+      "mode": "root",
+      "source": "assets/svg/spells/root_snare.svg",
+      "file": "root_snare.svg"
+    },
+    {
+      "id": "rune_hammer",
+      "mode": "hammer",
+      "source": "assets/svg/weapons/rune_hammer.svg",
+      "file": "rune_hammer.svg"
+    },
+    {
+      "id": "stone_spike",
+      "mode": "earth",
+      "source": "assets/svg/spells/stone_spike.svg",
+      "file": "stone_spike.svg"
+    },
+    {
+      "id": "swift_boots",
+      "mode": "boots",
+      "source": "assets/svg/armors/swift_boots.svg",
+      "file": "swift_boots.svg"
+    },
+    {
+      "id": "thunder_arc",
+      "mode": "bolt",
+      "source": "assets/svg/spells/thunder_arc.svg",
+      "file": "thunder_arc.svg"
+    },
+    {
+      "id": "tidal_surge",
+      "mode": "wave",
+      "source": "assets/svg/spells/tidal_surge.svg",
+      "file": "tidal_surge.svg"
+    },
+    {
+      "id": "tower_shield",
+      "mode": "shield",
+      "source": "assets/svg/armors/tower_shield.svg",
+      "file": "tower_shield.svg"
+    },
+    {
+      "id": "warning",
+      "mode": "warning",
+      "source": "assets/svg/ui/warning.svg",
+      "file": "warning.svg"
+    },
+    {
+      "id": "wind_cut",
+      "mode": "wind",
+      "source": "assets/svg/spells/wind_cut.svg",
+      "file": "wind_cut.svg"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+<svg data-holdfast-derived-from="healing_light" xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <metadata>Holdfast recolour derived from Runic Relic RPG Icons 144 (healing_light, heart mode).</metadata>
+  <defs>
+    <filter id="drop" x="-35%" y="-30%" width="170%" height="170%">
+      <feDropShadow dx="0" dy="8" stdDeviation="7" flood-color="#050308" flood-opacity="0.45"/>
+    </filter>
+    <filter id="glow" x="-35%" y="-35%" width="170%" height="170%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#f3e2b3" flood-opacity="0.38"/>
+    </filter>
+    <linearGradient id="healing_light_rim" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#f3e2b3"/>
+    <stop offset="0.55" stop-color="#795d9c"/>
+    <stop offset="1" stop-color="#4ac1b7"/>
+  </linearGradient>
+    <linearGradient id="healing_light_fill" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#34313a"/>
+    <stop offset="0.55" stop-color="#211e27"/>
+    <stop offset="1" stop-color="#141118"/>
+  </linearGradient>
+    <radialGradient id="healing_light_light" cx="46%" cy="33%" r="72%">
+      <stop offset="0" stop-color="#4ac1b7" stop-opacity="0.3"/>
+      <stop offset="0.5" stop-color="#211e27" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#141118" stop-opacity="0.98"/>
+    </radialGradient>
+  </defs>
+  <rect width="256" height="256" fill="none"/>
+    <g filter="url(#drop)">
+      <rect x="18" y="18" width="220" height="220" rx="48" fill="#09070c"/>
+      <rect x="26" y="26" width="204" height="204" rx="42" fill="url(#healing_light_fill)" stroke="url(#healing_light_rim)" stroke-width="7"/>
+      <circle cx="128" cy="128" r="78" fill="url(#healing_light_light)" stroke="#795d9c" stroke-width="4" opacity="0.95"/>
+      <circle cx="128" cy="128" r="96" fill="none" stroke="#f3e2b3" stroke-width="2" opacity="0.24"/>
+      <path d="M36 128 H54 M202 128 H220" stroke="#4ac1b7" stroke-width="7" stroke-linecap="round" opacity="0.8"/>
+      <g filter="url(#glow)"><path d="M128 206 C60 160 58 96 96 72 C116 60 128 74 128 94 C128 74 140 60 160 72 C198 96 196 160 128 206 Z" fill="#795d9c" stroke="#141118" stroke-width="9"/></g>
+    </g>
+</svg>
