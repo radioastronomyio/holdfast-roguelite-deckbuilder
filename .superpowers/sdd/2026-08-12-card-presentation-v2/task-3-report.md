@@ -123,3 +123,82 @@ prohibition on redistributing the raw pack.
 
 No functional blocker. A1.4 will add the first PNG exemplar; this task
 deliberately keeps the vocabulary SVG-only.
+
+## Fix Round 1 — validate Runic icon semantics
+
+### RED
+
+Command:
+
+```sh
+cd game && npm test -- src/ui/cards/cardMap.test.ts src/ui/cards/cardArt.test.ts src/ui/cards/holdfastCard.test.ts src/ui/cards/cardAssetHygiene.test.ts scripts/derive-runic-card-icons.test.ts
+```
+
+Observed result: 2 test files failed, with 4 failed and 37 passed tests.
+
+- `RUNIC_ICON_MODES` did not exist, so both card motifs and semantic tag/stat
+  selections had no executable mode contract.
+- The manifest-backed inventory could not be compared to a committed literal
+  mode inventory.
+- The initial active-tree hygiene test identified its own unsplit retired pack
+  wording; this was corrected before GREEN by constructing the prohibited
+  tokens and scanning the entire active `src/`, `scripts/`, and `assets/`
+  trees. Recycle and Git history are outside that scan.
+
+The upgrade-tree fixture loaded 90 `added_effects`; all were exercised during
+RED and happened to resolve through existing companion tags. The strengthened
+GREEN mapping adds explicit entries for upgrade-only semantics (`bleed`,
+`party`, `regen`, `stun`, and `weaken`) so those tags also have standalone
+mode-backed meanings.
+
+The derivation regression was moved under `src/` after RED because the Vitest
+configuration intentionally collects tests from `src/`, not `scripts/`.
+
+### GREEN
+
+Focused command:
+
+```sh
+cd game && npm test -- src/ui/cards/cardMap.test.ts src/ui/cards/cardArt.test.ts src/ui/cards/holdfastCard.test.ts src/ui/cards/cardAssetHygiene.test.ts src/ui/cards/cardAssetDerivation.test.ts
+```
+
+Result: 5 files passed, 42 tests passed.
+
+Derivation, staging, public validation, full suite, and build:
+
+```sh
+cd game && node scripts/derive-runic-card-icons.mjs /opt/agents/repos/html5-game-ui-framework/reference-files-ui/runic-relic-rpg-icons-144
+cd game && npm run prepare:public
+cd game && npm run check:public
+cd game && npm test
+cd game && npm run build
+```
+
+Results:
+
+- Derivation regenerated exactly 22 SVGs.
+- Public staging and checks passed.
+- Full game suite: 21 files passed, 92 tests passed.
+- Production build passed (`tsc -p tsconfig.json && vite build`).
+
+### Changes
+
+- Added a literal, exhaustive `RUNIC_ICON_MODES` inventory matching the
+  committed derived manifest exactly.
+- Every card-subtype motif, effect tag, and tagless stat fallback now calls a
+  runtime mode guard. A selected asset with the wrong expected Runic mode
+  throws during mapping initialization.
+- Tests independently lock the meaningful tag/stat modes and exact manifest
+  modes, so nonsense metadata or a wrong-mode symbol fails.
+- Modifier coverage now includes all 90 `added_effects` across every branch in
+  `data/cards/upgrade-trees.json`, in addition to base and hazard effects.
+- Added an active-tree stale-reference regression for retired source names and
+  URLs, excluding the separate `recycle/` archive and repository history by
+  scope.
+- The derivation script now refuses unexpected files in its output inventory,
+  overwrites only exact known outputs, and accepts an isolated output path for
+  its regression test. It never recursively deletes the asset directory.
+
+### Concerns
+
+None.

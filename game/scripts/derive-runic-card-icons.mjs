@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -8,7 +8,7 @@ const sourceRoot = resolve(
   process.argv[2]
     ?? "/opt/agents/repos/html5-game-ui-framework/reference-files-ui/runic-relic-rpg-icons-144",
 );
-const outputRoot = join(gameRoot, "assets/card-icons");
+const outputRoot = resolve(process.argv[3] ?? join(gameRoot, "assets/card-icons"));
 
 const selectedIds = new Set([
   "arcane_burst",
@@ -58,6 +58,21 @@ if (selected.length !== selectedIds.size) {
   const found = new Set(selected.map(({ id }) => id));
   const missing = [...selectedIds].filter((id) => !found.has(id));
   throw new Error(`Runic Relic manifest is missing required icons: ${missing.join(", ")}`);
+}
+
+const expectedOutputFiles = new Set([
+  ...selected.map(({ id }) => `${id}.svg`),
+  "README.md",
+  "NOTICE",
+  "manifest.json",
+]);
+if (existsSync(outputRoot)) {
+  const unexpected = readdirSync(outputRoot)
+    .filter((file) => !expectedOutputFiles.has(file))
+    .sort();
+  if (unexpected.length > 0) {
+    throw new Error(`Unexpected files in Runic card icon output: ${unexpected.join(", ")}`);
+  }
 }
 
 mkdirSync(outputRoot, { recursive: true });

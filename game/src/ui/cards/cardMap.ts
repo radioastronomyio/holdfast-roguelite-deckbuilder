@@ -31,6 +31,31 @@ export const CARD_ART_SYMBOLS = [
 ] as const;
 
 export type CardArtSymbol = (typeof CARD_ART_SYMBOLS)[number];
+export const RUNIC_ICON_MODES = Object.freeze({
+  arcane_burst: "rune",
+  barrier_spell: "barrier",
+  black_bomb: "bomb",
+  crescent_blade: "sword",
+  fireball: "flame",
+  frostbite: "frost",
+  healing_light: "heart",
+  health_potion: "potion",
+  holy_ray: "sun",
+  life_drain: "skull",
+  mana_orb: "gem",
+  poison_cloud: "poison",
+  rage_surge: "claw",
+  root_snare: "root",
+  rune_hammer: "hammer",
+  stone_spike: "earth",
+  swift_boots: "boots",
+  thunder_arc: "bolt",
+  tidal_surge: "wave",
+  tower_shield: "shield",
+  warning: "warning",
+  wind_cut: "wind",
+} as const satisfies Readonly<Record<CardArtSymbol, string>>);
+export type RunicIconMode = (typeof RUNIC_ICON_MODES)[CardArtSymbol];
 export type CardIconFormat = "svg" | "png";
 export const CARD_ART_GROUNDS = ["arcane", "ash", "ice", "marsh", "ruin", "stone", "thicket"] as const;
 export type CardArtGround = (typeof CARD_ART_GROUNDS)[number];
@@ -43,33 +68,44 @@ export interface CardVisual {
 
 type CardMotifPalette = Pick<CardVisual, "motif" | "palette">;
 
+/** Select an icon only when its committed Runic mode matches the semantic role. */
+function modeBackedIcon(mode: RunicIconMode, symbol: CardArtSymbol): CardArtSymbol {
+  const actualMode = RUNIC_ICON_MODES[symbol];
+  if (actualMode !== mode) {
+    throw new Error(
+      `Runic icon mode mismatch: symbol=${symbol} expected=${mode} actual=${actualMode}`,
+    );
+  }
+  return symbol;
+}
+
 /**
  * The scene's lead motif and palette are deliberately card-specific rather
  * than a tag-only lookup. This keeps mechanically adjacent cards readable as
  * distinct objects while leaving gameplay definitions in data/ untouched.
  */
 const CARD_VISUAL_ROWS: Readonly<Record<string, CardMotifPalette>> = {
-  arcane_strike_01: { motif: "arcane_burst", palette: "magic" },
-  immolate_01: { motif: "fireball", palette: "danger" },
-  shield_bash_01: { motif: "tower_shield", palette: "info" },
-  sweeping_blade_01: { motif: "crescent_blade", palette: "danger" },
-  phalanx_01: { motif: "barrier_spell", palette: "info" },
-  adrenaline_01: { motif: "swift_boots", palette: "warning" },
-  cleanse_01: { motif: "holy_ray", palette: "success" },
-  deep_focus_01: { motif: "mana_orb", palette: "magic" },
-  acid_flask_01: { motif: "black_bomb", palette: "success" },
-  frost_bolt_01: { motif: "frostbite", palette: "info" },
-  power_surge_01: { motif: "rage_surge", palette: "warning" },
-  stone_wall_01: { motif: "stone_spike", palette: "info" },
-  lightning_chain_01: { motif: "thunder_arc", palette: "warning" },
-  heal_potion_01: { motif: "health_potion", palette: "success" },
-  drain_life_01: { motif: "life_drain", palette: "magic" },
-  tripwire_hazard_01: { motif: "root_snare", palette: "warning" },
-  miasma_hazard_01: { motif: "tidal_surge", palette: "success" },
-  toxic_fumes_hazard_01: { motif: "poison_cloud", palette: "success" },
-  freezing_wind_hazard_01: { motif: "wind_cut", palette: "info" },
-  crushing_weight_hazard_01: { motif: "rune_hammer", palette: "warning" },
-  blinding_light_hazard_01: { motif: "warning", palette: "warning" },
+  arcane_strike_01: { motif: modeBackedIcon("rune", "arcane_burst"), palette: "magic" },
+  immolate_01: { motif: modeBackedIcon("flame", "fireball"), palette: "danger" },
+  shield_bash_01: { motif: modeBackedIcon("shield", "tower_shield"), palette: "info" },
+  sweeping_blade_01: { motif: modeBackedIcon("sword", "crescent_blade"), palette: "danger" },
+  phalanx_01: { motif: modeBackedIcon("barrier", "barrier_spell"), palette: "info" },
+  adrenaline_01: { motif: modeBackedIcon("boots", "swift_boots"), palette: "warning" },
+  cleanse_01: { motif: modeBackedIcon("sun", "holy_ray"), palette: "success" },
+  deep_focus_01: { motif: modeBackedIcon("gem", "mana_orb"), palette: "magic" },
+  acid_flask_01: { motif: modeBackedIcon("bomb", "black_bomb"), palette: "success" },
+  frost_bolt_01: { motif: modeBackedIcon("frost", "frostbite"), palette: "info" },
+  power_surge_01: { motif: modeBackedIcon("claw", "rage_surge"), palette: "warning" },
+  stone_wall_01: { motif: modeBackedIcon("earth", "stone_spike"), palette: "info" },
+  lightning_chain_01: { motif: modeBackedIcon("bolt", "thunder_arc"), palette: "warning" },
+  heal_potion_01: { motif: modeBackedIcon("potion", "health_potion"), palette: "success" },
+  drain_life_01: { motif: modeBackedIcon("skull", "life_drain"), palette: "magic" },
+  tripwire_hazard_01: { motif: modeBackedIcon("root", "root_snare"), palette: "warning" },
+  miasma_hazard_01: { motif: modeBackedIcon("wave", "tidal_surge"), palette: "success" },
+  toxic_fumes_hazard_01: { motif: modeBackedIcon("poison", "poison_cloud"), palette: "success" },
+  freezing_wind_hazard_01: { motif: modeBackedIcon("wind", "wind_cut"), palette: "info" },
+  crushing_weight_hazard_01: { motif: modeBackedIcon("hammer", "rune_hammer"), palette: "warning" },
+  blinding_light_hazard_01: { motif: modeBackedIcon("warning", "warning"), palette: "warning" },
 };
 
 /** Stable public inventory used to ensure the explicit visual rows cover JSON exactly. */
@@ -96,41 +132,46 @@ const CARD_TAG_GROUND: ReadonlyArray<readonly [string, CardArtGround]> = [
 ];
 
 const EFFECT_TAG_SYMBOL: ReadonlyArray<readonly [string, CardArtSymbol]> = [
-  ["fire", "fireball"],
-  ["dot", "fireball"],
-  ["lightning", "thunder_arc"],
-  ["ice", "frostbite"],
-  ["cold", "frostbite"],
-  ["poison", "poison_cloud"],
-  ["shred", "poison_cloud"],
-  ["blind", "holy_ray"],
-  ["dark", "life_drain"],
-  ["lifesteal", "life_drain"],
-  ["slow", "swift_boots"],
-  ["speed", "swift_boots"],
-  ["heal", "healing_light"],
-  ["defense", "barrier_spell"],
-  ["energy", "mana_orb"],
-  ["power", "rage_surge"],
-  ["aoe", "tidal_surge"],
-  ["trap", "root_snare"],
-  ["pressure", "rune_hammer"],
-  ["magic", "arcane_burst"],
-  ["control", "root_snare"],
-  ["attack", "crescent_blade"],
-  ["physical", "crescent_blade"],
-  ["hazard", "warning"],
-  ["debuff", "warning"],
-  ["buff", "arcane_burst"],
-  ["utility", "mana_orb"],
+  ["fire", modeBackedIcon("flame", "fireball")],
+  ["dot", modeBackedIcon("flame", "fireball")],
+  ["lightning", modeBackedIcon("bolt", "thunder_arc")],
+  ["ice", modeBackedIcon("frost", "frostbite")],
+  ["cold", modeBackedIcon("frost", "frostbite")],
+  ["poison", modeBackedIcon("poison", "poison_cloud")],
+  ["shred", modeBackedIcon("poison", "poison_cloud")],
+  ["blind", modeBackedIcon("sun", "holy_ray")],
+  ["dark", modeBackedIcon("skull", "life_drain")],
+  ["lifesteal", modeBackedIcon("skull", "life_drain")],
+  ["bleed", modeBackedIcon("claw", "rage_surge")],
+  ["slow", modeBackedIcon("boots", "swift_boots")],
+  ["speed", modeBackedIcon("boots", "swift_boots")],
+  ["heal", modeBackedIcon("heart", "healing_light")],
+  ["regen", modeBackedIcon("heart", "healing_light")],
+  ["defense", modeBackedIcon("barrier", "barrier_spell")],
+  ["party", modeBackedIcon("barrier", "barrier_spell")],
+  ["energy", modeBackedIcon("gem", "mana_orb")],
+  ["power", modeBackedIcon("claw", "rage_surge")],
+  ["aoe", modeBackedIcon("wave", "tidal_surge")],
+  ["trap", modeBackedIcon("root", "root_snare")],
+  ["stun", modeBackedIcon("root", "root_snare")],
+  ["pressure", modeBackedIcon("hammer", "rune_hammer")],
+  ["magic", modeBackedIcon("rune", "arcane_burst")],
+  ["control", modeBackedIcon("root", "root_snare")],
+  ["attack", modeBackedIcon("sword", "crescent_blade")],
+  ["physical", modeBackedIcon("sword", "crescent_blade")],
+  ["hazard", modeBackedIcon("warning", "warning")],
+  ["debuff", modeBackedIcon("warning", "warning")],
+  ["weaken", modeBackedIcon("warning", "warning")],
+  ["buff", modeBackedIcon("rune", "arcane_burst")],
+  ["utility", modeBackedIcon("gem", "mana_orb")],
 ];
 
 const STAT_SYMBOL: Partial<Record<Stat, CardArtSymbol>> = {
-  [Stat.HP]: "healing_light",
-  [Stat.Power]: "rage_surge",
-  [Stat.Speed]: "swift_boots",
-  [Stat.Defense]: "barrier_spell",
-  [Stat.Energy]: "mana_orb",
+  [Stat.HP]: modeBackedIcon("heart", "healing_light"),
+  [Stat.Power]: modeBackedIcon("claw", "rage_surge"),
+  [Stat.Speed]: modeBackedIcon("boots", "swift_boots"),
+  [Stat.Defense]: modeBackedIcon("barrier", "barrier_spell"),
+  [Stat.Energy]: modeBackedIcon("gem", "mana_orb"),
 };
 
 export function resolveCardVisual(card: Pick<Card, "id" | "tags">): CardVisual {
