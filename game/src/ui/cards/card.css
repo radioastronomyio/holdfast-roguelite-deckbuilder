@@ -103,10 +103,10 @@
   aspect-ratio: 1 / 0.9;
   min-block-size: 0;
   overflow: hidden;
-  border: var(--gui-border-width) solid var(--card-accent);
+  border: var(--gui-border-width) solid var(--gui-border-strong);
   border-radius: var(--gui-radius-sm);
   background: var(--gui-surface-strong);
-  color: var(--card-accent);
+  color: var(--gui-text);
   box-shadow: inset var(--gui-shadow-sm);
 }
 
@@ -114,20 +114,32 @@
   display: block;
   inline-size: 100%;
   block-size: 100%;
-  color: var(--card-accent);
+  color: var(--hf-card-art-color, var(--gui-accent-primary));
 }
 
 .hf-card-art__sky-stop--base {
   stop-color: var(--gui-bg);
 }
 
-.hf-card-art--primary .hf-card-art__sky-stop--accent { stop-color: var(--gui-accent-primary); }
-.hf-card-art--success .hf-card-art__sky-stop--accent { stop-color: var(--gui-accent-success); }
-.hf-card-art--warning .hf-card-art__sky-stop--accent { stop-color: var(--gui-accent-warning); }
-.hf-card-art--danger .hf-card-art__sky-stop--accent { stop-color: var(--gui-accent-danger); }
-.hf-card-art--info .hf-card-art__sky-stop--accent { stop-color: var(--gui-accent-info); }
-.hf-card-art--magic .hf-card-art__sky-stop--accent { stop-color: var(--gui-accent-magic); }
-.hf-card-art--pink .hf-card-art__sky-stop--accent { stop-color: var(--gui-accent-pink); }
+.hf-card-art--primary { --hf-card-art-color: var(--gui-accent-primary); }
+.hf-card-art--success { --hf-card-art-color: var(--gui-accent-success); }
+.hf-card-art--warning { --hf-card-art-color: var(--gui-accent-warning); }
+.hf-card-art--danger { --hf-card-art-color: var(--gui-accent-danger); }
+.hf-card-art--info { --hf-card-art-color: var(--gui-accent-info); }
+.hf-card-art--magic { --hf-card-art-color: var(--gui-accent-magic); }
+.hf-card-art--pink { --hf-card-art-color: var(--gui-accent-pink); }
+
+.hf-card-art__sky-stop--accent { stop-color: var(--hf-card-art-color); }
+
+.hf-card-art__glow-stop--core {
+  stop-color: var(--hf-card-art-color);
+  stop-opacity: 0.72;
+}
+
+.hf-card-art__glow-stop--fade {
+  stop-color: var(--hf-card-art-color);
+  stop-opacity: 0;
+}
 
 .hf-card-art__ground {
   fill: var(--gui-surface);
@@ -135,8 +147,8 @@
   stroke-width: var(--gui-border-width-strong);
 }
 
-.hf-card-art__symbol {
-  color: var(--card-accent);
+.hf-card-art__motif {
+  color: var(--hf-card-art-color);
   fill: currentColor;
 }
 

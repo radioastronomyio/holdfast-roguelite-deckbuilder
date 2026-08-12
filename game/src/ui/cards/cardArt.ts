@@ -2,7 +2,7 @@
 
 import type { CardAccent } from "../gameui";
 import { cardArtIconUrl } from "./cardMap";
-import type { CardArtSymbol } from "./cardMap";
+import type { CardArtGround, CardArtSymbol } from "./cardMap";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 let artId = 0;
@@ -10,7 +10,18 @@ let artId = 0;
 export interface CardArtOptions {
   motif: CardArtSymbol;
   palette: CardAccent;
+  ground: CardArtGround;
 }
+
+const GROUND_PATH: Record<CardArtGround, string> = {
+  arcane: "M0 310 C68 264 112 302 178 258 C249 215 312 294 382 252 C450 211 518 280 600 236 L600 400 L0 400 Z",
+  ash: "M0 298 L74 280 L136 302 L210 250 L292 287 L365 239 L444 276 L520 225 L600 248 L600 400 L0 400 Z",
+  ice: "M0 305 L84 270 L151 294 L241 238 L332 288 L424 246 L511 275 L600 218 L600 400 L0 400 Z",
+  marsh: "M0 314 C68 286 111 326 172 294 C243 262 303 318 369 284 C437 249 521 307 600 275 L600 400 L0 400 Z",
+  ruin: "M0 308 L72 282 L126 306 L170 248 L235 284 L296 228 L359 290 L420 255 L489 302 L548 266 L600 286 L600 400 L0 400 Z",
+  stone: "M0 304 L92 278 L168 302 L246 264 L322 293 L404 250 L481 282 L600 232 L600 400 L0 400 Z",
+  thicket: "M0 315 C52 259 108 317 160 271 C218 223 282 316 341 260 C403 200 462 303 523 249 C550 225 573 245 600 223 L600 400 L0 400 Z",
+};
 
 function svgNode<K extends keyof SVGElementTagNameMap>(tag: K): SVGElementTagNameMap[K] {
   return document.createElementNS(SVG_NS, tag);
@@ -34,9 +45,10 @@ export function createCardSymbol(
   return svg;
 }
 
-export function createCardArt({ motif, palette }: CardArtOptions): SVGSVGElement {
+export function createCardArt({ motif, palette, ground: groundType }: CardArtOptions): SVGSVGElement {
   const id = artId++;
   const skyId = `hf-card-sky-${id}`;
+  const glowId = `hf-card-glow-${id}`;
   const vignetteId = `hf-card-vignette-${id}`;
 
   const svg = svgNode("svg");
@@ -62,6 +74,16 @@ export function createCardArt({ motif, palette }: CardArtOptions): SVGSVGElement
   skyAccent.setAttribute("offset", "1");
   skyGradient.append(skyBase, skyAccent);
 
+  const glowGradient = svgNode("radialGradient");
+  glowGradient.id = glowId;
+  const glowCore = svgNode("stop");
+  glowCore.classList.add("hf-card-art__glow-stop", "hf-card-art__glow-stop--core");
+  glowCore.setAttribute("offset", "0");
+  const glowFade = svgNode("stop");
+  glowFade.classList.add("hf-card-art__glow-stop", "hf-card-art__glow-stop--fade");
+  glowFade.setAttribute("offset", "1");
+  glowGradient.append(glowCore, glowFade);
+
   const vignetteGradient = svgNode("radialGradient");
   vignetteGradient.id = vignetteId;
   const clear = svgNode("stop");
@@ -71,7 +93,7 @@ export function createCardArt({ motif, palette }: CardArtOptions): SVGSVGElement
   dark.classList.add("hf-card-art__vignette-stop", "hf-card-art__vignette-stop--dark");
   dark.setAttribute("offset", "1");
   vignetteGradient.append(clear, dark);
-  defs.append(skyGradient, vignetteGradient);
+  defs.append(skyGradient, glowGradient, vignetteGradient);
 
   const sky = svgNode("rect");
   sky.classList.add("hf-card-art__sky");
@@ -79,21 +101,26 @@ export function createCardArt({ motif, palette }: CardArtOptions): SVGSVGElement
   sky.setAttribute("height", "400");
   sky.setAttribute("fill", `url(#${skyId})`);
 
-  const ground = svgNode("path");
-  ground.classList.add("hf-card-art__ground");
-  ground.setAttribute(
-    "d",
-    "M0 302 C72 270 123 296 181 269 C252 235 318 287 374 258 C446 220 514 266 600 230 L600 400 L0 400 Z",
-  );
+  const glow = svgNode("ellipse");
+  glow.classList.add("hf-card-art__glow");
+  glow.setAttribute("cx", "300");
+  glow.setAttribute("cy", "180");
+  glow.setAttribute("rx", "210");
+  glow.setAttribute("ry", "175");
+  glow.setAttribute("fill", `url(#${glowId})`);
 
-  const symbol = svgNode("use");
-  symbol.classList.add("hf-card-art__symbol");
-  symbol.setAttribute("href", cardArtIconUrl(motif));
-  symbol.setAttribute("x", "172");
-  symbol.setAttribute("y", "74");
-  symbol.setAttribute("width", "256");
-  symbol.setAttribute("height", "256");
-  symbol.setAttribute("fill", "currentColor");
+  const motifLayer = svgNode("use");
+  motifLayer.classList.add("hf-card-art__motif");
+  motifLayer.setAttribute("href", cardArtIconUrl(motif));
+  motifLayer.setAttribute("x", "172");
+  motifLayer.setAttribute("y", "74");
+  motifLayer.setAttribute("width", "256");
+  motifLayer.setAttribute("height", "256");
+  motifLayer.setAttribute("fill", "currentColor");
+
+  const ground = svgNode("path");
+  ground.classList.add("hf-card-art__ground", `hf-card-art__ground--${groundType}`);
+  ground.setAttribute("d", GROUND_PATH[groundType]);
 
   const vignette = svgNode("rect");
   vignette.classList.add("hf-card-art__vignette");
@@ -101,6 +128,6 @@ export function createCardArt({ motif, palette }: CardArtOptions): SVGSVGElement
   vignette.setAttribute("height", "400");
   vignette.setAttribute("fill", `url(#${vignetteId})`);
 
-  svg.append(defs, sky, ground, symbol, vignette);
+  svg.append(defs, sky, glow, motifLayer, ground, vignette);
   return svg;
 }

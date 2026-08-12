@@ -168,7 +168,7 @@ function buildFrameBody(card: Card, rules: HTMLElement): HTMLElement {
 
   const art = document.createElement("div");
   art.className = "hf-card__art";
-  const visual = resolveCardVisual(card.tags);
+  const visual = resolveCardVisual(card);
   art.appendChild(createCardArt(visual));
 
   const type = document.createElement("div");
@@ -189,7 +189,7 @@ function composeHeader(el: HTMLElement, card: Card): void {
   name.className = "hf-card__header-name";
   const glyph = document.createElement("span");
   glyph.className = "hf-card__header-glyph";
-  const motif = card.effects[0] ? resolveEffectSymbol(card.effects[0]) : resolveCardVisual(card.tags).motif;
+  const motif = card.effects[0] ? resolveEffectSymbol(card.effects[0]) : resolveCardVisual(card).motif;
   glyph.appendChild(createCardSymbol(motif, "hf-card__header-glyph-icon"));
   header.replaceChildren(cost, name, glyph);
 }
