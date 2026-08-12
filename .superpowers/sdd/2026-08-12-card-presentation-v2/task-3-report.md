@@ -202,3 +202,61 @@ Results:
 ### Concerns
 
 None.
+
+## Fix Round 2 — hermetic card asset guards
+
+### RED
+
+Command:
+
+```sh
+cd game && npm test -- src/ui/cards/cardAssetHygiene.test.ts src/ui/cards/cardAssetDerivation.test.ts src/ui/cards/cardMap.test.ts
+```
+
+Observed result: the new hygiene suite failed to load the wished-for
+`findStaleCardAssetReferences` scanner; the other 2 files passed with 14 tests.
+This was the expected failure proving the active-tree scanning contract did not
+yet exist. The rewritten derivation test was already GREEN against the existing
+configurable source/output arguments, confirming no production script change
+was needed to remove its external test dependency.
+
+### GREEN
+
+Focused command:
+
+```sh
+cd game && npm test -- src/ui/cards/cardAssetHygiene.test.ts src/ui/cards/cardAssetDerivation.test.ts src/ui/cards/cardMap.test.ts
+```
+
+Result: 3 files passed, 16 tests passed.
+
+Full verification:
+
+```sh
+cd game && npm test
+cd game && npm run build
+```
+
+Results:
+
+- Full game suite: 21 files passed, 93 tests passed.
+- Production build passed, including `check:public`, TypeScript, and Vite.
+
+### Changes
+
+- Added a reusable active-tree scanner over `game/src/`, `game/scripts/`,
+  `game/assets/`, and `game/tests/`.
+- The scanner includes Python harnesses such as `tests/capture.py`, while
+  excluding `tests/baseline/`, `__pycache__/`, and non-text binaries by explicit
+  directory and extension rules. Recycle and Git history remain out of scope.
+- A temporary-game regression proves a restored `/assets/card-art-icons/` URL
+  in `tests/capture.py` is returned as stale.
+- The derivation regression now builds a complete minimal Runic manifest and
+  tiny source SVG set beneath `mkdtemp`, invokes the script with that fixture,
+  proves palette derivation, and proves stale-output rejection.
+- The hermetic test contains no external reference-pack path and removes its
+  entire temporary fixture in `finally`, on both success and failure.
+
+### Concerns
+
+None.

@@ -1,27 +1,27 @@
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-
-function filesBelow(root: string): string[] {
-  return readdirSync(root).flatMap((entry) => {
-    const path = join(root, entry);
-    return statSync(path).isDirectory() ? filesBelow(path) : [path];
-  });
-}
+import { findStaleCardAssetReferences } from "./cardAssetHygiene";
 
 describe("active card asset references", () => {
   it("contains no retired icon-pack source names or URLs", () => {
-    const gameRoot = resolve(process.cwd());
-    const activeFiles = ["src", "scripts", "assets"].flatMap((directory) => (
-      filesBelow(join(gameRoot, directory))
-    ));
-    const retiredPath = ["card", "art", "icons"].join("-");
-    const retiredPack = /game[- ]icons/i;
-    const stale = activeFiles.filter((path) => {
-      const source = readFileSync(path, "utf8");
-      return source.includes(retiredPath) || retiredPack.test(source);
-    });
+    expect(findStaleCardAssetReferences(resolve(process.cwd()))).toEqual([]);
+  });
 
-    expect(stale).toEqual([]);
+  it("flags a restored retired asset URL in tests/capture.py", () => {
+    const gameRoot = mkdtempSync(join(tmpdir(), "holdfast-asset-hygiene-"));
+    try {
+      for (const directory of ["src", "scripts", "assets", "tests/baseline"]) {
+        mkdirSync(join(gameRoot, directory), { recursive: true });
+      }
+      const stalePath = join(gameRoot, "tests/capture.py");
+      writeFileSync(stalePath, `probe = "assets/${["card", "art", "icons"].join("-")}/old.svg"\n`);
+      writeFileSync(join(gameRoot, "tests/baseline/ignored.sha1"), "binary baseline");
+
+      expect(findStaleCardAssetReferences(gameRoot)).toEqual([stalePath]);
+    } finally {
+      rmSync(gameRoot, { recursive: true, force: true });
+    }
   });
 });
