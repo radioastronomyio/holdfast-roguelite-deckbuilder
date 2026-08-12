@@ -12,4 +12,4 @@ validation.
 - `prepare-public.mjs` copies shared game JSON, the GameUI skin, and committed
   card-icon derivatives (SVG vocabulary plus presentation-owned PNG motifs)
   into `game/public/`.
-- `check-public.mjs` fails the build early when required generated public files are missing.
+- `check-public.mjs` fails the build early when required generated public files are missing or when stale card-icon references escape the owned asset family. Browser semantics and geometry live in `tests/capture.py`, which checks the DEV-only 21-card approval gallery before refreshing or comparing its baseline.

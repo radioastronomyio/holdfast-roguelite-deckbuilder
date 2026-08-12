@@ -405,7 +405,7 @@ def capture_card_gallery(context, base_url: str, origin: str, captured: set[str]
 
     The gallery renders asynchronously (it fetches the shared card JSON), so
     after triggering the hook we wait for the Holdfast cards to mount, assert
-    the complete JSON-backed SVG composition, then capture the dark-fantasy
+    the complete JSON-backed mixed-source composition, exercise selection, then capture the dark-fantasy
     baseline."""
     if "card-gallery" in captured:
         return
@@ -428,35 +428,131 @@ def capture_card_gallery(context, base_url: str, origin: str, captured: set[str]
             "&& window.__holdfast.showCardGallery()"
         )
         page.wait_for_selector("[data-screen='card-gallery'] .hf-card", timeout=10000)
+        page.wait_for_function(
+            "() => Array.from(document.querySelectorAll('.hf-gallery__catalog .hf-card__effect-icon'))"
+            ".every((image) => image.complete && image.naturalWidth > 0)",
+            timeout=10000,
+        )
         assert_card_gallery(page, errors)
+        assert_gallery_interaction(page, errors)
         capture_screen(page, "card-gallery", captured, errors)
     finally:
         page.close()
 
 
 def assert_card_gallery(page: Page, errors: list[str]) -> None:
-    """Assert the complete derived-SVG card catalog and upgraded exemplar contract."""
+    """Assert the complete v2 gallery's semantic, art-source, and geometry contract."""
     state = page.evaluate(
         r"""() => {
             const catalog = document.querySelector('.hf-gallery__catalog');
+            const gallery = document.querySelector('.hf-gallery');
             const cards = Array.from(catalog?.querySelectorAll('.hf-card[data-card-id]') || []);
             const ids = cards.map((card) => card.getAttribute('data-card-id'));
-            const artImages = cards.map((card) => card.querySelector('.hf-card-art image')?.getAttribute('href') || '');
+            const art = cards.map((card) => card.querySelector('.hf-card-art'));
+            const artImages = art.map((scene) => scene?.querySelector('.hf-card-art__motif')?.getAttribute('href') || '');
             const effects = Array.from(catalog?.querySelectorAll('.hf-card__effect') || []);
             const effectImages = effects.map((row) => row.querySelector('img')?.getAttribute('src') || '');
+            const resolveColorToken = (owner, token) => {
+                const probe = document.createElement('span');
+                probe.style.color = `var(${token})`;
+                owner.appendChild(probe);
+                const color = getComputedStyle(probe).color;
+                probe.remove();
+                return color;
+            };
+            const paintLayerClasses = [
+                'hf-card-art__sky',
+                'hf-card-art__glow',
+                'hf-card-art__motif',
+                'hf-card-art__ground',
+                'hf-card-art__vignette',
+            ];
+            const within = (inner, outer) => {
+                const a = inner.getBoundingClientRect();
+                const b = outer.getBoundingClientRect();
+                return a.left >= b.left - 1 && a.top >= b.top - 1
+                    && a.right <= b.right + 1 && a.bottom <= b.bottom + 1;
+            };
+            const semanticSelectors = [
+                '.gui-card__header', '.hf-card__art', '.hf-card__type',
+                '.hf-card__rules', '.gui-card__footer', '.hf-card__stat-value',
+            ];
+            const clippedCards = cards.filter((card) => {
+                if (card.scrollWidth > card.clientWidth + 1 || card.scrollHeight > card.clientHeight + 1) return true;
+                const cardBox = card.getBoundingClientRect();
+                const galleryBox = gallery?.getBoundingClientRect();
+                if (!galleryBox || cardBox.left < galleryBox.left - 1 || cardBox.right > galleryBox.right + 1) return true;
+                return semanticSelectors.some((selector) =>
+                    Array.from(card.querySelectorAll(selector)).some((node) =>
+                        node.scrollWidth > node.clientWidth + 1
+                        || node.scrollHeight > node.clientHeight + 1
+                        || !within(node, card)
+                    )
+                );
+            }).map((card) => card.getAttribute('data-card-id'));
+            const foregroundMismatches = cards.flatMap((card) => {
+                const guiText = resolveColorToken(card, '--gui-text');
+                const accent = resolveColorToken(card, '--card-accent');
+                return ['.hf-card__type', '.hf-card__rules', '.hf-card__stat-value']
+                    .flatMap((selector) => Array.from(card.querySelectorAll(selector)))
+                    .filter((node) => {
+                        const color = getComputedStyle(node).color;
+                        return color !== guiText || color === accent;
+                    }).map((node) => `${card.getAttribute('data-card-id')}:${node.className}`);
+            });
+            const ratioFailures = cards.filter((card) => {
+                const box = card.getBoundingClientRect();
+                const ratio = box.width / box.height;
+                return ratio < 0.60 || ratio > 0.64;
+            }).map((card) => card.getAttribute('data-card-id'));
+            const artRatioFailures = cards.filter((card) => {
+                const box = card.querySelector('.hf-card__art')?.getBoundingClientRect();
+                if (!box || box.height === 0) return true;
+                const ratio = box.width / box.height;
+                return ratio < 0.88 || ratio > 1.12;
+            }).map((card) => card.getAttribute('data-card-id'));
+            const layerFailures = art.filter((scene) => {
+                const painted = Array.from(scene?.children || [])
+                    .filter((node) => paintLayerClasses.some((name) => node.classList.contains(name)));
+                return painted.length !== paintLayerClasses.length
+                    || painted.some((node, index) => !node.classList.contains(paintLayerClasses[index]));
+            }).length;
+            const axes = (cardId) => {
+                const scene = catalog?.querySelector(`[data-card-id='${cardId}'] .hf-card-art`);
+                const ground = Array.from(scene?.querySelector('.hf-card-art__ground')?.classList || [])
+                    .find((name) => name.startsWith('hf-card-art__ground--')) || '';
+                return [scene?.getAttribute('data-palette') || '', ground, scene?.getAttribute('data-motif') || ''];
+            };
+            const attackA = axes('arcane_strike_01');
+            const attackB = axes('immolate_01');
+            const cardBack = document.querySelector('.hf-gallery__card-back .hf-card-back');
             return {
                 declaredCount: catalog?.getAttribute('data-gallery-card-count') || '',
                 cardCount: cards.length,
                 uniqueCount: new Set(ids).size,
-                missingArtSymbols: artImages.filter((href) => !href.match(/\/assets\/card-icons\/.+\.svg$/)).length,
+                svgArtCount: artImages.filter((href) => href.match(/\/assets\/card-icons\/.+\.svg$/)).length,
+                pngArtCount: artImages.filter((href) => href.match(/\/assets\/card-icons\/.+\.png$/)).length,
                 effectCount: effects.length,
                 missingEffectSymbols: effectImages.filter((href) => !href.match(/\/assets\/card-icons\/.+\.svg$/)).length,
-                pngCount: Array.from(catalog?.querySelectorAll('img, image') || [])
-                    .filter((image) => (image.getAttribute('src') || image.getAttribute('href') || '').endsWith('.png')).length,
+                unloadedEffectSymbols: effects.filter((row) => {
+                    const image = row.querySelector('img');
+                    return !image || !image.complete || image.naturalWidth <= 0;
+                }).length,
+                layerFailures,
+                foregroundMismatches,
+                ratioFailures,
+                artRatioFailures,
+                clippedCards,
+                galleryHorizontalOverflow: !gallery || gallery.scrollWidth > gallery.clientWidth + 1,
+                attackAxesDistinct: attackA.every((value, index) => value !== attackB[index]),
                 costThree: catalog?.querySelector("[data-card-id='sweeping_blade_01'] .hf-card-badge--cost text")?.textContent || '',
                 catalogShine: catalog?.querySelectorAll('.hf-card--shine').length || 0,
                 exemplarShine: document.querySelectorAll('.hf-gallery__pair .hf-card--shine').length,
                 exemplarTier: document.querySelector('.hf-gallery__pair .hf-card--shine')?.getAttribute('data-upgrade-tier') || '',
+                cardBackCount: document.querySelectorAll('.hf-gallery__card-back .hf-card-back').length,
+                cardBackRasterCount: cardBack?.querySelectorAll('img, image').length ?? -1,
+                cardBackPattern: cardBack?.querySelectorAll('.hf-card-back__pattern').length ?? 0,
+                cardBackEmblem: cardBack?.querySelectorAll('.hf-card-back__emblem').length ?? 0,
             };
         }"""
     )
@@ -464,13 +560,25 @@ def assert_card_gallery(page: Page, errors: list[str]) -> None:
         "declaredCount": "21",
         "cardCount": 21,
         "uniqueCount": 21,
-        "missingArtSymbols": 0,
+        "svgArtCount": 20,
+        "pngArtCount": 1,
         "missingEffectSymbols": 0,
-        "pngCount": 0,
+        "unloadedEffectSymbols": 0,
+        "layerFailures": 0,
+        "foregroundMismatches": [],
+        "ratioFailures": [],
+        "artRatioFailures": [],
+        "clippedCards": [],
+        "galleryHorizontalOverflow": False,
+        "attackAxesDistinct": True,
         "costThree": "3",
         "catalogShine": 0,
         "exemplarShine": 1,
         "exemplarTier": "2",
+        "cardBackCount": 1,
+        "cardBackRasterCount": 0,
+        "cardBackPattern": 1,
+        "cardBackEmblem": 1,
     }
     for key, value in expected.items():
         if state[key] != value:
@@ -480,7 +588,25 @@ def assert_card_gallery(page: Page, errors: list[str]) -> None:
         errors.append("card-gallery check failed: no effect rows")
         print("    GALLERY-FAIL  no effect rows")
     if not any(error.startswith("card-gallery check failed") for error in errors):
-        print("    GALLERY-OK    21 unique JSON cards; derived SVGs, cost, and shine verified")
+        print("    GALLERY-OK    catalog, five layers, mixed art, geometry, text, back, cost, and shine verified")
+
+
+def assert_gallery_interaction(page: Page, errors: list[str]) -> None:
+    """Exercise a real selectable card and restore it before the baseline capture."""
+    card = page.locator(".hf-gallery__catalog .hf-card[role='button']").first
+    before = card.get_attribute("aria-pressed")
+    card.click()
+    selected = card.get_attribute("aria-pressed")
+    card.click()
+    restored = card.get_attribute("aria-pressed")
+    if (before, selected, restored) != ("false", "true", "false"):
+        errors.append(
+            "card-gallery interaction failed: "
+            f"aria-pressed sequence={(before, selected, restored)!r}"
+        )
+        print(f"    GALLERY-FAIL  interaction={(before, selected, restored)!r}")
+    else:
+        print("    INTERACT-OK   card selection toggles and restores")
 
 
 # =============================================================================

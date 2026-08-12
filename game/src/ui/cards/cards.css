@@ -46,7 +46,7 @@
 .hf-card__effects {
   display: flex;
   flex-direction: column;
-  gap: var(--gui-space-sm);
+  gap: var(--gui-space-xs);
 }
 
 .hf-card__effect {
@@ -57,28 +57,30 @@
 
 .hf-card__effect-icon {
   display: block;
-  width: 28px;
-  height: 28px;
+  width: calc(var(--gui-space-sm) * 2.5);
+  height: calc(var(--gui-space-sm) * 2.5);
   flex: 0 0 auto;
   object-fit: contain;
 }
 
 .hf-card__effect-text {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--gui-space-xs);
   line-height: 1.25;
   min-width: 0;
 }
 
 .hf-card__effect-value {
   font-family: var(--gui-font-display);
-  font-size: var(--gui-font-size-md);
+  font-size: var(--gui-font-size-sm);
   font-weight: 700;
   color: var(--gui-text);
 }
 
 .hf-card__effect-meta {
-  font-size: var(--gui-font-size-sm);
+  font-size: calc(var(--gui-font-size-sm) * 0.85);
   color: var(--gui-text-muted);
 }
 
@@ -237,6 +239,7 @@
 */
 
 .hf-gallery {
+  --hf-card-width: 15rem;
   display: flex;
   flex-direction: column;
   gap: var(--gui-space-lg);
@@ -269,9 +272,10 @@
 
 .hf-gallery__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(var(--hf-card-width), 1fr));
   gap: var(--gui-space-md);
   align-items: start;
+  justify-items: center;
 }
 
 .hf-gallery__pair {

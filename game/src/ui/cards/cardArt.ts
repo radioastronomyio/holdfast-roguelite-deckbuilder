@@ -1,4 +1,4 @@
-/** Parametric, zero-raster SVG scene used by every Holdfast card. */
+/** Parametric SVG scene whose motif source may be a presentation-mapped SVG or PNG. */
 
 import type { CardAccent } from "../gameui";
 import { cardArtUrl, cardIconUrl } from "./cardMap";

@@ -12,6 +12,7 @@
  */
 
 import type { Card, UpgradeTree } from "../../sim/types";
+import { createHoldfastCardBack } from "../cards/cardBack";
 import { createHoldfastCard } from "../cards/holdfastCard";
 
 const BASE = import.meta.env.BASE_URL;
@@ -45,8 +46,24 @@ export async function renderCardGallery(): Promise<HTMLElement> {
 
   root.appendChild(catalog);
   root.appendChild(buildUpgradedExemplar(baseCards, upgradeTrees));
+  root.appendChild(buildCardBackSpecimen());
 
   return root;
+}
+
+function buildCardBackSpecimen(): HTMLElement {
+  const section = document.createElement("section");
+  section.className = "hf-gallery__section hf-gallery__card-back";
+
+  const heading = document.createElement("h2");
+  heading.className = "hf-gallery__heading";
+  heading.textContent = "Card Back";
+
+  const specimen = document.createElement("div");
+  specimen.className = "hf-gallery__labeled";
+  specimen.appendChild(createHoldfastCardBack());
+  section.append(heading, specimen);
+  return section;
 }
 
 function buildSection(title: string, cards: Card[], trees: Record<string, UpgradeTree>): HTMLElement {

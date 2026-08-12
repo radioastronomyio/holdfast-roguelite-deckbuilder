@@ -5,7 +5,7 @@
   aspect-ratio: 744 / 1200;
   min-block-size: 0;
   overflow: hidden;
-  gap: var(--gui-space-sm);
+  gap: var(--gui-space-xs);
   padding: var(--gui-space-md);
   border-color: var(--card-accent);
   background: var(--gui-surface);
@@ -72,9 +72,9 @@
 
 .hf-card .gui-card__header {
   display: grid;
-  grid-template-columns: calc(var(--gui-space-xl) + var(--gui-space-sm)) 1fr calc(var(--gui-space-xl) + var(--gui-space-sm));
+  grid-template-columns: calc(var(--gui-space-sm) * 4) 1fr calc(var(--gui-space-sm) * 4);
   align-items: center;
-  min-block-size: calc(var(--gui-space-xl) + var(--gui-space-xs));
+  min-block-size: calc(var(--gui-space-sm) * 4);
 }
 
 .hf-card__header-name {
@@ -97,8 +97,8 @@
   display: grid;
   justify-self: end;
   place-items: center;
-  inline-size: var(--gui-space-xl);
-  block-size: var(--gui-space-xl);
+  inline-size: calc(var(--gui-space-sm) * 4);
+  block-size: calc(var(--gui-space-sm) * 4);
   color: var(--card-accent);
 }
 
@@ -111,8 +111,8 @@
 
 .hf-card .gui-card__tag.hf-card__cost {
   flex: 0 0 auto;
-  inline-size: calc(var(--gui-space-xl) + var(--gui-space-sm));
-  block-size: calc(var(--gui-space-xl) + var(--gui-space-sm));
+  inline-size: calc(var(--gui-space-sm) * 4);
+  block-size: calc(var(--gui-space-sm) * 4);
   padding: 0;
   justify-content: center;
   border-radius: var(--gui-radius-pill);
@@ -152,7 +152,7 @@
 .hf-card__content {
   display: grid;
   grid-template-rows: auto auto minmax(0, 1fr);
-  gap: var(--gui-space-sm);
+  gap: var(--gui-space-xs);
   block-size: 100%;
 }
 
@@ -230,14 +230,14 @@
 }
 
 .hf-card__type {
-  padding: var(--gui-space-xs) var(--gui-space-sm);
+  padding: 0 var(--gui-space-sm);
   border-radius: var(--gui-radius-sm);
   background: var(--gui-surface-strong);
   color: var(--gui-text);
   font-family: var(--gui-font-display);
-  font-size: var(--gui-font-size-sm);
+  font-size: calc(var(--gui-font-size-sm) * 0.8);
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-align: center;
   text-transform: uppercase;
 }
@@ -292,12 +292,15 @@
   font-size: var(--gui-font-size-sm);
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  line-height: 1.2;
 }
 
 .hf-card__stat-value {
   color: var(--gui-text);
   font-family: var(--gui-font-display);
   font-size: var(--gui-font-size-lg);
+  font-weight: 800;
+  line-height: 1.2;
 }
 
 .hf-card__tools {
@@ -314,8 +317,8 @@
 }
 
 .hf-card__pip {
-  inline-size: calc(var(--gui-space-xs) * 0.75);
-  block-size: calc(var(--gui-space-xs) * 0.75);
+  inline-size: calc(var(--gui-space-xs) * 0.5);
+  block-size: calc(var(--gui-space-xs) * 0.5);
   border-radius: var(--gui-radius-pill);
   background: var(--gui-border-strong);
 }
@@ -326,8 +329,8 @@
 }
 
 .hf-card-gem {
-  inline-size: calc(var(--gui-space-xl) + var(--gui-space-xs));
-  block-size: calc(var(--gui-space-xl) + var(--gui-space-xs));
+  inline-size: calc(var(--gui-space-sm) * 4);
+  block-size: calc(var(--gui-space-sm) * 4);
   color: var(--card-accent);
 }
 

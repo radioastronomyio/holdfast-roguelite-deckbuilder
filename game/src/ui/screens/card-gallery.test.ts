@@ -51,6 +51,14 @@ describe("renderCardGallery", () => {
       .every(([, href]) => /\/assets\/card-icons\/.+\.svg$/.test(href)))
       .toBe(true);
     expect(cards.every((card) => card.querySelector(".hf-card-badge--cost"))).toBe(true);
+    expect(
+      cards.every((card) =>
+        Array.from(card.querySelectorAll(".hf-card-art > [class^='hf-card-art__']"))
+          .map((layer) => layer.getAttribute("class")?.split(" ")[0])
+          .join("|") ===
+        "hf-card-art__sky|hf-card-art__glow|hf-card-art__motif|hf-card-art__ground|hf-card-art__vignette",
+      ),
+    ).toBe(true);
   });
 
   it("reserves the only gallery shine for the upgraded exemplar", async () => {
@@ -62,5 +70,16 @@ describe("renderCardGallery", () => {
     expect(
       gallery.querySelector(".hf-gallery__pair .hf-card--shine")?.getAttribute("data-upgrade-tier"),
     ).toBe("2");
+  });
+
+  it("includes an accessible zero-raster card-back specimen", async () => {
+    installCatalogFetch();
+    const gallery = await renderCardGallery();
+    const cardBack = gallery.querySelector<HTMLElement>(".hf-gallery__card-back .hf-card-back");
+
+    expect(cardBack?.getAttribute("aria-label")).toBe("Holdfast card back");
+    expect(cardBack?.querySelector(".hf-card-back__pattern")).not.toBeNull();
+    expect(cardBack?.querySelector(".hf-card-back__emblem")).not.toBeNull();
+    expect(cardBack?.querySelectorAll("img, image")).toHaveLength(0);
   });
 });

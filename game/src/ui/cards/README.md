@@ -1,7 +1,7 @@
 <!--
 ---
 title: "Card Renderer"
-description: "Holdfast deckbuilder card component composed over the GameUI createCard primitive: JSON-driven, with SVG art, energy badge, effect symbols, upgrade gem, shine, and inspect"
+description: "Holdfast deckbuilder card component composed over the GameUI createCard primitive: JSON-driven, with five-layer mixed-source art, card backs, energy badge, effect symbols, upgrade gem, shine, and inspect"
 author: "VintageDon (https://github.com/vintagedon/)"
 date: "2026-06-22"
 version: "1.0"
@@ -36,3 +36,5 @@ Composition, not forking: the factory calls `createCard` for the frame and adds 
 Specs 04 (combat) and 05 (flow screens) consume this component without modification: combat maps energy affordability to `setEnergyAffordable` (→ `setDisabled`) and hand selection to `onSelect`.
 
 `createHoldfastCardBack()` is intentionally not an option on `createHoldfastCard`. It returns an accessible, face-down `article` with the distinct `.hf-card-back__pattern` and `.hf-card-back__emblem` anatomy, making hidden deck, draw-pile, and opponent-card states possible without mutating the frozen front-card API. Its Runic geometry is inline SVG only: it does not load an `<img>`, `<image>`, or raster asset.
+
+The DEV gallery is the approval surface for the full contract. It renders all 21 JSON cards exactly once, a base/upgraded pair, the SVG and PNG motif paths, and a face-down card. Its Playwright gate checks the locked five-layer art order, foreground text, tall card and near-square art geometry, semantic clipping, attack-card variety axes, loaded effect glyphs, and real selection behavior before capturing `tests/baseline/08-card-gallery.png`.

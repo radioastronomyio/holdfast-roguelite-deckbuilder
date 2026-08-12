@@ -94,7 +94,7 @@ describe("createHoldfastCard rendering", () => {
 
   it("uses symmetric header tracks and lower-corner footer stat anchors", () => {
     expect(cardCss).toMatch(
-      /\.hf-card \.gui-card__header\s*\{[^}]*grid-template-columns:\s*calc\(var\(--gui-space-xl\) \+ var\(--gui-space-sm\)\) 1fr calc\(var\(--gui-space-xl\) \+ var\(--gui-space-sm\)\);[^}]*\}/s,
+      /\.hf-card \.gui-card__header\s*\{[^}]*grid-template-columns:\s*calc\(var\(--gui-space-sm\) \* 4\) 1fr calc\(var\(--gui-space-sm\) \* 4\);[^}]*\}/s,
     );
     expect(cardCss).toMatch(
       /\.hf-card__header-glyph\s*\{[^}]*justify-self:\s*end;[^}]*\}/s,

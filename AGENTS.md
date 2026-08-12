@@ -29,14 +29,14 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 
 ## Current State
 
-- **Phase:** M4b first playable; spec 06 card-system rewrite complete on the full-DOM GameUI dark-fantasy frontend
+- **Phase:** M4b first playable; spec 06 Amendment 1 card-presentation v2 complete on the full-DOM GameUI dark-fantasy frontend
 - **GDD:** v1.1 (flavor system, tags, fixed-point arithmetic)
-- **Tests:** 367 passing (`pytest simulation/tests/` from repo root); 77 passing (`cd game && npm test`); 8 dark-fantasy screen baselines (`cd game && npm run test:screens:check`); build-output acceptance gate (`cd game && npm run test:screens:build`)
+- **Tests:** 367 passing (`pytest simulation/tests/` from repo root); 100 passing (`cd game && npm test`); 8 dark-fantasy screen baselines (`cd game && npm run test:screens:check`); build-output acceptance gate (`cd game && npm run test:screens:build`)
 - **M3a Analysis (pre-deck):** `reports/m3-analysis-pre-deck-mechanics/` archived before deck mechanics
 - **M3b Analysis (pre-M3c):** `reports/m3-analysis-pre-m3c/` archived before M3c tuning
 - **M3c Analysis (pre-M3d):** `reports/m3-analysis-pre-m3d/` archived before M3d tuning
 - **M3d Analysis (current):** `reports/m3-analysis/` 5000-seed run post all M3d changes
-- **Next work:** Operator approval of the spec-06 card review, then combat spec 04 followed by flow-screens spec 05. Both consume the frozen `createHoldfastCard` contract delivered here.
+- **Next work:** Renewed operator approval of the spec-06 Amendment 1 card review, then combat spec 04 followed by flow-screens spec 05. Both consume the frozen `createHoldfastCard` contract delivered here.
 
 ### M3d Key Findings (5000 seeds x 3 strategies, post-stun-fix-and-AI-rework)
 
@@ -105,7 +105,7 @@ Both `simulation/` and `game/` consume `data/`. The simulation's ResolverEngine 
 | **M4b-GUI** | `/opt/agents/repos/spec/2026-06/2026-06-22-holdfast-spec-01-gameui-vendor-dom-shell.md` | GameUI vendored (dark-fantasy), Phaser removed, vanilla DOM screen router + placeholder screens, Playwright baselines |
 | **M4b-GUI-02** | `/opt/agents/repos/spec/2026-06/2026-06-22-holdfast-spec-02-card-renderer.md` | Data-driven `createHoldfastCard` over `createCard` (energy badge, effect icons, accent tint, upgrade pips, shine, inspect modal), RPG icon staging, DEV-gated card-gallery route + 8th dark-fantasy baseline |
 | **M4b-GUI-03** | `/opt/agents/repos/spec/2026-06/2026-06-22-holdfast-spec-03-asset-foundation-build-correctness.md` | Stage vendored `game/vendor/gameui/` into gitignored `public/vendor/` so `vite build` serves the dark-fantasy skin; removed dead Pixel Quest staging; vendored card-icon subset in-repo (`game/assets/card-icons/`) for a hermetic build; `check-public` guards each staged family; `capture.py --build` build-output acceptance gate (build + `vite preview` + skin/asset/network assertions) |
-| **M4b-GUI-06** | `/opt/agents/repos/spec/2026-08/2026-08-10-holdfast-spec-06-card-system-rewrite.md` | Frozen card contract, six-region deckbuilder frame, parametric SVG art, SVG cost badges and upgrade gems, full 21-card gallery assertions/baseline, root-path build gate, and scoped publisher |
+| **M4b-GUI-06** | `/opt/agents/repos/spec/2026-08/2026-08-10-holdfast-spec-06-card-system-rewrite.md` | Frozen card contract, tall six-region deckbuilder frame, Runic Relic-derived five-layer mixed SVG/PNG art, SVG cost badges and upgrade gems, card backs, full 21-card gallery geometry/interaction assertions and baseline, root-path build gate, and scoped publisher |
 
 ## Critical: STAT_SCALE Awareness
 
