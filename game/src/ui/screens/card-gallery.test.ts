@@ -56,7 +56,7 @@ describe("renderCardGallery", () => {
         Array.from(card.querySelectorAll(".hf-card-art > :not(defs)"))
           .map((layer) => layer.getAttribute("class")?.split(" ")[0])
           .join("|") ===
-        "hf-card-art__sky|hf-card-art__glow|hf-card-art__motif|hf-card-art__ground|hf-card-art__vignette",
+        "hf-card-art__sky|hf-card-art__glow|hf-card-art__ground|hf-card-art__motif|hf-card-art__vignette",
       ),
     ).toBe(true);
   });

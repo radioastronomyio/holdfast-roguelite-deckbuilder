@@ -15,13 +15,13 @@ export interface CardArtOptions {
 }
 
 const GROUND_PATH: Record<CardArtGround, string> = {
-  arcane: "M0 310 C68 264 112 302 178 258 C249 215 312 294 382 252 C450 211 518 280 600 236 L600 400 L0 400 Z",
-  ash: "M0 298 L74 280 L136 302 L210 250 L292 287 L365 239 L444 276 L520 225 L600 248 L600 400 L0 400 Z",
-  ice: "M0 305 L84 270 L151 294 L241 238 L332 288 L424 246 L511 275 L600 218 L600 400 L0 400 Z",
-  marsh: "M0 314 C68 286 111 326 172 294 C243 262 303 318 369 284 C437 249 521 307 600 275 L600 400 L0 400 Z",
-  ruin: "M0 308 L72 282 L126 306 L170 248 L235 284 L296 228 L359 290 L420 255 L489 302 L548 266 L600 286 L600 400 L0 400 Z",
-  stone: "M0 304 L92 278 L168 302 L246 264 L322 293 L404 250 L481 282 L600 232 L600 400 L0 400 Z",
-  thicket: "M0 315 C52 259 108 317 160 271 C218 223 282 316 341 260 C403 200 462 303 523 249 C550 225 573 245 600 223 L600 400 L0 400 Z",
+  arcane: "M0 352 C68 326 112 350 178 330 C249 320 312 348 382 328 C450 320 518 344 600 324 L600 400 L0 400 Z",
+  ash: "M0 350 L74 340 L136 352 L210 326 L292 348 L365 322 L444 344 L520 320 L600 336 L600 400 L0 400 Z",
+  ice: "M0 352 L84 334 L151 348 L241 320 L332 346 L424 324 L511 342 L600 320 L600 400 L0 400 Z",
+  marsh: "M0 354 C68 340 111 360 172 342 C243 324 303 356 369 338 C437 320 521 350 600 334 L600 400 L0 400 Z",
+  ruin: "M0 352 L72 340 L126 354 L170 324 L235 346 L296 320 L359 348 L420 330 L489 352 L548 334 L600 344 L600 400 L0 400 Z",
+  stone: "M0 350 L92 336 L168 350 L246 328 L322 346 L404 322 L481 340 L600 320 L600 400 L0 400 Z",
+  thicket: "M0 356 C52 326 108 356 160 332 C218 320 282 356 341 328 C403 320 462 350 523 326 C550 320 573 332 600 320 L600 400 L0 400 Z",
 };
 
 function svgNode<K extends keyof SVGElementTagNameMap>(tag: K): SVGElementTagNameMap[K] {
@@ -116,10 +116,10 @@ export function createCardArt({
   motifLayer.classList.add("hf-card-art__motif");
   motifLayer.setAttribute("data-art-source", artSource);
   motifLayer.setAttribute("href", cardArtUrl(motif, artSource));
-  motifLayer.setAttribute("x", "172");
-  motifLayer.setAttribute("y", "74");
-  motifLayer.setAttribute("width", "256");
-  motifLayer.setAttribute("height", "256");
+  motifLayer.setAttribute("x", "146");
+  motifLayer.setAttribute("y", "18");
+  motifLayer.setAttribute("width", "308");
+  motifLayer.setAttribute("height", "308");
   motifLayer.setAttribute("preserveAspectRatio", "xMidYMid meet");
 
   const ground = svgNode("path");
@@ -132,6 +132,6 @@ export function createCardArt({
   vignette.setAttribute("height", "400");
   vignette.setAttribute("fill", `url(#${vignetteId})`);
 
-  svg.append(defs, sky, glow, motifLayer, ground, vignette);
+  svg.append(defs, sky, glow, ground, motifLayer, vignette);
   return svg;
 }

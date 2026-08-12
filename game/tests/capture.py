@@ -475,8 +475,8 @@ def assert_card_gallery(page: Page, errors: list[str]) -> None:
             const paintLayerClasses = [
                 'hf-card-art__sky',
                 'hf-card-art__glow',
-                'hf-card-art__motif',
                 'hf-card-art__ground',
+                'hf-card-art__motif',
                 'hf-card-art__vignette',
             ];
             const within = (inner, outer) => {
@@ -529,6 +529,24 @@ def assert_card_gallery(page: Page, errors: list[str]) -> None:
                 return painted.length !== paintLayerClasses.length
                     || painted.some((node, index) => !node.classList.contains(paintLayerClasses[index]));
             }).length;
+            const compositionFailures = art.filter((scene) => {
+                const motif = scene?.querySelector('.hf-card-art__motif');
+                const ground = scene?.querySelector('.hf-card-art__ground');
+                if (!motif || !ground) return true;
+                const motifY = Number(motif.getAttribute('y'));
+                const motifHeight = Number(motif.getAttribute('height'));
+                const coordinates = Array.from(
+                    (ground.getAttribute('d') || '').matchAll(/-?\d+(?:\.\d+)?/g),
+                    ([value]) => Number(value),
+                );
+                const groundYs = coordinates.filter((_, index) => index % 2 === 1 && coordinates[index] < 400);
+                const groundPeak = Math.min(...groundYs);
+                return groundYs.length === 0
+                    || groundYs.some((value) => !Number.isFinite(value))
+                    || groundPeak < 320
+                    || Math.abs((motifY + motifHeight / 2) - 172) > 1
+                    || motifHeight < 304;
+            }).length;
             const axes = (cardId) => {
                 const scene = catalog?.querySelector(`[data-card-id='${cardId}'] .hf-card-art`);
                 const ground = Array.from(scene?.querySelector('.hf-card-art__ground')?.classList || [])
@@ -558,6 +576,7 @@ def assert_card_gallery(page: Page, errors: list[str]) -> None:
                     return !image || !image.complete || image.naturalWidth <= 0;
                 }).length,
                 layerFailures,
+                compositionFailures,
                 foregroundMismatches,
                 ratioFailures,
                 artRatioFailures,
@@ -591,6 +610,7 @@ def assert_card_gallery(page: Page, errors: list[str]) -> None:
         "missingEffectSymbols": 0,
         "unloadedEffectSymbols": 0,
         "layerFailures": 0,
+        "compositionFailures": 0,
         "foregroundMismatches": [],
         "ratioFailures": [],
         "artRatioFailures": [],
