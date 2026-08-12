@@ -2,7 +2,7 @@
 
 .hf-card {
   inline-size: var(--hf-card-width, 15rem);
-  aspect-ratio: 744 / 1038;
+  aspect-ratio: 744 / 1200;
   min-block-size: 0;
   overflow: hidden;
   gap: var(--gui-space-sm);
@@ -14,15 +14,39 @@
 }
 
 .hf-card .gui-card__header {
-  min-block-size: calc(var(--gui-space-xl) + var(--gui-space-md));
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: calc(var(--gui-space-xl) + var(--gui-space-sm)) 1fr var(--gui-space-xl);
+  align-items: center;
+  min-block-size: calc(var(--gui-space-xl) + var(--gui-space-xs));
+}
+
+.hf-card__header-name {
+  min-inline-size: 0;
+  text-align: center;
 }
 
 .hf-card .gui-card__title {
-  padding-inline-end: var(--gui-space-sm);
   color: var(--gui-text);
   font-size: var(--gui-font-size-md);
   line-height: 1.15;
+  text-align: center;
+}
+
+.hf-card .gui-card__subtitle {
+  display: none;
+}
+
+.hf-card__header-glyph {
+  display: grid;
+  place-items: center;
+  inline-size: var(--gui-space-xl);
+  block-size: var(--gui-space-xl);
+  color: var(--card-accent);
+}
+
+.hf-card__header-glyph-icon {
+  inline-size: 100%;
+  block-size: 100%;
 }
 
 .hf-card .gui-card__tag.hf-card__cost {
@@ -67,7 +91,7 @@
 
 .hf-card__content {
   display: grid;
-  grid-template-rows: minmax(0, 1.75fr) auto minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
   gap: var(--gui-space-sm);
   block-size: 100%;
 }
@@ -75,7 +99,8 @@
 .hf-card__art {
   display: grid;
   place-items: center;
-  min-block-size: 7rem;
+  aspect-ratio: 1 / 0.9;
+  min-block-size: 0;
   overflow: hidden;
   border: var(--gui-border-width) solid var(--card-accent);
   border-radius: var(--gui-radius-sm);
@@ -129,9 +154,10 @@
 }
 
 .hf-card__type {
-  padding-block: var(--gui-space-xs);
-  border-block: var(--gui-border-width) solid var(--gui-border);
-  color: var(--card-accent);
+  padding: var(--gui-space-xs) var(--gui-space-sm);
+  border-radius: var(--gui-radius-sm);
+  background: var(--gui-surface-strong);
+  color: var(--gui-text);
   font-family: var(--gui-font-display);
   font-size: var(--gui-font-size-sm);
   font-weight: 700;
@@ -146,7 +172,11 @@
   padding: var(--gui-space-xs);
   overflow: hidden;
   border-radius: var(--gui-radius-sm);
-  background: var(--gui-surface);
+  background: var(--gui-surface-strong);
+}
+
+.hf-card__foreground {
+  color: var(--gui-text);
 }
 
 .hf-card .gui-card__footer {
@@ -166,10 +196,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--gui-space-xs);
-  border: var(--gui-border-width) solid var(--card-accent);
-  border-radius: var(--gui-radius-sm);
-  background: var(--gui-surface-strong);
+  padding: 0;
   color: var(--gui-text);
 }
 
@@ -182,7 +209,7 @@
 }
 
 .hf-card__stat-value {
-  color: var(--card-accent);
+  color: var(--gui-text);
   font-family: var(--gui-font-display);
   font-size: var(--gui-font-size-lg);
 }
@@ -192,6 +219,24 @@
   flex-direction: column;
   align-items: center;
   gap: var(--gui-space-xs);
+}
+
+.hf-card__pips {
+  display: flex;
+  justify-content: center;
+  gap: var(--gui-space-xs);
+}
+
+.hf-card__pip {
+  inline-size: calc(var(--gui-space-xs) * 0.75);
+  block-size: calc(var(--gui-space-xs) * 0.75);
+  border-radius: var(--gui-radius-pill);
+  background: var(--gui-border-strong);
+}
+
+.hf-card__pip--filled {
+  background: var(--card-accent);
+  box-shadow: 0 0 var(--gui-space-xs) var(--card-accent);
 }
 
 .hf-card-gem {

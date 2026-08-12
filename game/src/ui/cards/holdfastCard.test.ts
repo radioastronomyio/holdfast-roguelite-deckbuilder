@@ -70,6 +70,35 @@ describe("createHoldfastCard rendering", () => {
     expect(control.el.querySelector(".hf-card__guard")?.textContent).toContain("0");
   });
 
+  it("orders the cost, centered name, and effect glyph across the header", () => {
+    const control = render(byId("arcane_strike_01"));
+    const header = control.el.querySelector(".gui-card__header");
+
+    expect(Array.from(header?.children ?? []).map((child) => (
+      child.classList.contains("hf-card__cost") ? "hf-card__cost" : child.className
+    ))).toEqual([
+      "hf-card__cost",
+      "hf-card__header-name",
+      "hf-card__header-glyph",
+    ]);
+    expect(header?.querySelector(".hf-card__header-name")?.textContent).toBe("Arcane Strike");
+    expect(header?.querySelector(".hf-card__header-glyph use")).not.toBeNull();
+    expect(header?.querySelector(".hf-card__header-emblem")).toBeNull();
+    expect(control.el.querySelector(".hf-card__art-overlay")).toBeNull();
+  });
+
+  it("uses foreground text roles and a gem-plus-three-pip footer", () => {
+    const control = render(byId("arcane_strike_01"));
+
+    expect(control.el.querySelector(".hf-card__type.hf-card__foreground")).not.toBeNull();
+    expect(control.el.querySelector(".hf-card__rules.hf-card__foreground")).not.toBeNull();
+    expect(control.el.querySelector(".hf-card__stat-value.hf-card__foreground")).not.toBeNull();
+    expect(control.el.querySelector(".hf-card__attack .hf-card__stat-value")?.textContent).toBe("15");
+    expect(control.el.querySelector(".hf-card__guard .hf-card__stat-value")?.textContent).toBe("0");
+    expect(control.el.querySelector(".hf-card-gem")?.getAttribute("data-upgrade-tier")).toBe("0");
+    expect(control.el.querySelectorAll(".hf-card__pips .hf-card__pip")).toHaveLength(3);
+  });
+
   it("shows FLAT_SUB HP as the display-scale damage value (15, not 15000)", () => {
     const control = render(byId("arcane_strike_01"));
     const value = control.el.querySelector(".hf-card__effect-value")?.textContent ?? "";

@@ -21,8 +21,8 @@
    upgraded / rare modifiers. The frame itself stays the primitive's job. */
 
 .hf-card {
-  width: var(--hf-card-width, 200px);
-  min-height: var(--hf-card-min-height, 240px);
+  width: var(--hf-card-width, 15rem);
+  min-height: 0;
 }
 
 /* The energy-cost badge lives in the createCard tag slot (.gui-card__tag).
@@ -87,37 +87,27 @@
    -------------------------------------------------------------------------- */
 
 .hf-card__footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gui-space-sm);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: var(--gui-space-xs);
   width: 100%;
 }
 
 .hf-card__inspect {
-  appearance: none;
-  background: transparent;
-  border: var(--gui-border-width) solid var(--gui-border);
-  color: var(--gui-text-muted);
-  border-radius: var(--gui-radius-pill);
-  width: 26px;
-  height: 26px;
-  padding: 0;
-  font-size: var(--gui-font-size-md);
-  line-height: 1;
-  cursor: pointer;
-  transition: color var(--gui-duration-fast) var(--gui-ease-out),
-    border-color var(--gui-duration-fast) var(--gui-ease-out);
-}
-
-.hf-card__inspect:hover {
-  color: var(--card-accent);
-  border-color: var(--card-accent);
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .hf-card__inspect:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--gui-surface-strong), 0 0 0 4px var(--card-accent);
+  position: static;
+  inline-size: auto;
+  block-size: auto;
+  clip-path: none;
 }
 
 /* -----------------------------------------------------------------------------

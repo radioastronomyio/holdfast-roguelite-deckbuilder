@@ -81,7 +81,7 @@ export const createHoldfastCard: CreateHoldfastCard = (card, opts = {}) => {
   const upgraded = card.upgrade_tier > 0;
 
   const rules = document.createElement("div");
-  rules.className = "hf-card__rules hf-card__effects";
+  rules.className = "hf-card__rules hf-card__effects hf-card__foreground";
   for (const effect of card.effects) {
     rules.appendChild(buildEffectRow(effect));
   }
@@ -95,6 +95,7 @@ export const createHoldfastCard: CreateHoldfastCard = (card, opts = {}) => {
   const tools = document.createElement("div");
   tools.className = "hf-card__tools";
   tools.appendChild(createUpgradeGem(card.upgrade_tier));
+  tools.appendChild(buildUpgradePips(card.upgrade_tier));
   const inspectBtn = buildInspectButton();
   tools.appendChild(inspectBtn);
   footer.appendChild(tools);
@@ -121,6 +122,7 @@ export const createHoldfastCard: CreateHoldfastCard = (card, opts = {}) => {
   const costSlot = el.querySelector<HTMLElement>(".gui-card__tag");
   costSlot?.classList.add("hf-card__cost");
   costSlot?.replaceChildren(createCostBadge(card.energy_cost));
+  composeHeader(el, card);
   if (upgraded) el.classList.add("hf-card--upgraded");
   if (rare) el.classList.add("hf-card--rare");
   if (upgraded) el.classList.add("hf-card--shine");
@@ -170,11 +172,26 @@ function buildFrameBody(card: Card, rules: HTMLElement): HTMLElement {
   art.appendChild(createCardArt(visual));
 
   const type = document.createElement("div");
-  type.className = "hf-card__type";
+  type.className = "hf-card__type hf-card__foreground";
   type.textContent = card.tags.map(titleCase).join(" · ");
 
   body.append(art, type, rules);
   return body;
+}
+
+/** Put the frozen primitive's header slots into the v2 cost/name/glyph order. */
+function composeHeader(el: HTMLElement, card: Card): void {
+  const header = el.querySelector<HTMLElement>(".gui-card__header");
+  const cost = header?.querySelector<HTMLElement>(".hf-card__cost");
+  const name = header?.querySelector<HTMLElement>(".gui-card__title")?.parentElement;
+  if (!header || !cost || !name) return;
+
+  name.className = "hf-card__header-name";
+  const glyph = document.createElement("span");
+  glyph.className = "hf-card__header-glyph";
+  const motif = card.effects[0] ? resolveEffectSymbol(card.effects[0]) : resolveCardVisual(card.tags).motif;
+  glyph.appendChild(createCardSymbol(motif, "hf-card__header-glyph-icon"));
+  header.replaceChildren(cost, name, glyph);
 }
 
 /** Derive compact attack/guard footer values from the universal modifiers. */
@@ -207,7 +224,7 @@ function buildStatSlot(label: string, value: number, className: string): HTMLEle
   caption.textContent = label;
 
   const amount = document.createElement("strong");
-  amount.className = "hf-card__stat-value";
+  amount.className = "hf-card__stat-value hf-card__foreground";
   amount.textContent = String(value);
 
   slot.append(caption, amount);
@@ -246,6 +263,19 @@ function buildEffectRow(modifier: Modifier): HTMLElement {
 
   row.appendChild(text);
   return row;
+}
+
+/** Render all three upgrade pips; filled pips communicate the current tier. */
+function buildUpgradePips(tier: number): HTMLElement {
+  const pips = document.createElement("div");
+  pips.className = "hf-card__pips";
+  for (let index = 1; index <= 3; index += 1) {
+    const pip = document.createElement("span");
+    pip.className = "hf-card__pip";
+    pip.classList.toggle("hf-card__pip--filled", index <= tier);
+    pips.appendChild(pip);
+  }
+  return pips;
 }
 
 /** Build the small inspect button placed in the card footer. */

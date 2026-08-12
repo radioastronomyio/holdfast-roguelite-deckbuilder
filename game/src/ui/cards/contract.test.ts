@@ -49,4 +49,14 @@ describe("createHoldfastCard frozen contract", () => {
     expect(control.el).toBeInstanceOf(HTMLElement);
     expect(document.querySelector(".gui-modal.is-open")).not.toBeNull();
   });
+
+  it("keeps the frozen factory signature while exposing the v2 card anatomy", () => {
+    const control: HoldfastCardControl = frozenFactory(card);
+    const footer = control.el.querySelector(".hf-card__footer");
+
+    expect(footer?.querySelector(".hf-card__attack")).not.toBeNull();
+    expect(footer?.querySelector(".hf-card-gem")).not.toBeNull();
+    expect(footer?.querySelectorAll(".hf-card__pips .hf-card__pip")).toHaveLength(3);
+    expect(footer?.querySelector(".hf-card__guard")).not.toBeNull();
+  });
 });
