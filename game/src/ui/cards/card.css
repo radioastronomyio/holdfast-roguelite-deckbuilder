@@ -13,6 +13,63 @@
   box-shadow: var(--gui-shadow-md);
 }
 
+/* Face-down companion: same physical card frame, distinct violet Runic field. */
+.hf-card-back {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: var(--hf-card-width, 15rem);
+  aspect-ratio: 744 / 1200;
+  overflow: hidden;
+  border: var(--gui-border-width-strong) solid var(--gui-accent-magic);
+  border-radius: var(--gui-radius-md);
+  background: var(--gui-bg);
+  box-shadow: var(--gui-shadow-md);
+  color: var(--gui-accent-magic);
+}
+
+.hf-card-back--magic {
+  color: var(--gui-accent-magic);
+}
+
+.hf-card-back__pattern {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  background: var(--gui-surface);
+  color: var(--gui-accent-pink);
+}
+
+.hf-card-back__field {
+  opacity: var(--gui-glow-alpha);
+  stroke-width: var(--gui-border-width);
+}
+
+.hf-card-back__inner-frame,
+.hf-card-back__seal {
+  stroke-width: var(--gui-border-width-strong);
+}
+
+.hf-card-back__seal {
+  opacity: var(--gui-glow-alpha);
+}
+
+.hf-card-back__emblem {
+  position: relative;
+  z-index: 1;
+  inline-size: 48%;
+  block-size: auto;
+  color: var(--gui-accent-warning);
+  filter: drop-shadow(0 0 var(--gui-glow-blur) var(--gui-accent-magic));
+}
+
+.hf-card-back__emblem polygon,
+.hf-card-back__emblem path {
+  stroke-width: var(--gui-border-width-strong);
+  stroke-linejoin: round;
+}
+
 .hf-card .gui-card__header {
   display: grid;
   grid-template-columns: calc(var(--gui-space-xl) + var(--gui-space-sm)) 1fr calc(var(--gui-space-xl) + var(--gui-space-sm));

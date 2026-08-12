@@ -25,6 +25,7 @@ The Holdfast card is a composition over the GameUI `createCard` primitive (`game
 |------|---------|
 | `contract.ts` | Frozen `createHoldfastCard` options and returned-control types consumed by the combat and flow-screen specs. |
 | `holdfastCard.ts` | Factory that composes the six-region frame over `createCard` and binds all real card fields without changing the public contract. |
+| `cardBack.ts` | Separate `createHoldfastCardBack()` factory for face-down cards: a front-sized, token-driven, SVG-only Runic field and central emblem with no card-data or front-contract dependency. |
 | `cardArt.ts` / `cardMap.ts` | Parametric inline-SVG scene composition and loud tag/effect mapping over the attributed Runic Relic-derived vocabulary. Presentation rows default to SVG motifs; Immolate alone selects its Holdfast-owned PNG inside the same SVG scene. |
 | `cardBadges.ts` | Inline-SVG energy badge and `upgrade_tier` gem factories. Shine is reserved for upgraded cards. |
 | `iconMap.ts` | Card-tag-to-accent precedence only; legacy PNG mappings are retired in `recycle/2026-08-10-card-icons/`. |
@@ -33,3 +34,5 @@ The Holdfast card is a composition over the GameUI `createCard` primitive (`game
 Composition, not forking: the factory calls `createCard` for the frame and adds Holdfast-specific children to the slots it exposes. It never edits the vendored primitive. Card JSON effect values are at display scale (Arcane Strike shows 15, not 15000) and are rendered as written.
 
 Specs 04 (combat) and 05 (flow screens) consume this component without modification: combat maps energy affordability to `setEnergyAffordable` (→ `setDisabled`) and hand selection to `onSelect`.
+
+`createHoldfastCardBack()` is intentionally not an option on `createHoldfastCard`. It returns an accessible, face-down `article` with the distinct `.hf-card-back__pattern` and `.hf-card-back__emblem` anatomy, making hidden deck, draw-pile, and opponent-card states possible without mutating the frozen front-card API. Its Runic geometry is inline SVG only: it does not load an `<img>`, `<image>`, or raster asset.
