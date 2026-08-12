@@ -1,10 +1,11 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
 import baseCardsJson from "../../../../data/cards/base-cards.json";
 import hazardCardsJson from "../../../../data/cards/hazard-cards.json";
 import upgradeTreesJson from "../../../../data/cards/upgrade-trees.json";
 import type { Card, Modifier, UpgradeTree } from "../../sim/types";
+import type { HoldfastCardOptions } from "./contract";
 import {
   CARD_VISUAL_IDS,
   CARD_ART_SYMBOLS,
@@ -164,6 +165,19 @@ describe("card visual mappings", () => {
         expectedRunicModes[visual.motif],
       );
     }
+  });
+
+  it("keeps art-source selection in presentation, with SVG as the default and Immolate as the PNG exemplar", () => {
+    const byId = Object.fromEntries(cards.map((card) => [card.id, card]));
+
+    expect(resolveCardVisual(byId.arcane_strike_01!).artSource).toBe("svg");
+    expect(resolveCardVisual(byId.immolate_01!).artSource).toBe("image");
+  });
+
+  it("does not expose the presentation art source through card JSON or the frozen factory options", () => {
+    expect(cards.every((card) => !Object.hasOwn(card, "artSource"))).toBe(true);
+    expectTypeOf<"artSource" extends keyof HoldfastCardOptions ? true : false>()
+      .toEqualTypeOf<false>();
   });
 
   it("backs every semantic tag and tagless stat fallback with its expected Runic mode", () => {

@@ -37,6 +37,30 @@ describe("createCardArt", () => {
     }
   });
 
+  it("uses a derived SVG motif when no presentation source is supplied", () => {
+    const art = createCardArt({ motif: "arcane_burst", palette: "primary", ground: "arcane" });
+    const motif = art.querySelector(".hf-card-art__motif");
+
+    expect(art.getAttribute("data-art-source")).toBe("svg");
+    expect(motif?.getAttribute("data-art-source")).toBe("svg");
+    expect(motif?.getAttribute("href")).toBe("/assets/card-icons/arcane_burst.svg");
+  });
+
+  it("uses the Immolate PNG inside the shared image motif layer", () => {
+    const art = createCardArt({
+      motif: "fireball",
+      palette: "danger",
+      ground: "ash",
+      artSource: "image",
+    });
+    const motif = art.querySelector(".hf-card-art__motif");
+
+    expect(art.getAttribute("data-art-source")).toBe("image");
+    expect(motif?.tagName.toLowerCase()).toBe("image");
+    expect(motif?.getAttribute("data-art-source")).toBe("image");
+    expect(motif?.getAttribute("href")).toBe("/assets/card-icons/immolate-fireball.png");
+  });
+
   it("records the selected palette as a semantic class", () => {
     const art = createCardArt({ motif: "frostbite", palette: "info", ground: "ice" });
     expect(art.classList.contains("hf-card-art--info")).toBe(true);

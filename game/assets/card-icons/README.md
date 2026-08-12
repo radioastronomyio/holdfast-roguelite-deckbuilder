@@ -9,7 +9,7 @@ status: "Active"
 tags:
   - type: directory-readme
   - domain: [ui, game-dev, card-game, assets]
-  - tech: [svg]
+  - tech: [svg, png]
 related_documents:
   - "[License Notice](NOTICE)"
   - "[Derived Asset Manifest](manifest.json)"
@@ -31,4 +31,7 @@ node game/scripts/derive-runic-card-icons.mjs /path/to/runic-relic-rpg-icons-144
 ```
 
 The SVGs render as external image assets because the source artwork contains
-its own multicolour gradients. No PNG derivative ships in A1.3.
+its own multicolour gradients. A1.4 adds one Holdfast-owned PNG motif,
+`immolate-fireball.png`, selected only by the Immolate presentation row inside
+the otherwise inline-SVG art scene. It is not used for card chrome, badges,
+upgrade gems, pips, or effect glyphs.

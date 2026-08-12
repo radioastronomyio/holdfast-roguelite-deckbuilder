@@ -1,8 +1,8 @@
 /** Parametric, zero-raster SVG scene used by every Holdfast card. */
 
 import type { CardAccent } from "../gameui";
-import { cardIconUrl } from "./cardMap";
-import type { CardArtGround, CardArtSymbol } from "./cardMap";
+import { cardArtUrl, cardIconUrl } from "./cardMap";
+import type { CardArtGround, CardArtSource, CardArtSymbol } from "./cardMap";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 let artId = 0;
@@ -11,6 +11,7 @@ export interface CardArtOptions {
   motif: CardArtSymbol;
   palette: CardAccent;
   ground: CardArtGround;
+  artSource?: CardArtSource;
 }
 
 const GROUND_PATH: Record<CardArtGround, string> = {
@@ -41,7 +42,12 @@ export function createCardSymbol(
   return image;
 }
 
-export function createCardArt({ motif, palette, ground: groundType }: CardArtOptions): SVGSVGElement {
+export function createCardArt({
+  motif,
+  palette,
+  ground: groundType,
+  artSource = "svg",
+}: CardArtOptions): SVGSVGElement {
   const id = artId++;
   const skyId = `hf-card-sky-${id}`;
   const glowId = `hf-card-glow-${id}`;
@@ -54,6 +60,7 @@ export function createCardArt({ motif, palette, ground: groundType }: CardArtOpt
   svg.setAttribute("aria-label", `${motif.replaceAll("-", " ")} card art`);
   svg.setAttribute("data-motif", motif);
   svg.setAttribute("data-palette", palette);
+  svg.setAttribute("data-art-source", artSource);
 
   const defs = svgNode("defs");
   const skyGradient = svgNode("linearGradient");
@@ -107,7 +114,8 @@ export function createCardArt({ motif, palette, ground: groundType }: CardArtOpt
 
   const motifLayer = svgNode("image");
   motifLayer.classList.add("hf-card-art__motif");
-  motifLayer.setAttribute("href", cardIconUrl(motif, "svg"));
+  motifLayer.setAttribute("data-art-source", artSource);
+  motifLayer.setAttribute("href", cardArtUrl(motif, artSource));
   motifLayer.setAttribute("x", "172");
   motifLayer.setAttribute("y", "74");
   motifLayer.setAttribute("width", "256");

@@ -39,13 +39,13 @@ for (const file of readdirSync(join(repoRoot, "mods/default/flavor"))) {
 // game/vendor/gameui/; this is a generated, gitignored copy.
 copyDir(join(gameRoot, "vendor/gameui"), join(publicRoot, "vendor/gameui"));
 
-// --- Zero-raster card art (in-repo source) ---
+// --- In-repo card art (SVG vocabulary plus presentation-owned PNG motifs) ---
 rmSync(join(publicRoot, "assets"), { recursive: true, force: true });
 stageCardIcons();
 
-console.log("Prepared browser data, GameUI vendor skin, and card SVG assets in game/public/.");
+console.log("Prepared browser data, GameUI vendor skin, and card art assets in game/public/.");
 
-/** Stage the licensed Runic Relic-derived SVG vocabulary used by card art. */
+/** Stage the licensed Runic Relic-derived card-art vocabulary and image motifs. */
 function stageCardIcons() {
   copyDir(
     join(gameRoot, "assets/card-icons"),

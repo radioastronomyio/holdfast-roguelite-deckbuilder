@@ -5,7 +5,7 @@ const root = new URL("..", import.meta.url).pathname;
 
 // Representative members of each staged family. The prebuild check fails loudly
 // and names whatever is missing if `prepare:public` has not staged the GameUI
-// skin, the data, or the card SVGs. A missing entry means the published build
+// skin, the data, or the card art. A missing entry means the published build
 // would 404 that asset, so this guards the build before it ships.
 const required = [
   // Vendored GameUI skin (one of each kind the dark-fantasy CSS references).
@@ -18,6 +18,7 @@ const required = [
   "public/data/flavor/given_names.json",
   // Runic Relic-derived card vocabulary and its provenance.
   "public/assets/card-icons/crescent_blade.svg",
+  "public/assets/card-icons/immolate-fireball.png",
   "public/assets/card-icons/NOTICE",
   "public/assets/card-icons/manifest.json",
 ];

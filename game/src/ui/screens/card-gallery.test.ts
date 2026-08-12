@@ -41,9 +41,15 @@ describe("renderCardGallery", () => {
     expect(catalog?.dataset.galleryCardCount).toBe("21");
     expect(cards).toHaveLength(21);
     expect(new Set(cards.map(({ dataset }) => dataset.cardId)).size).toBe(21);
-    expect(cards.every((card) => /\/assets\/card-icons\/.+\.svg$/.test(
+    const artByCardId = Object.fromEntries(cards.map((card): [string, string] => [
+      card.dataset.cardId ?? "",
       card.querySelector(".hf-card-art image")?.getAttribute("href") ?? "",
-    ))).toBe(true);
+    ]));
+    expect(artByCardId.immolate_01).toBe("/assets/card-icons/immolate-fireball.png");
+    expect(Object.entries(artByCardId)
+      .filter(([cardId]) => cardId !== "immolate_01")
+      .every(([, href]) => /\/assets\/card-icons\/.+\.svg$/.test(href)))
+      .toBe(true);
     expect(cards.every((card) => card.querySelector(".hf-card-badge--cost"))).toBe(true);
   });
 

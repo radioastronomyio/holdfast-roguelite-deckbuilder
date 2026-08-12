@@ -25,7 +25,7 @@ The Holdfast card is a composition over the GameUI `createCard` primitive (`game
 |------|---------|
 | `contract.ts` | Frozen `createHoldfastCard` options and returned-control types consumed by the combat and flow-screen specs. |
 | `holdfastCard.ts` | Factory that composes the six-region frame over `createCard` and binds all real card fields without changing the public contract. |
-| `cardArt.ts` / `cardMap.ts` | Parametric inline-SVG scene composition and loud tag/effect-to-image mapping over the attributed Runic Relic-derived vocabulary. |
+| `cardArt.ts` / `cardMap.ts` | Parametric inline-SVG scene composition and loud tag/effect mapping over the attributed Runic Relic-derived vocabulary. Presentation rows default to SVG motifs; Immolate alone selects its Holdfast-owned PNG inside the same SVG scene. |
 | `cardBadges.ts` | Inline-SVG energy badge and `upgrade_tier` gem factories. Shine is reserved for upgraded cards. |
 | `iconMap.ts` | Card-tag-to-accent precedence only; legacy PNG mappings are retired in `recycle/2026-08-10-card-icons/`. |
 | `card.css` / `cards.css` | Six-region frame, SVG layers, inspect UI, and DEV gallery layout on existing GameUI tokens. |

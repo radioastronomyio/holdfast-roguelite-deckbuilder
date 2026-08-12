@@ -10,5 +10,6 @@ validation.
   unexpected file; an optional second argument selects an isolated output
   directory for verification.
 - `prepare-public.mjs` copies shared game JSON, the GameUI skin, and committed
-  card-icon derivatives into `game/public/`.
+  card-icon derivatives (SVG vocabulary plus presentation-owned PNG motifs)
+  into `game/public/`.
 - `check-public.mjs` fails the build early when required generated public files are missing.

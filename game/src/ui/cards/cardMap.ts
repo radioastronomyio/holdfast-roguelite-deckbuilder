@@ -57,6 +57,7 @@ export const RUNIC_ICON_MODES = Object.freeze({
 } as const satisfies Readonly<Record<CardArtSymbol, string>>);
 export type RunicIconMode = (typeof RUNIC_ICON_MODES)[CardArtSymbol];
 export type CardIconFormat = "svg" | "png";
+export type CardArtSource = "svg" | "image";
 export const CARD_ART_GROUNDS = ["arcane", "ash", "ice", "marsh", "ruin", "stone", "thicket"] as const;
 export type CardArtGround = (typeof CARD_ART_GROUNDS)[number];
 
@@ -64,9 +65,11 @@ export interface CardVisual {
   motif: CardArtSymbol;
   palette: CardAccent;
   ground: CardArtGround;
+  artSource: CardArtSource;
 }
 
-type CardMotifPalette = Pick<CardVisual, "motif" | "palette">;
+type CardMotifPalette = Pick<CardVisual, "motif" | "palette"> &
+  Partial<Pick<CardVisual, "artSource">>;
 
 /** Select an icon only when its committed Runic mode matches the semantic role. */
 function modeBackedIcon(mode: RunicIconMode, symbol: CardArtSymbol): CardArtSymbol {
@@ -86,7 +89,11 @@ function modeBackedIcon(mode: RunicIconMode, symbol: CardArtSymbol): CardArtSymb
  */
 const CARD_VISUAL_ROWS: Readonly<Record<string, CardMotifPalette>> = {
   arcane_strike_01: { motif: modeBackedIcon("rune", "arcane_burst"), palette: "magic" },
-  immolate_01: { motif: modeBackedIcon("flame", "fireball"), palette: "danger" },
+  immolate_01: {
+    motif: modeBackedIcon("flame", "fireball"),
+    palette: "danger",
+    artSource: "image",
+  },
   shield_bash_01: { motif: modeBackedIcon("shield", "tower_shield"), palette: "info" },
   sweeping_blade_01: { motif: modeBackedIcon("sword", "crescent_blade"), palette: "danger" },
   phalanx_01: { motif: modeBackedIcon("barrier", "barrier_spell"), palette: "info" },
@@ -179,7 +186,11 @@ export function resolveCardVisual(card: Pick<Card, "id" | "tags">): CardVisual {
   if (!motifPalette) {
     throw new Error(`Unmapped card visual: id=${card.id}`);
   }
-  return { ...motifPalette, ground: resolveGround(card.tags) };
+  return {
+    ...motifPalette,
+    artSource: motifPalette.artSource ?? "svg",
+    ground: resolveGround(card.tags),
+  };
 }
 
 function resolveGround(tags: readonly string[]): CardArtGround {
@@ -204,4 +215,18 @@ export function resolveEffectSymbol(modifier: Modifier): CardArtSymbol {
 
 export function cardIconUrl(symbol: CardArtSymbol, format: CardIconFormat): string {
   return `${import.meta.env.BASE_URL}assets/card-icons/${symbol}.${format}`;
+}
+
+/** Presentation-owned raster motifs. Add an entry before opting a card into image art. */
+const CARD_IMAGE_ART_ASSET: Partial<Record<CardArtSymbol, string>> = {
+  fireball: "immolate-fireball",
+};
+
+/** Resolve the motif URL selected by the presentation map, never card JSON or factory options. */
+export function cardArtUrl(motif: CardArtSymbol, artSource: CardArtSource): string {
+  if (artSource === "svg") return cardIconUrl(motif, "svg");
+
+  const asset = CARD_IMAGE_ART_ASSET[motif];
+  if (!asset) throw new Error(`Unmapped raster card art: motif=${motif}`);
+  return `${import.meta.env.BASE_URL}assets/card-icons/${asset}.png`;
 }

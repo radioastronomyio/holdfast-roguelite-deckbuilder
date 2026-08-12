@@ -153,6 +153,11 @@
   pointer-events: none;
 }
 
+/* The scene remains SVG; only a presentation-mapped motif may be raster. */
+.hf-card-art__motif[data-art-source="image"] {
+  image-rendering: auto;
+}
+
 .hf-card-art__vignette-stop--clear {
   stop-color: var(--gui-bg);
   stop-opacity: 0;
